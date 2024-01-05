@@ -9,3 +9,5 @@ License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
+URL: https://github.com/twood886/CQRTester
+BugReports: https://github.com/twood886/CQRTester/issues
