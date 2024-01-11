@@ -2,11 +2,12 @@
 # SinglePeriodFactorData (S4 Object) --------------------------------------
 #'  An S4 Class to represent Factor Data for a single period
 #'
-#'  @slot factor A character representing the name of the factor
-#'  @slot date A date object representing the date of the data
-#'  @slot ids A character vector representing the company ids
-#'  @slot fvales A named numeric vector representing the factor values
-#'  @slot returns A names numeric vector representing the forward returns
+#'@slot factor A character representing the name of the factor
+#'@slot date A date object representing the date of the data
+#'@slot ids A character vector representing the company ids
+#'@slot fvales A named numeric vector representing the factor values
+#'@slot returns A names numeric vector representing the forward returns
+#'@keywords internal
 setClass(
   "SinglePeriodFactorData",
   representation(
@@ -17,19 +18,19 @@ setClass(
     returns = "numeric"))
 
 # SinglePeriodFactorData --------------------------------------------------
-#' @title Single Period Factor Data
-#' @description Function to create SinglePeriodFactorData object
-#' @details This function converts data into SinglePeriodFactorData object.
-#' @param data A data frame containing id columns, return column and factor
+#'@title Single Period Factor Data
+#'@description Function to create SinglePeriodFactorData object
+#'@details This function converts data into SinglePeriodFactorData object.
+#'@param data A data frame containing id columns, return column and factor
 #' value column.
-#' @param date A date object representing the date of the data.
-#' @param iname A character representing the column name of identifiers.
-#' @param fname A character representing the column name of the factor.
-#' @param rname A character representing the column name of the returns.
-#' @returns A SinglePeriodFactorData object.
-#' @import methods
-#' @keywords internal
-#' @export
+#'@param date A date object representing the date of the data.
+#'@param iname A character representing the column name of identifiers.
+#'@param fname A character representing the column name of the factor.
+#'@param rname A character representing the column name of the returns.
+#'@returns A SinglePeriodFactorData object.
+#'@import methods
+#'@keywords internal
+#'@export
 MakeSinglePeriodFactorData <- function(data, date, iname, fname, rname, ...){
 
   dargs <- list(...)
@@ -117,53 +118,3 @@ setMethod("UniverseReturnStats",
     )
     return(u_stats)
   })
-
-UniverseReturnStats <- function(.data) UseMethod("UniverseReturnStats")
-
-# -------------------------------------------------------------------------
-
-
-
-setMethod('AlphaTest',
-  signature(.Object = 'SinglePeriodFactorData'),
-  function(.Object){
-
-    fftile = 5
-    win.prob = c(0,1)
-
-    # Extract Date
-    d <- .Object@date
-
-    # Alpha Testing Settings
-    .settings <- list(
-      "fftile" = fftile,
-      "win.prob" = win.prob)
-
-    # Calculate the Z-Score of Factors
-    fz <- ctz(.Object@fvals, win.prob)
-
-    # Calculate the Z-Score of Returns
-    rz <- ctz(.Object@returns, win.prob)
-
-    # Calculate the Quantile of Factors
-    fq<-ctq(.Object@fvals, fftile)
-
-    # Calculate the IC
-    IC<-cor(fz, rz, use = "pairwise.complete.obs")
-
-    # Universe Level Statistics
-    u_stat <- UniverseReturnStats(.Object)
-
-    return(new("SinglePeriodAT",
-               .factordata = .Object,
-               date = d,
-               factorZscore = fz,
-               factorQuantile = fq,
-               returnZscore = rz,
-               IC = IC,
-               .settings = .settings
-    ))
-
-
-  })
-

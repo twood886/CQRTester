@@ -5,9 +5,19 @@
 \alias{SinglePeriodFactorData-class}
 \title{An S4 Class to represent Factor Data for a single period}
 \description{
-@slot factor A character representing the name of the factor
- @slot date A date object representing the date of the data
- @slot ids A character vector representing the company ids
- @slot fvales A named numeric vector representing the factor values
- @slot returns A names numeric vector representing the forward returns
+An S4 Class to represent Factor Data for a single period
 }
+\section{Slots}{
+
+\describe{
+\item{\code{factor}}{A character representing the name of the factor}
+
+\item{\code{date}}{A date object representing the date of the data}
+
+\item{\code{ids}}{A character vector representing the company ids}
+
+\item{\code{fvales}}{A named numeric vector representing the factor values}
+
+\item{\code{returns}}{A names numeric vector representing the forward returns}
+}}
+

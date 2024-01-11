@@ -5,12 +5,24 @@
 \alias{SinglePeriodAT-class}
 \title{An S4 Class to represent Factor Alpha Testing for a single period}
 \description{
-@slot .factordata A SinglePeriodFactorData object.
- @slot date A date object representing the date of the data
- @slot factorZscore A named numeric vector representing the factor Z-Score
- @slot factorQuantile A named numeric vector representing the factor Quantile
- @slot returnZscore A named numeric vector representing the forward
- return Z-Score
- @slot IC A numeric value representing the Information Coefficient
- @slot .settings
+An S4 Class to represent Factor Alpha Testing for a single period
 }
+\section{Slots}{
+
+\describe{
+\item{\code{.factordata}}{A SinglePeriodFactorData object.}
+
+\item{\code{date}}{A date object representing the date of the data}
+
+\item{\code{factorZscore}}{A named numeric vector representing the factor Z-Score}
+
+\item{\code{factorQuantile}}{A named numeric vector representing the factor Quantile}
+
+\item{\code{returnZscore}}{A named numeric vector representing the forward
+return Z-Score}
+
+\item{\code{IC}}{A numeric value representing the Information Coefficient}
+
+\item{\code{.settings}}{Alpha Testing settings}
+}}
+
