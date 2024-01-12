@@ -1,15 +1,17 @@
 # SinglePeriodAT (S4 Object) ----------------------------------------------
 #'  An S4 Class to represent Factor Alpha Testing for a single period
 #'
-#'@slot .factordata A SinglePeriodFactorData object.
-#'@slot date A date object representing the date of the data
-#'@slot factorZscore A named numeric vector representing the factor Z-Score
-#'@slot factorQuantile A named numeric vector representing the factor Quantile
-#'@slot returnZscore A named numeric vector representing the forward
+#' @slot .factordata A SinglePeriodFactorData object.
+#' @slot date A date object representing the date of the data
+#' @slot factorZscore A named numeric vector representing the factor Z-Score
+#' @slot factorQuantile A named numeric vector representing the factor Quantile
+#' @slot returnZscore A named numeric vector representing the forward
 #'  return Z-Score
-#'@slot IC A numeric value representing the Information Coefficient
-#'@slot .settings Alpha Testing settings
-#'@keywords internal
+#' @slot IC A numeric value representing the Information Coefficient
+#' @slot uStats Universe Return Statistics
+#' @slot qStats Quantile Return Statistics
+#' @slot .settings Alpha Testing settings
+#' @keywords internal
 setClass(
   "SinglePeriodAT",
   representation(
@@ -19,6 +21,8 @@ setClass(
     factorQuantile = "ordered",
     returnZscore = "numeric",
     IC = "numeric",
+    uStats = "list",
+    qStats = "list",
     .settings = "list"))
 
 
@@ -64,15 +68,21 @@ setMethod('AlphaTest',
     IC<-cor(fz, rz, use = "pairwise.complete.obs")
     
     # Universe Level Statistics
-    u_stat <- UniverseReturnStats(.Object)
+    uStats <- UniverseReturnStats(.Object)
     
-    return(new("SinglePeriodAT",
-               .factordata = .Object,
-               date = d,
-               factorZscore = fz,
-               factorQuantile = fq,
-               returnZscore = rz,
-               IC = IC,
-               .settings = .settings
+    # Quintile Level Statistics
+    qStats <- QuantileReturnStats(.Object, fftile=fftile)
+    
+    return(
+      new("SinglePeriodAT",
+        .factordata = .Object,
+        date = d,
+        factorZscore = fz,
+        factorQuantile = fq,
+        returnZscore = rz,
+        IC = IC,
+        uStats = uStats,
+        qStats = qStats,
+        .settings = .settings
     ))
   })

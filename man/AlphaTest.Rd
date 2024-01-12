@@ -4,16 +4,16 @@
 \alias{AlphaTest}
 \title{Single Period Factor Alpha Testing}
 \usage{
-AlphaTest(.Object)
+AlphaTest(.Object, fftile = 5, win.prob = c(0, 1), ...)
 }
 \arguments{
-\item{.data}{A SinglePeriodFactorData}
-
 \item{fftile}{A numeric value representing the number of quantiles to group
 the factor data by.}
 
 \item{win.prob}{A numeric vector of length 2 representing the percentile
 cut-offs for windsorization.}
+
+\item{.data}{A SinglePeriodFactorData}
 }
 \value{
 A SinglePeriodFactorData object.
@@ -21,4 +21,3 @@ A SinglePeriodFactorData object.
 \description{
 Function to create a Single Period Alpha Testing Object
 }
-\keyword{internal}

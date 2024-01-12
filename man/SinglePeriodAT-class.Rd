@@ -23,6 +23,11 @@ return Z-Score}
 
 \item{\code{IC}}{A numeric value representing the Information Coefficient}
 
+\item{\code{uStats}}{Universe Return Statistics}
+
+\item{\code{qStats}}{Quantile Return Statistics}
+
 \item{\code{.settings}}{Alpha Testing settings}
 }}
 
+\keyword{internal}

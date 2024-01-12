@@ -21,3 +21,4 @@ An S4 Class to represent Factor Data for a single period
 \item{\code{returns}}{A names numeric vector representing the forward returns}
 }}
 
+\keyword{internal}

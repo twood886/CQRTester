@@ -157,8 +157,8 @@ setMethod("QuantileReturnStats",
     names(quantileStats) <- levels(fq)
     
     qn <- length(levels(fq)[which(levels(fq) != "NA")])
-    qspread <- quantileStats[[1]]$avg_return - quantilesStats[[qn]]$avg_return
-    qspreadweigths <- c(quantileStats[[1]]$weights, quantileStats[[qn]]$weights)
+    qspread <- quantileStats[[1]]$avg_return - quantileStats[[qn]]$avg_return
+    qspreadweights <- c(quantileStats[[1]]$weights, quantileStats[[qn]]$weights)
     
     list(
       "q_spread" = qspread,
