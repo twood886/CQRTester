@@ -30,4 +30,3 @@ return Z-Score}
 \item{\code{.settings}}{Alpha Testing settings}
 }}
 
-\keyword{internal}

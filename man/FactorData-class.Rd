@@ -6,4 +6,5 @@
 \title{An S4 Class to represent Factor Data over time}
 \description{
 @slot data A list of SinglePeriodFactorData objects.
+ @include SinglePeriodFactorData.R
 }

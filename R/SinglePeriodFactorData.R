@@ -1,4 +1,3 @@
-
 # SinglePeriodFactorData (S4 Object) --------------------------------------
 #'  An S4 Class to represent Factor Data for a single period
 #'
@@ -7,7 +6,7 @@
 #'@slot ids A character vector representing the company ids
 #'@slot fvales A named numeric vector representing the factor values
 #'@slot returns A names numeric vector representing the forward returns
-#'@keywords internal
+#'@export
 setClass(
   "SinglePeriodFactorData",
   representation(
@@ -31,7 +30,7 @@ setClass(
 #'@import methods
 #'@keywords internal
 #'@export
-MakeSinglePeriodFactorData <- function(data, date, iname, fname, rname, ...){
+SinglePeriodFactorData <- function(data, date, iname, fname, rname, ...){
 
   dargs <- list(...)
 

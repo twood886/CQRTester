@@ -2,6 +2,7 @@
 #'  An S4 Class to represent Factor Data over time
 #'
 #'  @slot data A list of SinglePeriodFactorData objects.
+#'  @include SinglePeriodFactorData.R
 setClass(
   "FactorData",
   representation(
@@ -23,6 +24,8 @@ setClass(
 #' @returns A FactorData object.
 #' @import dplyr
 #' @import methods
+#' @include Utilities.R
+#' @export
 FactorData <- function(data, dname, iname, fname, rname){
 
   # Split Data by Data Column
@@ -40,3 +43,15 @@ FactorData <- function(data, dname, iname, fname, rname){
   return(new("FactorData", data = fdata))
 }
 
+
+FactorAvail <- function(FactorData, ...) UseMethod("FactorAvail")
+setMethod("FactorAvail",
+  signature(FactorData = "FactorData"),
+  function(FactorData, ...){
+    
+    .avail <- function(.data){
+      fvals = .data@fvals
+      length(which(!is.na(fvals)))/length(fvals)}
+    
+    unlist(lapply(FactorData@data, .avail))
+    })

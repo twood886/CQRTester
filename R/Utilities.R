@@ -2,15 +2,16 @@
 #' @description Splits Data by Group into List and Names
 #' @details Splits Data by Group into List and Names
 #' @param ... dynamic dots
-#' @import tidyverse
+#' @import dplyr
+#' @import purrr
 #' @export
 named_group_split <- function(...) {
   data <- group_by(...)
 
   names <- group_keys(data) %>%
-    map(as.character) %>%
-    reduce(paste, sep = "~~")
+    purrr::map(as.character) %>%
+    purrr::reduce(paste, sep = "~~")
 
-  group_split(data) %>%
-    set_names(names)
+  dplyr::group_split(data) %>%
+    purrr::set_names(names)
 }

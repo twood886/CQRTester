@@ -11,7 +11,7 @@
 #' @slot uStats Universe Return Statistics
 #' @slot qStats Quantile Return Statistics
 #' @slot .settings Alpha Testing settings
-#' @keywords internal
+#' @include SinglePeriodFactorData.R
 setClass(
   "SinglePeriodAT",
   representation(
@@ -39,10 +39,8 @@ setClass(
 AlphaTest <- function(.Object, fftile = 5, win.prob = c(0,1), ...) UseMethod("AlphaTest")
 
 # -------------------------------------------------------------------------
-is.SinglePeriodAT <- function(x) is(x, "SPAT")
-
-
-# -------------------------------------------------------------------------
+#' @include Utilities.R
+#' @include Utilities_Scoring.R
 setMethod('AlphaTest',
   signature(.Object = 'SinglePeriodFactorData'),
   function(.Object, fftile, win.prob, ...){
