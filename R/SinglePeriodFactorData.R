@@ -96,7 +96,6 @@ as.SinglePeriodFactorData.SinglePeriodsFactorData <- function(x,...){
 
 
 # UniverseReturnStats -----------------------------------------------------
-
 setMethod("UniverseReturnStats",
   signature(.data = "SinglePeriodFactorData"),
   function(.data){
@@ -118,3 +117,52 @@ setMethod("UniverseReturnStats",
     )
     return(u_stats)
   })
+
+
+# -------------------------------------------------------------------------
+
+QuantileReturnStats <- function(.Object, fftile = 5, ...) UseMethod("QuantileReturnStats")
+setMethod("QuantileReturnStats",
+  signature(.Object = "SinglePeriodFactorData"),
+  function(.Object, fftile){
+    
+    # Calculate the Quantile of Factors
+    fq<-ctq(.Object@fvals, fftile)
+    
+    .SingleGroupReturnStats <- function(.Object, fq, ftile){
+      group_loc <- which(fq==ftile)
+      group_ids <-.Object@ids[group_loc]
+      group_returns <- .Object@returns[group_loc]
+      
+      group_n <- length(group_ids)
+      group_n_avail <- length(which(!is.na(group_returns)))
+      group_weights <- rep(1/group_n, group_n)
+      names(group_weights) <- group_ids
+      
+      out <- list(
+        "n" = group_n,
+        "n_avail" = group_n_avail,
+        "avg_return" = mean(group_returns, na.rm = T),
+        "med_return" = median(group_returns, na.rm = T),
+        "hit_rate_zero" = length(which(group_returns > 0)) / group_n_avail,
+        "weights" = group_weights)
+      return(out)
+    }
+    
+    quantileStats <- lapply(
+      levels(fq), 
+      .SingleGroupReturnStats, 
+      .Object = .Object, 
+      fq = fq)
+    names(quantileStats) <- levels(fq)
+    
+    qn <- length(levels(fq)[which(levels(fq) != "NA")])
+    qspread <- quantileStats[[1]]$avg_return - quantilesStats[[qn]]$avg_return
+    qspreadweigths <- c(quantileStats[[1]]$weights, quantileStats[[qn]]$weights)
+    
+    list(
+      "q_spread" = qspread,
+      "q_spread.weights" = qspreadweights,
+      "q_stats" = quantileStats)
+})
+

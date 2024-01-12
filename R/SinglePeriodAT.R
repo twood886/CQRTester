@@ -32,7 +32,7 @@ setClass(
 #'cut-offs for windsorization.
 #'@returns A SinglePeriodFactorData object.
 #'@export
-AlphaTest <- function(.Object) UseMethod("AlphaTest")
+AlphaTest <- function(.Object, fftile = 5, win.prob = c(0,1), ...) UseMethod("AlphaTest")
 
 # -------------------------------------------------------------------------
 is.SinglePeriodAT <- function(x) is(x, "SPAT")
@@ -41,10 +41,7 @@ is.SinglePeriodAT <- function(x) is(x, "SPAT")
 # -------------------------------------------------------------------------
 setMethod('AlphaTest',
   signature(.Object = 'SinglePeriodFactorData'),
-  function(.Object){
-    
-    fftile = 5
-    win.prob = c(0,1)
+  function(.Object, fftile, win.prob, ...){
     
     # Extract Date
     d <- .Object@date
