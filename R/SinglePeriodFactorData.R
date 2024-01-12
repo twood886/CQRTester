@@ -78,21 +78,6 @@ SinglePeriodFactorData <- function(data, date, iname, fname, rname, ...){
 }
 
 
-# -------------------------------------------------------------------------
-is.SinglePeriodFactorData <- function(x) is(x, "SinglePeriodFactorData")
-
-
-# -------------------------------------------------------------------------
-as.SinglePeriodFactorData <- function(x, ...) UseMethod("as.SinglePeriodFactorData")
-
-as.SinglePeriodFactorData.SinglePeriodsFactorData <- function(x,...){
-  ## true SinglePeriodFactorData
-  if(class(x)=="SinglePeriodFactorData")
-    x
-  else
-    as(x, "SinglePeriodFactorData")
-}
-
 
 # UniverseReturnStats -----------------------------------------------------
 setMethod("UniverseReturnStats",
