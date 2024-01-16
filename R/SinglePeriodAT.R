@@ -56,9 +56,11 @@ setClass(
 setGeneric("AlphaTest", function(data, .Settings, ...) standardGeneric("AlphaTest"))
 
 # -------------------------------------------------------------------------
+#' @export
 AlphaTest <- function(data, .Settings, ...) UseMethods("AlphaTest")
 
 # -------------------------------------------------------------------------
+#' @include WeightingFunctions.R
 setMethod('AlphaTest',
   signature(
     data = "SinglePeriodFactorData", 
@@ -77,12 +79,19 @@ setMethod('AlphaTest',
     # Calculate the IC
     IC<-cor(fz, rz, use = "pairwise.complete.obs")
     
+    # Weights
+    weights <- ZscoreWeighting(fz)
+    
+    # Return
+    r <- weights %*% data@returns
+    
+    
     return(
       new("SinglePeriodAT_FactorWeighted",
         date = d,
-        return = as.numeric(NA),
+        return = r,
         alpha = as.numeric(NA),
-        weights = as.numeric(NA),
+        weights = weights,
         .factordata = data,
         .settings = .Settings,
         IC = IC,
@@ -108,12 +117,17 @@ setMethod('AlphaTest',
     # Should Change to be defined for alt weighting, TODO
     qStats <- QuantileReturnStats(.Object, fftile = .Settings@quantiles)
     
+    # This needs to be fixed
+    weights <- qStats@q_spread_weights
+    
+    r <- weights %*% data@returns
+    
     return(
       new("SinglePeriodAT_Quantile",
         date = d,
         return = qStats$qspread,
         alpha = as.numeric(NA),
-        weights = as.numeric(NA),
+        weights = weights,
         .factordata = data,
         .settings = .Settings,
         factorQuintile = fq,

@@ -9,11 +9,10 @@ test_SPFD <-SinglePeriodFactorData(
   fname = "EPS to Price - Trail",
   rname = "Return_Q01")
 
-test_settings <- CQRTester::
+test_settings <- CQRTester::ATSettings_FactorWeighted(c(0.05, 0.95))
 
 
-
-test_SPAT <- AlphaTest(test_SPFD, 3, c(0.05, 0.95))
+test_SPAT <- CQRTester::AlphaTest(test_SPFD, test_settings)
 
 test_FD <- FactorData(
   data = data,

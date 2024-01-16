@@ -14,6 +14,7 @@ Collate:
     'Utilities.R'
     'FactorData.R'
     'GenericMethods.R'
+    'WeightingFunctions.R'
     'SinglePeriodFactorData.R'
     'SinglePeriodAT.R'
     'Utilities_Scoring.R'
