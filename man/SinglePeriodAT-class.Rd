@@ -3,30 +3,24 @@
 \docType{class}
 \name{SinglePeriodAT-class}
 \alias{SinglePeriodAT-class}
-\title{An S4 Class to represent Factor Alpha Testing for a single period}
+\title{Single Period Alpha Testing S4 Object}
 \description{
-An S4 Class to represent Factor Alpha Testing for a single period
+An S4 Class to represent Factor Alpha Testing Parent Class
+ for a single period
 }
 \section{Slots}{
 
 \describe{
-\item{\code{.factordata}}{A SinglePeriodFactorData object.}
-
 \item{\code{date}}{A date object representing the date of the data}
 
-\item{\code{factorZscore}}{A named numeric vector representing the factor Z-Score}
+\item{\code{return}}{}
 
-\item{\code{factorQuantile}}{A named numeric vector representing the factor Quantile}
+\item{\code{alpha}}{Relative Return of Factor over Benchmark}
 
-\item{\code{returnZscore}}{A named numeric vector representing the forward
-return Z-Score}
+\item{\code{weights}}{Portfolio Weights}
 
-\item{\code{IC}}{A numeric value representing the Information Coefficient}
+\item{\code{.factordata}}{A SinglePeriodFactorData object.#'}
 
-\item{\code{uStats}}{Universe Return Statistics}
-
-\item{\code{qStats}}{Quantile Return Statistics}
-
-\item{\code{.settings}}{Alpha Testing settings}
+\item{\code{.settings}}{Alpha Testing Settings#'}
 }}
 

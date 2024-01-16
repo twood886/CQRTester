@@ -1,86 +1,125 @@
 # SinglePeriodAT (S4 Object) ----------------------------------------------
-#'  An S4 Class to represent Factor Alpha Testing for a single period
-#'
-#' @slot .factordata A SinglePeriodFactorData object.
+#' @title Single Period Alpha Testing S4 Object
+#' @description An S4 Class to represent Factor Alpha Testing Parent Class
+#'  for a single period
 #' @slot date A date object representing the date of the data
-#' @slot factorZscore A named numeric vector representing the factor Z-Score
-#' @slot factorQuantile A named numeric vector representing the factor Quantile
-#' @slot returnZscore A named numeric vector representing the forward
-#'  return Z-Score
-#' @slot IC A numeric value representing the Information Coefficient
-#' @slot uStats Universe Return Statistics
-#' @slot qStats Quantile Return Statistics
-#' @slot .settings Alpha Testing settings
+#' @slot return 
+#' @slot alpha Relative Return of Factor over Benchmark
+#' @slot weights Portfolio Weights
+#' @slot .factordata A SinglePeriodFactorData object.#' 
+#' @slot .settings Alpha Testing Settings#' 
 #' @include SinglePeriodFactorData.R
 setClass(
   "SinglePeriodAT",
-  representation(
-    .factordata = "SinglePeriodFactorData",
+  slots = c(
     date = "Date",
-    factorZscore = "numeric",
-    factorQuantile = "ordered",
-    returnZscore = "numeric",
+    return = "numeric",
+    alpha = "numeric",
+    weights = "numeric",
+    .factordata = "SinglePeriodFactorData",
+    .settings = "ATSettings"))
+
+
+# SinglePeriodAT_FactorWeighted (S4 Object) -------------------------------
+#' @title Single Period Alpha Test (Factor Weighted) S4 Object
+#' @slot IC todo
+#' @slot factorZscore todo
+#' @slot returnZscore todo
+#' @include SinglePeriodFactorData.R
+setClass(
+  "SinglePeriodAT_FactorWeighted",
+  contains = "SinglePeriodAT",
+  representation(
     IC = "numeric",
-    uStats = "list",
-    qStats = "list",
-    .settings = "list"))
+    factorZscore = "numeric",
+    returnZscore = "numeric",
+    .settings = "ATSettings"))
 
 
-# SinglePeriodAT ----------------------------------------------------------
-#'@title Single Period Factor Alpha Testing
-#'@description Function to create a Single Period Alpha Testing Object
-#'@param .data A SinglePeriodFactorData
-#'@param fftile A numeric value representing the number of quantiles to group
-#'the factor data by.
-#'@param win.prob A numeric vector of length 2 representing the percentile
-#'cut-offs for windsorization.
-#'@returns A SinglePeriodFactorData object.
-#'@export
-AlphaTest <- function(.Object, fftile = 5, win.prob = c(0,1), ...) UseMethod("AlphaTest")
+# SinglePeriodAT_Qunatile (S4 Object) -------------------------------------
+#' @title Single Period Alpha Test (Quantiles) S4 Object
+#' @slot factorQuantile todo
+#' @slot qreturns todo
+#' @slot qstats todo
+#' @include SinglePeriodFactorData.R
+setClass(
+  "SinglePeriodAT_Quantile",
+  contains = "SinglePeriodAT",
+  slots = c(
+    factorQuantile = "ordered",
+    qreturns = "numeric",
+    qstats = "list"))
+
+
 
 # -------------------------------------------------------------------------
-#' @include Utilities.R
-#' @include Utilities_Scoring.R
+setGeneric("AlphaTest", function(data, .Settings, ...) standardGeneric("AlphaTest"))
+
+# -------------------------------------------------------------------------
+AlphaTest <- function(data, .Settings, ...) UseMethods("AlphaTest")
+
+# -------------------------------------------------------------------------
 setMethod('AlphaTest',
-  signature(.Object = 'SinglePeriodFactorData'),
-  function(.Object, fftile, win.prob, ...){
+  signature(
+    data = "SinglePeriodFactorData", 
+    .Setting = "ATSettings_FactorWeighted"),
+  function(data, .Settings, ...){
     
     # Extract Date
-    d <- .Object@date
-    
-    # Alpha Testing Settings
-    .settings <- list(
-      "fftile" = fftile,
-      "win.prob" = win.prob)
+    d <- data@date
     
     # Calculate the Z-Score of Factors
-    fz <- ctz(.Object@fvals, win.prob)
+    fz <- ctz(data@fvals, .Settings@win.prob)
     
     # Calculate the Z-Score of Returns
-    rz <- ctz(.Object@returns, win.prob)
-    
-    # Calculate the Quantile of Factors
-    fq<-ctq(.Object@fvals, fftile)
+    rz <- ctz(data@returns, .Settings@win.prob)
     
     # Calculate the IC
     IC<-cor(fz, rz, use = "pairwise.complete.obs")
     
-    # Universe Level Statistics
-    uStats <- UniverseReturnStats(.Object)
+    return(
+      new("SinglePeriodAT_FactorWeighted",
+        date = d,
+        return = as.numeric(NA),
+        alpha = as.numeric(NA),
+        weights = as.numeric(NA),
+        .factordata = data,
+        .settings = .Settings,
+        IC = IC,
+        factorZscore = fz,
+        returnZscore = rz))
+  })
+
+
+# -------------------------------------------------------------------------
+setMethod('AlphaTest',
+  signature(
+    data = "SinglePeriodFactorData",
+    .Settings = "ATSettings_Quantile"),
+  function(data, .Settings, ...){
+    
+    # Extract Date
+    d <- data@date
+    
+    # Calculate the Quantile of Factors
+    fq<-ctq(data@fvals, .Settings@quantiles)
     
     # Quintile Level Statistics
-    qStats <- QuantileReturnStats(.Object, fftile=fftile)
+    # Should Change to be defined for alt weighting, TODO
+    qStats <- QuantileReturnStats(.Object, fftile = .Settings@quantiles)
     
     return(
-      new("SinglePeriodAT",
-        .factordata = .Object,
+      new("SinglePeriodAT_Quantile",
         date = d,
-        factorZscore = fz,
-        factorQuantile = fq,
-        returnZscore = rz,
-        IC = IC,
-        uStats = uStats,
-        qStats = qStats,
-        .settings = .settings
-    ))
+        return = qStats$qspread,
+        alpha = as.numeric(NA),
+        weights = as.numeric(NA),
+        .factordata = data,
+        .settings = .Settings,
+        factorQuintile = fq,
+        qreturns = qStats$q_stats$avg_return,
+        qstats = qStats$q_stats))
+    
+    
   })
+
