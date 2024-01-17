@@ -1,4 +1,4 @@
-load("C:/Users/TWood.callodine/Callodine Capital Management, LP/TWood - Documents/CQRTester/Data/ATData.Rda")
+load("~/CQRTester/Data/ATData.Rda")
 datesub <- as.Date("2019-12-31")
 datasub <- data[which(data$Periods==datesub),]
 
@@ -9,7 +9,7 @@ test_SPFD <-SinglePeriodFactorData(
   fname = "EPS to Price - Trail",
   rname = "Return_Q01")
 
-test_settings <- CQRTester::ATSettings_FactorWeighted(c(0.05, 0.95))
+test_settings <- CQRTester::AT_FactorWeighted(c(0.05, 0.95))
 
 
 test_SPAT <- CQRTester::AlphaTest(test_SPFD, test_settings)

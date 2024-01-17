@@ -13,7 +13,7 @@ setClass(
   "SinglePeriodAT",
   slots = c(
     date = "Date",
-    return = "numeric",
+    sp_return = "numeric",
     alpha = "numeric",
     weights = "numeric",
     .factordata = "SinglePeriodFactorData",
@@ -59,6 +59,9 @@ setGeneric("AlphaTest", function(data, .Settings, ...) standardGeneric("AlphaTes
 #' @export
 AlphaTest <- function(data, .Settings, ...) UseMethods("AlphaTest")
 
+
+# -------------------------------------------------------------------------
+
 # -------------------------------------------------------------------------
 #' @include WeightingFunctions.R
 setMethod('AlphaTest',
@@ -83,13 +86,12 @@ setMethod('AlphaTest',
     weights <- ZscoreWeighting(fz)
     
     # Return
-    r <- weights %*% data@returns
-    
+    r <- as.numeric(weights %*% data@returns)
     
     return(
       new("SinglePeriodAT_FactorWeighted",
         date = d,
-        return = r,
+        sp_return = r,
         alpha = as.numeric(NA),
         weights = weights,
         .factordata = data,
@@ -120,12 +122,12 @@ setMethod('AlphaTest',
     # This needs to be fixed
     weights <- qStats@q_spread_weights
     
-    r <- weights %*% data@returns
+    r <- as.numeric(weights %*% data@returns)
     
     return(
       new("SinglePeriodAT_Quantile",
         date = d,
-        return = qStats$qspread,
+        sp_return = qStats$qspread,
         alpha = as.numeric(NA),
         weights = weights,
         .factordata = data,

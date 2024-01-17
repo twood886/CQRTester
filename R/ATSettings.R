@@ -8,7 +8,7 @@ setClass(
 
 
 
-# ATSettings_FacorWeighted (S4 Object) ------------------------------------
+# ATSettings_FactorWeighted (S4 Object) ------------------------------------
 #' @title Settings for Factor Weighted Alpha Testing
 #' @slot win.prob A numeric vector of length 2 representing the percentile
 #'cut-offs for windsorization.
@@ -21,9 +21,17 @@ setClass(
     win.prob = "numeric",
     longonly = "logical"))
 
-# ATSettings_FactorWeighted -----------------------------------------------
+#' @title Factor Weighted Alpha Testing Settings
+#' @description
+#' A function to create Alpha Testing settings for a factor weighted Alpha Test.
+#' 
+#' @param win.prob A numeric vector of length 2 representing the percentile
+#' cut-offs for windsorization
+#' @param longonly A logical representing whether or not the portfolio weights
+#' should be long only (True) or Long-Short (False)
+#' @returns An ATSettings_FactorWeighted S4 object to be used in Alpha Testing.
 #' @export
-ATSettings_FactorWeighted <- function(win.prob = c(0,1), longonly = F ,...){
+AT_FactorWeighted <- function(win.prob = c(0,1), longonly = F ,...){
   new("ATSettings_FactorWeighted",
     WeightingScheme = "FactorWeighted",
     win.prob = win.prob,
@@ -41,14 +49,12 @@ setClass(
   "ATSettings_Quantile",
   contains = "ATSettings",
   slots = c(
-    quantiles = "integer",
-    longonly = "logical"))
+    quantiles = "integer"))
 
 
 # ATSettings_Quantile -----------------------------------------------------
-ATSettings_Quantile <- function(quantiles = 5, longonly = F, ...){
+#' @export
+AT_FactorQSpread <- function(quantiles = 5, ...){
   new("ATSettings_Quantile",
     WeightingScheme = "Quantile",
-    quantiles = quantiles,
-    longonly = longonly)
-  }
+    quantiles = quantiles)}
