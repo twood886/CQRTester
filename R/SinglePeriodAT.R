@@ -19,7 +19,6 @@ setClass(
     .factordata = "SinglePeriodFactorData",
     .settings = "ATSettings"))
 
-
 # SinglePeriodAT_FactorWeighted (S4 Object) -------------------------------
 #' @title Single Period Alpha Test (Factor Weighted) S4 Object
 #' @slot IC todo
@@ -50,11 +49,14 @@ setClass(
     qreturns = "numeric",
     qstats = "list"))
 
-
+setMethod(f = 'show',
+  signature = "SinglePeriodAT",
+  definition = function(object){
+    print("test")
+  })
 
 # -------------------------------------------------------------------------
 setGeneric("AlphaTest", function(data, .Settings, ...) standardGeneric("AlphaTest"))
-
 # -------------------------------------------------------------------------
 #' @export
 AlphaTest <- function(data, .Settings, ...) UseMethods("AlphaTest")
@@ -80,7 +82,7 @@ setMethod('AlphaTest',
     rz <- ctz(data@returns, .Settings@win.prob)
     
     # Calculate the IC
-    IC<-cor(fz, rz, use = "pairwise.complete.obs")
+    IC <- cor(fz, rz, use = "pairwise.complete.obs")
     
     # Weights
     weights <- ZscoreWeighting(fz)
@@ -100,7 +102,6 @@ setMethod('AlphaTest',
         factorZscore = fz,
         returnZscore = rz))
   })
-
 
 # -------------------------------------------------------------------------
 setMethod('AlphaTest',
@@ -135,7 +136,4 @@ setMethod('AlphaTest',
         factorQuintile = fq,
         qreturns = qStats$q_stats$avg_return,
         qstats = qStats$q_stats))
-    
-    
   })
-

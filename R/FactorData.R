@@ -43,7 +43,7 @@ FactorData <- function(data, dname, iname, fname, rname){
   return(new("FactorData", data = fdata))
 }
 
-
+#' @export
 FactorAvail <- function(FactorData, ...) UseMethod("FactorAvail")
 setMethod("FactorAvail",
   signature(FactorData = "FactorData"),
