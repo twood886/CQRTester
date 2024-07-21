@@ -1,21 +1,15 @@
-
-
-
-load("~/CQRTester/Data/ATData.Rda")
-
 load("Data/ATData.Rda")
-
-source("R/FactorData.R")
-
+source("R/SinglePeriodFactorData.R")
 datesub <- as.Date("2019-12-31")
 datasub <- data[which(data$Periods==datesub),]
 
-test_SPFD <-SinglePeriodFactorData(
+test_spfd <- create_single_period_factor_data(
   data = datasub,
   date = datesub,
-  iname = "Company Id",
-  fname = "EPS to Price - Trail",
-  rname = "Return_Q01")
+  id_col_name = "Company Id",
+  factor_col_name = "EPS to Price - Trail",
+  return_col_name = "Return_Q01"
+)
 
 
 test_settings <- ATSettings(testing.scheme = "QSpread")

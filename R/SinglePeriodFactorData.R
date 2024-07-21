@@ -69,7 +69,7 @@ create_single_period_factor_data <- function(
   fvals <- data[[factor_col_name]]
   names(fvals) <- ids
   names(returns) <- ids
-  new("SinglePeriodFactorData",
+  new("single_period_factor_data",
     factor = fname,
     date = date,
     ids = ids,
