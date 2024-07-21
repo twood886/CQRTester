@@ -11,9 +11,8 @@ test_spfd <- create_single_period_factor_data(
   return_col_name = "Return_Q01"
 )
 
-load("R/ATSettings.R")
-test_settings <- ATSettings(testing.scheme = "QSpread")
-  
+source("R/ATSettings.R")
+test_settings <- set_at_settings(testing_scheme = "QSpread")
 
 
 test_settings <- CQRTester::AT_FactorWeighted(c(0.05, 0.95))

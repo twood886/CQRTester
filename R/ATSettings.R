@@ -13,7 +13,7 @@ setClass(
     start_date = "Date",
     end_date = "Date",
     testing_scheme = "character",
-    long_only = "logical",
+    long_only = "logical"
   )
 )
 
@@ -89,17 +89,17 @@ set_at_settings_q_spread <- function(
 #' @param end_date A date object representing the last date to be
 #' used when performing alpha testing. Factor data is filtered to end at or
 #' before provided End.Date argument.
-#' @param testing_scheme Weighting scheme to be used in testing factor. 
+#' @param testing_scheme Weighting scheme to be used in testing factor.
 #' Currently supports "Factor" and "Quantile"
 #' @param long_only add
 #' @param ... Additional settings to be passed based on Weighting.Scheme
 #' @export
 set_at_settings <- function(
-    start_date = as.Date("1901-01-01"), end_date = Sys.Date(), 
-    testing_scheme = "factorw", long_only = FALSE, ...) {
+    start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
+    testing_scheme = "Factor", long_only = FALSE, ...) {
 
   dargs <- list(...)
-  known_schemes <- c("Factor", "Quantile")
+  known_schemes <- c("Factor", "QSpread")
 
   if (!testing_scheme %in% known_schemes) {
     stop("Testing Scheme must be one of \"Factor\" or \"QSpread\".")
@@ -114,7 +114,7 @@ set_at_settings <- function(
     set_at_settings_factor_w(start_date, end_date, win_prob, long_only)
   }
 
-  if (testing_scheme == "Quantile") {
+  if (testing_scheme == "QSpread") {
     if ("quantiles" %in% names(dargs)) {
       quantiles <- dargs$quantiles
     }else {
@@ -154,9 +154,9 @@ setMethod(f = "show",
   function(object) {
     out <- paste(
       paste("----- Alpha Testing Settings -----"),
-      paste("Testing Scheme:", object@testing.scheme, sep = "\t\t"),
-      paste("Start Date:", format(object@start.date,"%b %d,%Y"), sep = "\t\t"),
-      paste("End Date:", format(object@end.date, "%b %d,%Y"), sep = "\t\t"),
+      paste("Testing Scheme:", object@testing_scheme, sep = "\t\t"),
+      paste("Start Date:", format(object@start_date, "%b %d,%Y"), sep = "\t\t"),
+      paste("End Date:", format(object@end_date, "%b %d,%Y"), sep = "\t\t"),
       paste("Factor Quantiles:", object@quantiles, sep = "\t"),
       sep = "\n"
     )
