@@ -12,9 +12,11 @@
 ctq <- function(x, fftile){
   b <- sum(!is.na(unique(x)))
   labels <- gettextf("Q%s", fftile:1)
-  if (b>=fftile){
+  if (b >= fftile) {
     xnames <- names(x)
-    qs <- round(rank(x, na.last = "keep") / sum(!is.na(x)) / (1 / fftile) + .4999)
+    qs <- round(
+      rank(x, na.last = "keep") / sum(!is.na(x)) / (1 / fftile) + .4999
+    )
     qs <- ifelse(qs < 1, 1, qs)
     ftile <- factor(
       ggplot2::cut_interval(qs, n = fftile, labels = labels),
@@ -28,7 +30,7 @@ ctq <- function(x, fftile){
       levels = labels,
       ordered = TRUE
     )
-    ftile <- forcats::fct_na_value_to_level(retval, level = "NA")
+    ftile <- forcats::fct_na_value_to_level(ftile, level = "NA")
   }
   return(ftile)
 }

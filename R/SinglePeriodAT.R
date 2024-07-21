@@ -3,10 +3,10 @@
 #' @description An S4 Class to represent Factor Alpha Testing Parent Class
 #'  for a single period
 #' @slot date A date object representing the date of the data
-#' @slot return 
+#' @slot return
 #' @slot weights Portfolio Weights
-#' @slot .factordata A SinglePeriodFactorData object.#' 
-#' @slot .settings Alpha Testing Settings#' 
+#' @slot .factordata A SinglePeriodFactorData object.
+#' @slot .settings Alpha Testing Settings#'
 #' @include SinglePeriodFactorData.R
 setClass(
   "SinglePeriodAT",
@@ -15,7 +15,9 @@ setClass(
     return = "numeric",
     weights = "numeric",
     .factordata = "SinglePeriodFactorData",
-    .settings = "ATSettings"))
+    .settings = "ATSettings"
+  )
+)
 
 
 
@@ -33,7 +35,9 @@ setClass(
     IC = "numeric",
     factorZscore = "numeric",
     returnZscore = "numeric",
-    .settings = "ATSettings"))
+    .settings = "ATSettings"
+  )
+)
 
 
 # SinglePeriodAT_Qunatile (S4 Object) -------------------------------------

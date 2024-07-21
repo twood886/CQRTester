@@ -57,7 +57,7 @@ create_factor_data <- function(
 
 #' @export
 calc_factor_avail <- function(factor_data, ...) UseMethod("calc_factor_avail")
-setMethod("factor_avail",
+setMethod("calc_factor_avail",
   signature(factor_data = "factor_data"),
   function(factor_data, ...) {
     .avail <- function(.data) {

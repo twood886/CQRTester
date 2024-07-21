@@ -4,6 +4,9 @@
 load("~/CQRTester/Data/ATData.Rda")
 
 load("Data/ATData.Rda")
+
+source("R/FactorData.R")
+
 datesub <- as.Date("2019-12-31")
 datasub <- data[which(data$Periods==datesub),]
 
