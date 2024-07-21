@@ -4,7 +4,6 @@
 #'  for a single period
 #' @slot date A date object representing the date of the data
 #' @slot return 
-#' @slot alpha Relative Return of Factor over Benchmark
 #' @slot weights Portfolio Weights
 #' @slot .factordata A SinglePeriodFactorData object.#' 
 #' @slot .settings Alpha Testing Settings#' 
@@ -13,8 +12,7 @@ setClass(
   "SinglePeriodAT",
   slots = c(
     date = "Date",
-    sp_return = "numeric",
-    alpha = "numeric",
+    return = "numeric",
     weights = "numeric",
     .factordata = "SinglePeriodFactorData",
     .settings = "ATSettings"))
@@ -43,33 +41,25 @@ setClass(
 #' @slot factorQuantile todo
 #' @slot qreturns todo
 #' @slot qstats todo
-#' @include SinglePeriodFactorData.R
 setClass(
-  "SinglePeriodAT_Quantile",
+  "SinglePeriodAT_QSpre",
   contains = "SinglePeriodAT",
   slots = c(
     factorQuantile = "ordered",
     qreturns = "numeric",
     qstats = "list"))
 
-setMethod(f = 'show',
-  signature = "SinglePeriodAT",
-  definition = function(object){
-    print("test")
-  })
-
 # -------------------------------------------------------------------------
 setGeneric("AlphaTest", function(data, .Settings, ...) standardGeneric("AlphaTest"))
 # -------------------------------------------------------------------------
-#' @export
-AlphaTest <- function(data, .Settings, ...) UseMethods("AlphaTest")
 
+#' @include WeightingFunctions.R
 setMethod('AlphaTest',
   signature(
     data = "SinglePeriodFactorData", 
     .Setting = "ATSettings"),
   function(data, .Settings, ...){
-            
+    
     # Extract Date
     d <- data@date
     
@@ -82,7 +72,7 @@ setMethod('AlphaTest',
     # Calculate the IC
     IC <- cor(fz, rz, use = "pairwise.complete.obs")
     
-    # Weights
+    # Calculate the weights using the ZScores
     weights <- ZscoreWeighting(fz)
     
     # Return
@@ -91,8 +81,7 @@ setMethod('AlphaTest',
     return(
       new("SinglePeriodAT_FactorWeighted",
           date = d,
-          sp_return = r,
-          alpha = as.numeric(NA),
+          return = r,
           weights = weights,
           .factordata = data,
           .settings = .Settings,
@@ -103,57 +92,19 @@ setMethod('AlphaTest',
 
 
 
-
+# -------------------------------------------------------------------------
 #' @include WeightingFunctions.R
 setMethod('AlphaTest',
   signature(
-    data = "SinglePeriodFactorData", 
-    .Setting = "ATSettings_FactorWeighted"),
-  function(data, .Settings, ...){
-    
-    # Extract Date
-    d <- data@date
-    
-    # Calculate the Z-Score of Factors
-    fz <- ctz(data@fvals, .Settings@win.prob)
-    
-    # Calculate the Z-Score of Returns
-    rz <- ctz(data@returns, .Settings@win.prob)
-    
-    # Calculate the IC
-    IC <- cor(fz, rz, use = "pairwise.complete.obs")
-    
-    # Weights
-    weights <- ZscoreWeighting(fz)
-    
-    # Return
-    r <- as.numeric(weights %*% data@returns)
-    
-    return(
-      new("SinglePeriodAT_FactorWeighted",
-        date = d,
-        sp_return = r,
-        alpha = as.numeric(NA),
-        weights = weights,
-        .factordata = data,
-        .settings = .Settings,
-        IC = IC,
-        factorZscore = fz,
-        returnZscore = rz))
-  })
-
-# -------------------------------------------------------------------------
-setMethod('AlphaTest',
-  signature(
     data = "SinglePeriodFactorData",
-    .Settings = "ATSettings_Quantile"),
+    .Settings = "ATSettings_QSpread"),
   function(data, .Settings, ...){
     
     # Extract Date
     d <- data@date
     
     # Calculate the Quantile of Factors
-    fq<-ctq(data@fvals, .Settings@quantiles)
+    fq <- ctq(data@fvals, .Settings@quantiles)
     
     # Quintile Level Statistics
     # Should Change to be defined for alt weighting, TODO
@@ -176,3 +127,9 @@ setMethod('AlphaTest',
         qreturns = qStats$q_stats$avg_return,
         qstats = qStats$q_stats))
   })
+
+
+
+
+#' @export
+AlphaTest <- function(data, .Settings, ...) UseMethods("AlphaTest")

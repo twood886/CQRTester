@@ -11,7 +11,7 @@
 #' @export
 ctq <- function(x, fftile){
   b<-sum(!is.na(unique(x)))
-  labels<-gettextf("Q%s", 1:fftile)
+  labels<-gettextf("Q%s", fftile:1)
   if(b>=fftile){
     xnames <- names(x)
     qs<-round(rank(x, na.last = "keep")/sum(!is.na(x))/(1/fftile)+.4999)

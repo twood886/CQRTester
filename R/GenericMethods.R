@@ -1,1 +1,0 @@
-setGeneric("UniverseReturnStats", function(.data) standardGeneric("UniverseReturnStats"))

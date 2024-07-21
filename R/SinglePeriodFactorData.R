@@ -1,12 +1,12 @@
 # SinglePeriodFactorData (S4 Object) --------------------------------------
 #'  An S4 Class to represent Factor Data for a single period
 #'
-#'@slot factor A character representing the name of the factor
-#'@slot date A date object representing the date of the data
-#'@slot ids A character vector representing the company ids
-#'@slot fvales A named numeric vector representing the factor values
-#'@slot returns A names numeric vector representing the forward returns
-#'@export
+#' @slot factor A character representing the name of the factor
+#' @slot date A date object representing the date of the data
+#' @slot ids A character vector representing the company ids
+#' @slot fvales A named numeric vector representing the factor values
+#' @slot returns A names numeric vector representing the forward returns
+#' @export
 setClass(
   "SinglePeriodFactorData",
   representation(
@@ -17,19 +17,19 @@ setClass(
     returns = "numeric"))
 
 # SinglePeriodFactorData --------------------------------------------------
-#'@title Single Period Factor Data
-#'@description Function to create SinglePeriodFactorData object
-#'@details This function converts data into SinglePeriodFactorData object.
-#'@param data A data frame containing id columns, return column and factor
+#' @title Single Period Factor Data
+#' @description Function to create SinglePeriodFactorData object
+#' @details This function converts data into SinglePeriodFactorData object.
+#' @param data A data frame containing id columns, return column and factor
 #' value column.
-#'@param date A date object representing the date of the data.
-#'@param iname A character representing the column name of identifiers.
-#'@param fname A character representing the column name of the factor.
-#'@param rname A character representing the column name of the returns.
-#'@returns A SinglePeriodFactorData object.
-#'@import methods
-#'@keywords internal
-#'@export
+#' @param date A date object representing the date of the data.
+#' @param iname A character representing the column name of identifiers.
+#' @param fname A character representing the column name of the factor.
+#' @param rname A character representing the column name of the returns.
+#' @returns A SinglePeriodFactorData object.
+#' @import methods
+#' @keywords internal
+#' @export
 SinglePeriodFactorData <- function(data, date, iname, fname, rname, ...){
 
   dargs <- list(...)
@@ -61,25 +61,24 @@ SinglePeriodFactorData <- function(data, date, iname, fname, rname, ...){
   }else{
     returns = data[[rname]]
   }
-
-
+  
   ids = data[[iname]]
   fvals = data[[fname]]
   names(fvals) = ids
   names(returns) = ids
-
-  return( new("SinglePeriodFactorData",
-              factor = fname,
-              date = date,
-              ids = ids,
-              fvals = fvals,
-              returns = returns
-  ))
+  
+  new("SinglePeriodFactorData",
+    factor = fname,
+    date = date,
+    ids = ids,
+    fvals = fvals,
+    returns = returns)
 }
 
 
 
 # UniverseReturnStats -----------------------------------------------------
+setGeneric("UniverseReturnStats", function(.data) standardGeneric("UniverseReturnStats"))
 setMethod("UniverseReturnStats",
   signature(.data = "SinglePeriodFactorData"),
   function(.data){

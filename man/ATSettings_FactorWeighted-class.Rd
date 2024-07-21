@@ -13,7 +13,8 @@ Settings for Factor Weighted Alpha Testing
 \item{\code{win.prob}}{A numeric vector of length 2 representing the percentile
 cut-offs for windsorization.}
 
-\item{\code{longonly}}{A logical representing if portfolio weights should be 
-long only}
+\item{\code{longonly}}{A logical representing if portfolio weights should be long only.}
+
+\item{\code{leverage}}{description}
 }}
 

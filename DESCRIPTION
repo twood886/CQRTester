@@ -12,10 +12,10 @@ RoxygenNote: 7.2.3
 Collate: 
     'ATSettings.R'
     'Utilities.R'
+    'SinglePeriodFactorData.R'
     'FactorData.R'
     'GenericMethods.R'
     'WeightingFunctions.R'
-    'SinglePeriodFactorData.R'
     'SinglePeriodAT.R'
     'Utilities_Scoring.R'
     'hello.R'

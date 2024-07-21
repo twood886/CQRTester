@@ -1,8 +1,8 @@
 # FactorData (S4 Object) --------------------------------------------------
 #'  An S4 Class to represent Factor Data over time
 #'
-#'  @slot data A list of SinglePeriodFactorData objects.
-#'  @include SinglePeriodFactorData.R
+#' @slot data A list of SinglePeriodFactorData objects.
+#' @include SinglePeriodFactorData.R
 setClass(
   "FactorData",
   representation(

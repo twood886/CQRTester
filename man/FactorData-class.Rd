@@ -5,6 +5,11 @@
 \alias{FactorData-class}
 \title{An S4 Class to represent Factor Data over time}
 \description{
-@slot data A list of SinglePeriodFactorData objects.
- @include SinglePeriodFactorData.R
+An S4 Class to represent Factor Data over time
 }
+\section{Slots}{
+
+\describe{
+\item{\code{data}}{A list of SinglePeriodFactorData objects.}
+}}
+

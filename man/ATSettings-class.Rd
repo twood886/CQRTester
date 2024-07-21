@@ -5,11 +5,16 @@
 \alias{ATSettings-class}
 \title{Alpha Testing Settings}
 \description{
-Alpha Testing Settings
+An S4 Object containing the settings to be used in Alpha Testing. Arguments
+passed through ATSettings are used in designing the alpha testing procedure.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{WeightingScheme}}{Character}
+\item{\code{start.date}}{Date representing the earliest date for Alpha Testing.}
+
+\item{\code{end.date}}{Date representing the latest date for Alpha Testing.}
+
+\item{\code{testing.scheme}}{Character representing alpha testing procedure.}
 }}
 

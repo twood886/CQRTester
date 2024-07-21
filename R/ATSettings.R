@@ -24,10 +24,7 @@ setClass(
 setClass(
   "ATSettings_FactorWeighted",
   contains = "ATSettings",
-  slots = c(
-    win.prob = "numeric",
-    longonly = "logical",
-    leverage = "numeric"))
+  slots = c(win.prob = "numeric"))
 
 #' @title Factor Weighted Alpha Testing Settings
 #' @description
@@ -41,20 +38,16 @@ setClass(
 #' should be long only (True) or Long-Short (False)
 #' @param leverage description
 #' @returns An ATSettings_FactorWeighted S4 object to be used in Alpha Testing.
-AT_FactorWeighted <- function(
+AT_SettingWeighted <- function(
     start.date = as.Date("1901-01-01"), end.date = Sys.Date(), 
-    win.prob = c(0,1), longonly = F, leverage = 1)
+    win.prob = c(0,1))
 {
   new("ATSettings_FactorWeighted",
       start.date = start.date,
       end.date = end.date,
       testing.scheme = "Factor",
-      win.prob = win.prob,
-      longonly = longonly,
-      leverage= leverage)
+      win.prob = win.prob)
 }
-
-
 
 
 # ATSettings_QSpread (S4 Object) -----------------------------------------
@@ -65,10 +58,7 @@ AT_FactorWeighted <- function(
 setClass(
   "ATSettings_QSpread",
   contains = "ATSettings",
-  slots = c(
-    quantiles = "integer",
-    longonly = "logical",
-    leverage = "numeric"))
+  slots = c(quantiles = "numeric"))
 
 #' @title Quantile Spread Alpha Testing Settings
 #' @description
@@ -81,17 +71,14 @@ setClass(
 #' should be long only (True) or Long-Short (False)
 #' @param leverage description
 #' @returns An ATSettings_FactorWeighted S4 object to be used in Alpha Testing.
-AT_FactorQSpread <- function(
-    start.date = as.Date("1901-01-01"), end.date = Sys.Date(), 
-    quantiles = 5, longonly = F, leverage = 1)
+AT_SettingQSpread <- function(
+    start.date = as.Date("1901-01-01"), end.date = Sys.Date(), quantiles = 5)
 {
   new("ATSettings_QSpread",
       start.date = start.date,
       end.date = end.date,
       testing.scheme = "QSpread",
-      quantiles = quantiles,
-      longonly = longonly,
-      leverage= leverage)
+      quantiles = quantiles)
 }
 
 
@@ -109,33 +96,28 @@ AT_FactorQSpread <- function(
 #' @param testing.scheme Weighting scheme to be used in testing factor. 
 #' Currently supports "Factor" and "Quantile"
 #' @param ... Additional settings to be passed based on Weighting.Scheme
+#' @export
 ATSettings <- function(start.date = as.Date("1901-01-01"),
   end.date = Sys.Date(), testing.scheme = "Factor", ...)
 {
   
-  known.schemes <- c(
-    "Factor",
-    "QSpread")
+  known.schemes <- c("Factor","QSpread")
   
-  if(!testing.scheme %in% know.schemes){
+  if(!testing.scheme %in% known.schemes){
     stop("Testing Scheme must be one of \"Factor\" or \"QSpread\".")
   }
   
   # Use if then statement to create a Factor Weighted AT Settings or Quantile 
-  if(Weighting.Scheme == "Factor"){
-    object <- AT_FactorWeighted(start.date, end.date, ...)
+  if(testing.scheme == "Factor"){
+    object <- AT_SettingWeighted(start.date, end.date, ...)
   }
   
-  if(Weighting.Scheme == "QSpread"){
-    object<- AT_FactorQSpread(start.date, end.date, ...)
+  if(testing.scheme == "QSpread"){
+    object <- AT_SettingQSpread(start.date, end.date, ...)
   }
   
   object
 }
-
-
-
-
 
 
 
@@ -145,7 +127,7 @@ setMethod(f = 'show',
   function(object){
     out <- paste(
       paste("----- Alpha Testing Settings -----"),
-      paste("Testing Scheme:", object@testing.scheme, sep = "\t"),
+      paste("Testing Scheme:", object@testing.scheme, sep = "\t\t"),
       paste("Start Date:", format(object@start.date,"%b %d,%Y"), sep = "\t\t"),
       paste("End Date:", format(object@end.date, "%b %d,%Y"), sep = "\t\t"),
       paste(
@@ -155,8 +137,6 @@ setMethod(f = 'show',
             paste0(format(object@win.prob[2] * 100, digits = 2),"%"),
             sep = " - "),
         sep = "\t\t"),
-      paste("Long Only:", object@longonly, sep = "\t\t"),
-      paste("Leverage Factor:", object@leverage, sep = "\t"),
       sep = "\n")
     cat(out)
   })
@@ -166,12 +146,10 @@ setMethod(f = 'show',
   function(object){
     out <- paste(
       paste("----- Alpha Testing Settings -----"),
-      paste("Testing Scheme:", object@testing.scheme, sep = "\t"),
+      paste("Testing Scheme:", object@testing.scheme, sep = "\t\t"),
       paste("Start Date:", format(object@start.date,"%b %d,%Y"), sep = "\t\t"),
       paste("End Date:", format(object@end.date, "%b %d,%Y"), sep = "\t\t"),
       paste("Factor Quantiles:", object@quantiles, sep = "\t"),
-      paste("Long Only:", object@longonly, sep = "\t\t"),
-      paste("Leverage Factor:", object@leverage, sep = "\t"),
       sep = "\n")
     cat(out)
   })
