@@ -25,9 +25,11 @@ setClass(
 #' @param data A data frame containing id columns, return column and factor
 #' value column.
 #' @param date A date object representing the date of the data.
-#' @param iname A character representing the column name of identifiers.
-#' @param fname A character representing the column name of the factor.
-#' @param rname A character representing the column name of the returns.
+#' @param id_col_name A character representing the column name of identifiers.
+#' @param factor_col_name A character string representing the
+#'  column name of the factor.
+#' @param return_col_name A character string representing the
+#'  column name of the returns.
 #' @returns A SinglePeriodFactorData object.
 #' @import methods
 #' @keywords internal
@@ -44,7 +46,7 @@ create_single_period_factor_data <- function(
   if ("return_col_name" %in% names(dargs))
     return_col_name <- dargs$return_col_name
   if ("factor_col_name" %in% names(dargs))
-    fname <- dargs$factor_col_name
+    factor_col_name <- dargs$factor_col_name
 
   # Check if necessary inputs are included
   if (missing(data))
@@ -70,7 +72,7 @@ create_single_period_factor_data <- function(
   names(fvals) <- ids
   names(returns) <- ids
   new("single_period_factor_data",
-    factor = fname,
+    factor = factor_col_name,
     date = date,
     ids = ids,
     fvals = fvals,
@@ -111,13 +113,12 @@ setMethod("calc_universe_return_stats",
 calc_qtile_return_stats <- function(.object, fftile = 5, ...) UseMethod("calc_qtile_return_stats")
 
 setMethod("calc_qtile_return_stats",
-  signature(.object = "SinglePeriodFactorData"),
-  function(.object, fftile)
-  {
+  signature(.object = "single_period_factor_data"),
+  function(.object, fftile) {
     # Calculate the Quantile of Factors
     fq <- ctq(.object@fvals, fftile)
 
-    .SingleGroupReturnStats <- function(.object, fq, ftile){
+    single_group_return_stats <- function(.object, fq, ftile) {
       group_loc <- which(fq==ftile)
       group_ids <- .object@ids[group_loc]
       group_returns <- .object@returns[group_loc]
@@ -137,14 +138,17 @@ setMethod("calc_qtile_return_stats",
 
     quantile_stats <- lapply(
       levels(fq),
-      .SingleGroupReturnStats,
+      single_group_return_stats,
       .Object = .object,
       fq = fq
     )
     names(quantile_stats) <- levels(fq)
     qn <- length(levels(fq)[which(levels(fq) != "NA")])
     qspread <- quantile_stats[[1]]$avg_return - quantile_stats[[qn]]$avg_return
-    qspreadweights <- c(quantile_stats[[1]]$weights, quantile_stats[[qn]]$weights)
+    qspreadweights <- c(
+      quantile_stats[[1]]$weights, 
+      quantile_stats[[qn]]$weights
+    )
     list(
       "q_spread" = qspread,
       "q_spread.weights" = qspreadweights,

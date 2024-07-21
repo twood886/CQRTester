@@ -56,19 +56,19 @@ ctz <- function(x, win_prob = c(0,1)) {
 #' @description Add Windsorized Z-Score and Quantile Score to Data
 #' @details Used in Alpha Testing Functions
 #' @param data dataframe containing column with data to be scored
-#' @param fname character column name of factor
+#' @param factor_col_name character column name of factor
 #' @param fftile integer number of fractiles to use in spliting data
 #' @param winsor pair of numeric to bound data in windsorization
 #' @return data
 #' @import tidyverse
 #' @import DescTools
 #' @export
-f_scoring <- function(data, fname, fftile, winsor = c(0, 1)) {
+f_scoring <- function(data, factor_col_name, fftile, winsor = c(0, 1)) {
   data %>%
     dplyr::mutate(
       `fzscore` = scale(
         DescTools::Winsorize(
-          .data[[fname]],
+          data[[factor_col_name]],
           probs = winsor,
           na.rm = TRUE
         )

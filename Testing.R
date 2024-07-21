@@ -11,7 +11,7 @@ test_spfd <- create_single_period_factor_data(
   return_col_name = "Return_Q01"
 )
 
-
+load("R/ATSettings.R")
 test_settings <- ATSettings(testing.scheme = "QSpread")
   
 
