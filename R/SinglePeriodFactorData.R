@@ -8,16 +8,18 @@
 #' @slot returns A names numeric vector representing the forward returns
 #' @export
 setClass(
-  "SinglePeriodFactorData",
+  "single_period_factor_data",
   representation(
     factor = "character",
     date = "Date",
     ids = "character",
     fvals = "numeric",
-    returns = "numeric"))
+    returns = "numeric"
+  )
+)
 
 # SinglePeriodFactorData --------------------------------------------------
-#' @title Single Period Factor Data
+#' @title Create single_period_factor_data S4 Object
 #' @description Function to create SinglePeriodFactorData object
 #' @details This function converts data into SinglePeriodFactorData object.
 #' @param data A data frame containing id columns, return column and factor
@@ -30,67 +32,70 @@ setClass(
 #' @import methods
 #' @keywords internal
 #' @export
-SinglePeriodFactorData <- function(data, date, iname, fname, rname, ...){
-
+create_single_period_factor_data <- function(
+  data, date, id_col_name, factor_col_name, return_col_name, ...
+) {
   dargs <- list(...)
 
-  if("date" %in% names(dargs))
-    date = dargs$date
-  if("iname" %in% names(dargs))
-    iname = dargs$iname
-  if("rname" %in% names(dargs))
-    rname = dargs$rname
-  if("fname" %in% names(dargs))
-    fname = dargs$fname
+  if ("date" %in% names(dargs))
+    date <- dargs$date
+  if ("id_col_name" %in% names(dargs))
+    id_col_name <- dargs$id_col_name
+  if ("return_col_name" %in% names(dargs))
+    return_col_name <- dargs$return_col_name
+  if ("factor_col_name" %in% names(dargs))
+    fname <- dargs$factor_col_name
 
   # Check if necessary inputs are included
-  if(missing(data))
+  if (missing(data))
     stop("There is no data provided")
 
-  if(missing(date))
+  if (missing(date))
     stop("No date arguement provided")
 
-  if(missing(iname))
+  if (missing(id_col_name))
     stop("No identifier column name provided")
 
-  if(missing(fname))
+  if (missing(factor_col_name))
     stop("No factor column name provided")
 
-  if(missing(rname)){
+  if (missing(return_col_name)){
     returns <- rep(NA_real_, nrow(data))
-  }else{
-    returns = data[[rname]]
+  } else {
+    returns <- data[[return_col_name]]
   }
-  
-  ids = data[[iname]]
-  fvals = data[[fname]]
-  names(fvals) = ids
-  names(returns) = ids
-  
+
+  ids <- data[[id_col_name]]
+  fvals <- data[[factor_col_name]]
+  names(fvals) <- ids
+  names(returns) <- ids
   new("SinglePeriodFactorData",
     factor = fname,
     date = date,
     ids = ids,
     fvals = fvals,
-    returns = returns)
+    returns = returns
+  )
 }
 
 
 
 # UniverseReturnStats -----------------------------------------------------
-setGeneric("UniverseReturnStats", function(.data) standardGeneric("UniverseReturnStats"))
-setMethod("UniverseReturnStats",
-  signature(.data = "SinglePeriodFactorData"),
+setGeneric("calc_universe_return_stats",
+  function(.data) standardGeneric("calc_universe_return_stats")
+)
+
+setMethod("calc_universe_return_stats",
+  signature(.data = "single_period_factor_data"),
   function(.data){
+    n <- length(.data@ids)
+    n_avail <- length(which(!is.na(.data@returns)))
+    avg_ret <- mean(.data@returns, na.rm = TRUE)
+    med_ret <- median(.data@returns, na.rm = TRUE)
+    hit_rate_zero <- length(which(.data@returns > 0)) / n_avail
+    hit_rate_uavg <- length(which(.data@returns > avg_ret)) / n_avail
 
-    n = length(.data@ids)
-    n_avail = length(which(!is.na(.data@returns)))
-    avg_ret = mean(.data@returns, na.rm = T)
-    med_ret = median(.data@returns, na.rm = T)
-    hit_rate_zero = length(which(.data@returns > 0)) / n_avail
-    hit_rate_uavg = length(which(.data@returns>avg_ret)) /n_avail
-
-    u_stats = list(
+    list(
       "n" = n,
       "n_avail" = n_avail,
       "avg_return" = avg_ret,
@@ -98,54 +103,52 @@ setMethod("UniverseReturnStats",
       "hit_rate_zero" = hit_rate_zero,
       "hit_rate_uavg" = hit_rate_uavg
     )
-    return(u_stats)
-  })
+  }
+)
 
 
 # -------------------------------------------------------------------------
+calc_qtile_return_stats <- function(.object, fftile = 5, ...) UseMethod("calc_qtile_return_stats")
 
-QuantileReturnStats <- function(.Object, fftile = 5, ...) UseMethod("QuantileReturnStats")
-setMethod("QuantileReturnStats",
-  signature(.Object = "SinglePeriodFactorData"),
-  function(.Object, fftile){
-    
+setMethod("calc_qtile_return_stats",
+  signature(.object = "SinglePeriodFactorData"),
+  function(.object, fftile)
+  {
     # Calculate the Quantile of Factors
-    fq<-ctq(.Object@fvals, fftile)
-    
-    .SingleGroupReturnStats <- function(.Object, fq, ftile){
+    fq <- ctq(.object@fvals, fftile)
+
+    .SingleGroupReturnStats <- function(.object, fq, ftile){
       group_loc <- which(fq==ftile)
-      group_ids <-.Object@ids[group_loc]
-      group_returns <- .Object@returns[group_loc]
-      
+      group_ids <- .object@ids[group_loc]
+      group_returns <- .object@returns[group_loc]
       group_n <- length(group_ids)
       group_n_avail <- length(which(!is.na(group_returns)))
       group_weights <- rep(1/group_n, group_n)
       names(group_weights) <- group_ids
-      
-      out <- list(
+      list(
         "n" = group_n,
         "n_avail" = group_n_avail,
-        "avg_return" = mean(group_returns, na.rm = T),
-        "med_return" = median(group_returns, na.rm = T),
+        "avg_return" = mean(group_returns, na.rm = TRUE),
+        "med_return" = median(group_returns, na.rm = TRUE),
         "hit_rate_zero" = length(which(group_returns > 0)) / group_n_avail,
-        "weights" = group_weights)
-      return(out)
+        "weights" = group_weights
+      )
     }
-    
-    quantileStats <- lapply(
-      levels(fq), 
-      .SingleGroupReturnStats, 
-      .Object = .Object, 
-      fq = fq)
-    names(quantileStats) <- levels(fq)
-    
+
+    quantile_stats <- lapply(
+      levels(fq),
+      .SingleGroupReturnStats,
+      .Object = .object,
+      fq = fq
+    )
+    names(quantile_stats) <- levels(fq)
     qn <- length(levels(fq)[which(levels(fq) != "NA")])
-    qspread <- quantileStats[[1]]$avg_return - quantileStats[[qn]]$avg_return
-    qspreadweights <- c(quantileStats[[1]]$weights, quantileStats[[qn]]$weights)
-    
+    qspread <- quantile_stats[[1]]$avg_return - quantile_stats[[qn]]$avg_return
+    qspreadweights <- c(quantile_stats[[1]]$weights, quantile_stats[[qn]]$weights)
     list(
       "q_spread" = qspread,
       "q_spread.weights" = qspreadweights,
-      "q_stats" = quantileStats)
-})
-
+      "q_stats" = quantile_stats
+    )
+  }
+)
