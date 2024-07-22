@@ -1,80 +1,93 @@
 # at_settings (S4 Object) --------------------------------------------------
-#' @title Alpha Testing Settings
+#' @title Alpha Testing Settings (S4 Object)
 #' @description
 #' An S4 Object containing the settings to be used in Alpha Testing. Arguments
 #' passed through ATSettings are used in designing the alpha testing procedure.
 #' @slot start_date Date representing the earliest date for Alpha Testing.
 #' @slot end_date Date representing the latest date for Alpha Testing.
 #' @slot testing_scheme Character representing alpha testing procedure.
-#' @slot long_only A logical representing if portfolio should be long only.
+#' @slot weighting_scheme Character representing weighting scheme.
 setClass(
   "at_settings",
   representation(
     start_date = "Date",
     end_date = "Date",
     testing_scheme = "character",
-    long_only = "logical"
+    weighting_scheme = "character"
   )
 )
 
-# at_settings_factor_w (S4 Object) -----------------------------------------
-#' @title Settings for Factor Weighted Alpha Testing
+# at_settings_factor_z (S4 Object) -----------------------------------------
+#' @title Settings for Factor Zscore Weighted Alpha Testing (S4 Object)
 #' @slot win_prob A numeric vector of length 2 representing the percentile
 #'cut-offs for windsorization.
 setClass(
-  "at_settings_factor_w",
+  "at_settings_factor_z",
   contains = "at_settings",
-  slots = c(win_prob = "numeric")
+  representation(win_prob = "numeric")
 )
 
-#' @title Factor Weighted Alpha Testing Settings
+# at_settings_factor_q (S4 Object) -----------------------------------------
+#' @title Settings for Factor Quantile Weighted Alpha Testing (S4 Object)
+#' @slot quantiles Number of Quantiles to use.
+setClass(
+  "at_settings_factor_q",
+  contains = "at_settings",
+  representation(quantiles = "numeric")
+)
+
+#' @title Set Factor Weighted Alpha Testing Settings
 #' @description
 #' A function to create Alpha Testing settings for a factor weighted Alpha Test.
 #' @param start_date description
 #' @param end_date description
+#' @param weighting_scheme description
 #' @param win_prob A numeric vector of length 2 representing the percentile
-#' @param long_only A logical if only long positions should be used.
-#' cut-offs for windsorization.
+#' @param ... Additional arguements to be passed to function.
 #' @returns An at_settings_factor_w S4 object to be used in Alpha Testing.
-set_at_settings_factor_w <- function(
-    start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-    win_prob = c(0, 1), long_only = FALSE) {
-  new("at_settings_factor_w",
+set_at_settings_factor_z <- function(
+  start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
+  weighting_scheme = "z-weighted", win_prob = c(0, 1), ...
+) {
+  dargs <- list(...)
+
+  if ("win_prob" %in% names(dargs))
+    win_prob <- dargs$win_prob
+
+  new("at_settings_factor_z",
     start_date = start_date,
     end_date = end_date,
-    testing_scheme = "factorw",
-    win_prob = win_prob,
-    long_only = long_only
+    testing_scheme = "factor_z",
+    weighting_scheme = weighting_scheme,
+    win_prob = win_prob
   )
 }
 
-# at_settings_q_spread (S4 Object) -----------------------------------------
-#' @title Settings for Quantile Spread Alpha Testing
-#' @slot quantiles Number of Quantiles to use.
-setClass(
-  "at_settings_q_spread",
-  contains = "at_settings",
-  slots = c(quantiles = "numeric")
-)
-
-#' @title Quantile Spread Alpha Testing Settings
+#' @title Set Quantile Spread Alpha Testing Settings
 #' @description
 #' A function to create Alpha Testing settings for a Quantile Spread Alpha Test.
 #' @param start_date description
 #' @param end_date description
+#' @param weighting_scheme description
 #' @param quantiles description
-#' @param long_only A logical representing whether or not the portfolio weights
-#' should be long only (True) or Long-Short (False)
+#' @param ... Addtional arguements to be passesd to function.
 #' @returns An at_settings_q_spread S4 object to be used in Alpha Testing.
-set_at_settings_q_spread <- function(
-    start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-    quantiles = 5, long_only = FALSE) {
-  new("at_settings_q_spread",
+set_at_settings_factor_q <- function(
+  start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
+  weighting_scheme = "equal",  quantiles = 5, ...
+) {
+  dargs <- list(...)
+
+  if ("quantiles" %in% names(dargs)) {
+    quantiles <- dargs$quantiles
+  }
+
+  new("at_settings_factor_q",
     start_date = start_date,
     end_date = end_date,
-    testing_scheme = "qspread",
-    quantiles = quantiles,
-    long_only = long_only
+    testing_scheme = "factor-q",
+    weighting_scheme = weighting_scheme,
+    quantiles = quantiles
   )
 }
 
@@ -91,47 +104,37 @@ set_at_settings_q_spread <- function(
 #' before provided End.Date argument.
 #' @param testing_scheme Weighting scheme to be used in testing factor.
 #' Currently supports "Factor" and "Quantile"
-#' @param long_only add
+#' @param weighting_scheme desctiption
 #' @param ... Additional settings to be passed based on Weighting.Scheme
 #' @export
 set_at_settings <- function(
+    testing_scheme = "factor-z",
     start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-    testing_scheme = "Factor", long_only = FALSE, ...) {
-
-  dargs <- list(...)
-  known_schemes <- c("Factor", "QSpread")
+    weighting_scheme = "z-weighted", ...) {
+  known_schemes <- c("factor-z", "factor-q")
 
   if (!testing_scheme %in% known_schemes) {
-    stop("Testing Scheme must be one of \"Factor\" or \"QSpread\".")
+    stop("Testing Scheme must be one of \"factor-z\" or \"factor-q\".")
   }
 
-  if (testing_scheme == "Factor") {
-    if ("win_prob" %in% names(dargs)) {
-      win_prob <- dargs$win_prob
-    }else {
-      win_prob <- c(0, 1)
-    }
-    set_at_settings_factor_w(start_date, end_date, win_prob, long_only)
+  if (testing_scheme == "factor-z") {
+    at <- set_at_settings_factor_z(start_date, end_date, weighting_scheme, ...)
   }
 
-  if (testing_scheme == "QSpread") {
-    if ("quantiles" %in% names(dargs)) {
-      quantiles <- dargs$quantiles
-    }else {
-      quantiles <- 5
-    }
-    set_at_settings_q_spread(start_date, end_date, quantiles, long_only)
+  if (testing_scheme == "factor-q") {
+    at <- set_at_settings_factor_q(start_date, end_date, weighting_scheme, ...)
   }
+  at
 }
 
 
 
 # Show Method -------------------------------------------------------------
 setMethod(f = "show",
-  signature(object = "at_settings_factor_w"),
+  signature(object = "at_settings_factor_z"),
   function(object) {
     out <- paste(
-      paste("----- Alpha Testeing Settings -----"),
+      paste("----- Alpha Testing Settings -----"),
       paste("Testing Scheme:", object@testing_scheme, sep = "\t\t"),
       paste("Start Date:", format(object@start_date, "%b %d,%Y"), sep = "\t\t"),
       paste("End Date:", format(object@end_date, "%b %d,%Y"), sep = "\t\t"),
@@ -143,6 +146,7 @@ setMethod(f = "show",
         ),
         sep = "\t\t"
       ),
+      "----------------------------------",
       sep = "\n"
     )
     cat(out)
@@ -150,7 +154,7 @@ setMethod(f = "show",
 )
 
 setMethod(f = "show",
-  signature(object = "at_settings_q_spread"),
+  signature(object = "at_settings_factor_q"),
   function(object) {
     out <- paste(
       paste("----- Alpha Testing Settings -----"),

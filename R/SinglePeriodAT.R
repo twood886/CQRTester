@@ -6,7 +6,7 @@
 #' @slot return
 #' @slot weights Portfolio Weights
 #' @slot .factordata A SinglePeriodFactorData object.
-#' @slot .settings Alpha Testing Settings#'
+#' @slot .settings Alpha Testing Settings'
 #' @include SinglePeriodFactorData.R
 setClass(
   "single_period_at",
@@ -26,13 +26,12 @@ setClass(
 #' @slot return_z_score todo
 #' @include SinglePeriodFactorData.R
 setClass(
-  "single_period_at_factor_w",
+  "single_period_at_factor_z",
   contains = "single_period_at",
   representation(
     IC = "numeric",
-    factor_z_score = "numeric",
-    return_z_score = "numeric",
-    .settings = "at_settings"
+    factor_z_score = "factor_z_score",
+    return_z_score = "numeric"
   )
 )
 
@@ -42,11 +41,12 @@ setClass(
 #' @slot factor_quantile todo
 #' @slot q_returns todo
 #' @slot q_stats todo
+#' @include SinglePeriodFactorData.R
 setClass(
-  "single_period_at_q_spread",
-  contains = "SinglePeriodAT",
+  "single_period_at_factor_q",
+  contains = "single_period_at",
   representation(
-    factor_quantile = "ordered",
+    factor_quantile = "factor_q_score",
     q_returns = "numeric",
     q_stats = "list"
   )
@@ -56,83 +56,75 @@ setClass(
 setGeneric("alpha_test",
   function(data, .settings, ...) standardGeneric("alpha_test")
 )
+
+#' @export
+alpha_test <- function(data, .settings, ...) UseMethod("alpha_test")
 # -------------------------------------------------------------------------
 
-#' @include WeightingFunctions.R
+#' @include testing_schemes.R
+#' @include weighting_schemes.R
 setMethod("alpha_test",
   signature(
     data = "single_period_factor_data",
-    .setting = "at_settings"
+    .setting = "at_settings_factor_z"
   ),
   function(data, .settings, ...) {
     # Extract Date
     d <- data@date
     # Calculate the Z-Score of Factors
-    fz <- ctz(data@fvals, .settings@win.prob)
+    fz <- calc_factor_z(data@fvals, .settings@win_prob)
     # Calculate the Z-Score of Returns
-    rz <- ctz(data@returns, .settings@win.prob)
+    rz <- ctz(data@returns, .settings@win_prob)
     # Calculate the IC
-    ic <- cor(fz, rz, use = "pairwise.complete.obs")
-    
+    ic <- cor(fz@factor_z, rz, use = "pairwise.complete.obs")
     # Calculate the weights using the ZScores
-    weights <- ZscoreWeighting(fz)
-    
+    weights <- calc_weights(fz, .settings@weighting_scheme)
     # Return
     r <- as.numeric(weights %*% data@returns)
-    
-    return(
-      new("SinglePeriodAT_FactorWeighted",
-          date = d,
-          return = r,
-          weights = weights,
-          .factordata = data,
-          .settings = .Settings,
-          IC = IC,
-          factorZscore = fz,
-          returnZscore = rz))
+    new("single_period_at_factor_z",
+      date = d,
+      return = r,
+      weights = weights,
+      .factor_data = data,
+      .settings = .settings,
+      IC = ic,
+      factor_z_score = fz,
+      return_z_score = rz
+    )
   }
 )
 
 
-
 # -------------------------------------------------------------------------
 #' @include WeightingFunctions.R
-setMethod('AlphaTest',
+#' @include testing_schemes.R
+#' @include weighting_schemes.R
+setMethod("alpha_test",
   signature(
-    data = "SinglePeriodFactorData",
-    .Settings = "ATSettings_QSpread"),
-  function(data, .Settings, ...){
-    
+    data = "single_period_factor_data",
+    .settings = "at_settings_factor_q"
+  ),
+  function(data, .settings, ...) {
     # Extract Date
     d <- data@date
-    
     # Calculate the Quantile of Factors
-    fq <- ctq(data@fvals, .Settings@quantiles)
-    
+    fq <- calc_factor_q(data@fvals, .settings@quantiles)
     # Quintile Level Statistics
     # Should Change to be defined for alt weighting, TODO
-    qStats <- QuantileReturnStats(.Object, fftile = .Settings@quantiles)
-    
-    # This needs to be fixed
-    weights <- qStats@q_spread_weights
-    
+    q_stats <- quantile_return_stats(fq@factor_q, returns = data@returns)
+
+    weights <- calc_weights(fq, .settings@weighting_scheme)
+    # returns
     r <- as.numeric(weights %*% data@returns)
-    
-    return(
-      new("SinglePeriodAT_Quantile",
-        date = d,
-        sp_return = qStats$qspread,
-        alpha = as.numeric(NA),
-        weights = weights,
-        .factordata = data,
-        .settings = .Settings,
-        factorQuintile = fq,
-        qreturns = qStats$q_stats$avg_return,
-        qstats = qStats$q_stats))
-  })
-
-
-
-
-#' @export
-AlphaTest <- function(data, .Settings, ...) UseMethods("AlphaTest")
+    new("single_period_at_factor_q",
+      date = d,
+      return = r,
+      weights = weights,
+      .factor_data = data,
+      .settings = .settings,
+      factor_quantile = fq,
+      q_returns = as.numeric(q_stats$avg_return),
+      q_stats = q_stats
+    )
+  }
+)

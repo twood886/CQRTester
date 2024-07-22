@@ -1,7 +1,8 @@
 load("Data/ATData.Rda")
 source("R/SinglePeriodFactorData.R")
 datesub <- as.Date("2019-12-31")
-datasub <- data[which(data$Periods==datesub),]
+datasub <- data[which(data$Periods == datesub), ]
+datasub[1, "EPS to Price - Trail"] <- NA
 
 test_spfd <- create_single_period_factor_data(
   data = datasub,
@@ -12,10 +13,20 @@ test_spfd <- create_single_period_factor_data(
 )
 
 source("R/ATSettings.R")
-test_settings <- set_at_settings(testing_scheme = "QSpread")
+test_settings <- set_at_settings(weighting_scheme = "long-only", win_prob = c(.05,.95))
+test_settings <- set_at_settings(
+  testing_scheme = "factor-q",
+  weighting_scheme = "equal-short-only",
+  quantiles = 3
+)
+
+source("R/Utilities_Scoring.R")
+source("R/testing_schemes.R")
+source("R/weighting_schemes.R")
+source("R/SinglePeriodAT.R")
+test_spat <- alpha_test(test_spfd, test_settings)
 
 
-test_SPAT <- CQRTester::AlphaTest(test_SPFD, test_settings)
 
 test_FD <- FactorData(
   data = data,

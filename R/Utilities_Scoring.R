@@ -41,8 +41,7 @@ ctq <- function(x, fftile){
 #' @param x a numeric vector to be winsorized and normalized.
 #' @param win.prob numeric vector of probabilities with values in [0,1]
 #' as used in quantile.
-#' @return A vector of the same length as the original data x containing the
-#' winsorized and normalized data.
+#' @return ord
 #' @import tidyverse
 #' @import DescTools
 #' @export
