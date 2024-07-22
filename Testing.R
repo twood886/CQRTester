@@ -15,9 +15,6 @@ source("R/ATSettings.R")
 test_settings <- set_at_settings(testing_scheme = "QSpread")
 
 
-test_settings <- CQRTester::AT_FactorWeighted(c(0.05, 0.95))
-
-
 test_SPAT <- CQRTester::AlphaTest(test_SPFD, test_settings)
 
 test_FD <- FactorData(
