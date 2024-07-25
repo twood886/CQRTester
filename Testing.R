@@ -27,6 +27,17 @@ source("R/SinglePeriodAT.R")
 test_spat <- alpha_test(test_spfd, test_settings)
 
 
+source("R/FactorData.R")
+source("R/Utilities.R")
+
+test_params <- create_factor_data_params()
+check_factor_data_params(test_params)
+
+
+test_fd <- create_factor_data(data)
+
+
+
 
 test_FD <- FactorData(
   data = data,

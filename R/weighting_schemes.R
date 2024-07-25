@@ -2,6 +2,9 @@ setGeneric("calc_weights",
   function(score, weighting_scheme, ...) standardGeneric("calc_weights")
 )
 
+#'@export
+calc_weights <- function(score, weighting_scheme, ...) UseMethod("calc_weights")
+
 #' @importFrom tidyr replace_na
 setMethod("calc_weights",
   signature(score = "factor_z_score"),
