@@ -5,17 +5,13 @@
 #' @slot date A date object representing the date of the data
 #' @slot return
 #' @slot weights Portfolio Weights
-#' @slot .factordata A SinglePeriodFactorData object.
-#' @slot .settings Alpha Testing Settings'
 #' @include SinglePeriodFactorData.R
 setClass(
   "single_period_at",
   slots = c(
     date = "Date",
     return = "numeric",
-    weights = "numeric",
-    .factor_data = "single_period_factor_data",
-    .settings = "at_settings"
+    weights = "numeric"
   )
 )
 
@@ -85,8 +81,6 @@ setMethod("alpha_test",
       date = d,
       return = r,
       weights = weights,
-      .factor_data = data,
-      .settings = .settings,
       IC = ic,
       factor_z_score = fz,
       return_z_score = rz
@@ -120,8 +114,6 @@ setMethod("alpha_test",
       date = d,
       return = r,
       weights = weights,
-      .factor_data = data,
-      .settings = .settings,
       factor_quantile = fq,
       q_returns = as.numeric(q_stats$avg_return),
       q_stats = q_stats

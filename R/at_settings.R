@@ -162,6 +162,7 @@ setMethod(f = "show",
       paste("Start Date:", format(object@start_date, "%b %d,%Y"), sep = "\t\t"),
       paste("End Date:", format(object@end_date, "%b %d,%Y"), sep = "\t\t"),
       paste("Factor Quantiles:", object@quantiles, sep = "\t"),
+      "----------------------------------",
       sep = "\n"
     )
     cat(out)

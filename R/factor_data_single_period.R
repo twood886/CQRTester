@@ -1,6 +1,6 @@
-# SinglePeriodFactorData (S4 Object) --------------------------------------
-#'  An S4 Class to represent Factor Data for a single period
-#'
+# single_period_factor_data (S4 Object) ------------------------------------
+#' @title Single Period Factor Data (S4 Object)
+#' @description An S4 Class to represent Factor Data for a single period
 #' @slot factor A character representing the name of the factor
 #' @slot date A date object representing the date of the data
 #' @slot ids A character vector representing the company ids
@@ -14,7 +14,9 @@ setClass(
     date = "Date",
     ids = "character",
     fvals = "numeric",
-    returns = "numeric"
+    returns = "numeric",
+    group = "character",
+    weights = "numeric"
   )
 )
 
@@ -30,12 +32,15 @@ setClass(
 #'  column name of the factor.
 #' @param return_col_name A character string representing the
 #'  column name of the returns.
+#' @param group_col_name A character string representing the column name of
+#'  grouping varialble.
+#' @param weight_col_name A character string representing the column name
+#'  of weighting variable.
 #' @returns A SinglePeriodFactorData object.
-#' @import methods
 #' @keywords internal
-#' @export
-create_single_period_factor_data <- function(
-  data, date, id_col_name, factor_col_name, return_col_name, ...
+create_single_period_factor_data <- function( # nolint: object_length_linter.
+  data, date, id_col_name, factor_col_name, return_col_name,
+  group_col_name, weight_col_name, ...
 ) {
   dargs <- list(...)
 
@@ -47,6 +52,10 @@ create_single_period_factor_data <- function(
     return_col_name <- dargs$return_col_name
   if ("factor_col_name" %in% names(dargs))
     factor_col_name <- dargs$factor_col_name
+  if ("group_col_name" %in% names(dargs))
+    group_col_name <- dargs$group_col_name
+  if ("weight_col_name" %in% names(dargs))
+    weight_col_name <- dargs$weight_col_name
 
   # Check if necessary inputs are included
   if (missing(data))
@@ -61,22 +70,39 @@ create_single_period_factor_data <- function(
   if (missing(factor_col_name))
     stop("No factor column name provided")
 
-  if (missing(return_col_name)){
+  if (missing(return_col_name)) {
     returns <- rep(NA_real_, nrow(data))
   } else {
     returns <- data[[return_col_name]]
+  }
+
+  if (missing(group_col_name)) {
+    group <- rep("All", nrow(data))
+  } else {
+    group <- data[[group_col_name]]
+  }
+
+  if (missing(weight_col_name)) {
+    weights <- rep(1 / nrow(data), nrow(data))
+  } else {
+    weights <- data[[weight_col_name]] / sum(data[[weight_col_name]], na.rm = TRUE) # nolint: line_length_linter.
   }
 
   ids <- data[[id_col_name]]
   fvals <- data[[factor_col_name]]
   names(fvals) <- ids
   names(returns) <- ids
+  names(group) <- ids
+  names(weights) <- ids
+
   new("single_period_factor_data",
     factor = factor_col_name,
     date = date,
     ids = ids,
     fvals = fvals,
-    returns = returns
+    returns = returns,
+    group = group,
+    weights = weights
   )
 }
 
@@ -89,7 +115,7 @@ setGeneric("calc_universe_return_stats",
 
 setMethod("calc_universe_return_stats",
   signature(.data = "single_period_factor_data"),
-  function(.data){
+  function(.data) {
     n <- length(.data@ids)
     n_avail <- length(which(!is.na(.data@returns)))
     avg_ret <- mean(.data@returns, na.rm = TRUE)
@@ -110,7 +136,7 @@ setMethod("calc_universe_return_stats",
 
 
 # -------------------------------------------------------------------------
-calc_qtile_return_stats <- function(.object, fftile = 5, ...) UseMethod("calc_qtile_return_stats")
+calc_qtile_return_stats <- function(.object, fftile = 5, ...) UseMethod("calc_qtile_return_stats") # nolint: line_length_linter.
 
 setMethod("calc_qtile_return_stats",
   signature(.object = "single_period_factor_data"),
@@ -119,12 +145,12 @@ setMethod("calc_qtile_return_stats",
     fq <- ctq(.object@fvals, fftile)
 
     single_group_return_stats <- function(.object, fq, ftile) {
-      group_loc <- which(fq==ftile)
+      group_loc <- which(fq == ftile)
       group_ids <- .object@ids[group_loc]
       group_returns <- .object@returns[group_loc]
       group_n <- length(group_ids)
       group_n_avail <- length(which(!is.na(group_returns)))
-      group_weights <- rep(1/group_n, group_n)
+      group_weights <- rep(1 / group_n, group_n)
       names(group_weights) <- group_ids
       list(
         "n" = group_n,
@@ -146,7 +172,7 @@ setMethod("calc_qtile_return_stats",
     qn <- length(levels(fq)[which(levels(fq) != "NA")])
     qspread <- quantile_stats[[1]]$avg_return - quantile_stats[[qn]]$avg_return
     qspreadweights <- c(
-      quantile_stats[[1]]$weights, 
+      quantile_stats[[1]]$weights,
       quantile_stats[[qn]]$weights
     )
     list(

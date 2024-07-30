@@ -15,7 +15,7 @@ setClass(
 )
 
 
-#' @title Calcualte Z-Score Factor Value
+#' @title Calculate Z-Score Factor Value
 #' @description Calculate Factor Z-Score
 #' @param factor_values a numeric array of factor values
 #' @param win_prob a numeric vector of probabilities with values in [0,1]
@@ -27,7 +27,7 @@ calc_factor_z <- function(factor_values, win_prob = c(0, 1)) {
   new("factor_z_score", factor_z = fz)
 }
 
-#' @title Calcualte Quantile Factor Value
+#' @title Calculate Quantile Factor Value
 #' @description Calculate Factor Z-Score
 #' @param factor_values a numeric array of factor values
 #' @param quantiles a numeric representing the number of quantiles.
