@@ -14,7 +14,6 @@ setClass(
   representation(factor_q = "ordered")
 )
 
-
 #' @title Calculate Z-Score Factor Value
 #' @description Calculate Factor Z-Score
 #' @param factor_values a numeric array of factor values
@@ -22,8 +21,11 @@ setClass(
 #' @return A vector of the same length as the original data x containing the
 #' winsorized and normalized data.
 #' @include Utilities_Scoring.R
-calc_factor_z <- function(factor_values, win_prob = c(0, 1)) {
-  fz <- ctz(factor_values, win_prob)
+calc_factor_z <- function(factor_data, win_prob = c(0, 1)) UseMethod("calc_factor_z") # nolint: line_length_linter.
+
+#' @include Utilities_Scoring.R
+calc_factor_z.single_period_factor_data <- function(x, win_prob = c(0, 1)) {
+  fz <- ctz(x@fvals, x@weights, x@group, win_prob)
   new("factor_z_score", factor_z = fz)
 }
 

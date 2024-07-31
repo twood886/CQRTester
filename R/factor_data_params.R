@@ -43,7 +43,7 @@ create_factor_data_params <- function(
     factor_col_name = factor_col_name,
     return_col_name = return_col_name,
     group_col_name = group_col_name,
-    weight_col_name = weight_col_name,
+    weight_col_name = weight_col_name
   )
 }
 

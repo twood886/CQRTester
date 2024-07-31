@@ -35,43 +35,98 @@ ctq <- function(x, fftile){
   return(ftile)
 }
 
-#' @title Calculate Z-Score with Winsorization
+#' @title Calculate Factor Z-Score with Winsorization
 #' @description Function to calculate normalized value with windsorization.
 #' @details Used in Alpha Testing Functions
-#' @param x a numeric vector to be winsorized and normalized.
+#' @param values a numeric vector to be winsorized and normalized.
+#' @param weights a numeric vector of weights.
+#' @param group a character vector of grouping.
 #' @param win.prob numeric vector of probabilities with values in [0,1]
 #' as used in quantile.
 #' @return ord
 #' @import tidyverse
 #' @import DescTools
 #' @export
-ctz <- function(x, win_prob = c(0,1)) {
-  win_x <- DescTools::Winsorize(x = x, probs = win_prob, na.rm = TRUE)
-  norm_x <- (win_x - mean(win_x, na.rm = TRUE)) / sd(win_x, na.rm = TRUE)
+ctz <- function(values, weights, group, win_prob = c(0, 1)) {
+  win_values <- grouped_windsorization(values, group, win_prob)
+  means <- grouped_weighted_mean(values, weights, group)
+  stds <- grouped_weighted_sd(values, weights, group)
+  norm_x <- (win_values - means) / stds
   return(norm_x)
 }
 
-#' @title Quantile & Z-Scoring
-#' @description Add Windsorized Z-Score and Quantile Score to Data
-#' @details Used in Alpha Testing Functions
-#' @param data dataframe containing column with data to be scored
-#' @param factor_col_name character column name of factor
-#' @param fftile integer number of fractiles to use in spliting data
-#' @param winsor pair of numeric to bound data in windsorization
-#' @return data
-#' @import tidyverse
-#' @import DescTools
-#' @export
-f_scoring <- function(data, factor_col_name, fftile, winsor = c(0, 1)) {
-  data %>%
-    dplyr::mutate(
-      `fzscore` = scale(
-        DescTools::Winsorize(
-          data[[factor_col_name]],
-          probs = winsor,
-          na.rm = TRUE
-        )
-      )
-    ) %>%
-    dplyr::mutate(fgroup = ctq(`fzscore`, {{fftile}}))
+
+
+grouped_weighted_mean <- function(values, weights, group) {
+  ind_grouped_weighted_mean <- function(group_x, values, weights, group) {
+    avail_values <- values[which(!is.na(values))]
+    weights <- ifelse(is.na(weights), 0, weights)
+    avail_weights <- weights[which(!is.na(values))]
+    avail_group <- group[which(!is.na(values))]
+    g_values <- avail_values[which(avail_group == group_x)]
+    g_weights <- avail_weights[which(avail_group == group_x)]
+    sum(g_values * g_weights) / sum(g_weights)
+  }
+  sapply(
+    group,
+    ind_grouped_weighted_mean,
+    values = values, weights = weights, group = group
+  )
+}
+
+grouped_weighted_sd <- function(values, weights, group) {
+  ind_grouped_weighted_sd <- function(group_x, values, weights, group) {
+    avail_values <- values[which(!is.na(values))]
+    weights <- ifelse(is.na(weights), 0, weights)
+    avail_weights <- weights[which(!is.na(values))]
+    avail_group <- group[which(!is.na(values))]
+    g_values <- avail_values[which(avail_group == group_x)]
+    g_weights <- avail_weights[which(avail_group == group_x)]
+
+    avg <- sum(g_values * g_weights) / sum(g_weights)
+    dof <- (length(g_weights) - 1) / length(g_weights)
+    var <- sum(g_weights * (g_values - avg)^2) / (dof * sum(g_weights))
+    sqrt(var)
+  }
+  sapply(
+    group,
+    ind_grouped_weighted_sd,
+    values = values, weights = weights, group = group
+  )
+}
+
+grouped_windsorization <- function(
+  values, group, probs = c(0.05, 0.95), na.rm = TRUE, type = 7
+) {
+
+  ind_grouped_windsorization <- function(x, g, v, gr,
+    probs = c(0.05, 0.95), na.rm = TRUE, type = 7
+  ) {
+    g_values <- v[which(gr == g)]
+    xq <- quantile(x = g_values, probs = probs, na.rm = na.rm, type = type)
+    minval <- xq[[1L]]
+    maxval <- xq[[2L]]
+
+    if (is.na(x)) {
+      x <- NA
+    }else if (x < minval) {
+      x <- minval
+    } else if (x > maxval) {
+      x <- maxval
+    }
+    return(x)
+  }
+
+  mapply(
+    ind_grouped_windsorization,
+    x = values,
+    g = group,
+    MoreArgs = list(
+      v = values,
+      gr = group,
+      probs = probs,
+      na.rm = na.rm,
+      type = type
+    )
+  )
 }

@@ -28,7 +28,7 @@ setClass(
 #' @returns A FactorData object.
 #' @import dplyr
 #' @import methods
-#' @include Utilities.R
+#' @include utilities.R
 #' @include factor_data_params.R
 #' @include factor_data_single_period.R
 #' @export

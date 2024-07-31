@@ -3,15 +3,19 @@
 #' @description An S4 Class to represent Factor Alpha Testing Parent Class
 #'  for a single period
 #' @slot date A date object representing the date of the data
-#' @slot return
+#' @slot return portfolio return
+#' @slot return_bmark benchmark return
 #' @slot weights Portfolio Weights
+#' @slot weights_bmark benchmark weights
 #' @include SinglePeriodFactorData.R
 setClass(
   "single_period_at",
   slots = c(
     date = "Date",
     return = "numeric",
-    weights = "numeric"
+    return_bmark = "numeric",
+    weights = "numeric",
+    weights_bmark = "numeric"
   )
 )
 
@@ -59,6 +63,7 @@ alpha_test <- function(data, .settings, ...) UseMethod("alpha_test")
 
 #' @include testing_schemes.R
 #' @include weighting_schemes.R
+#' @include utilties_scoring.R
 setMethod("alpha_test",
   signature(
     data = "single_period_factor_data",
@@ -68,19 +73,24 @@ setMethod("alpha_test",
     # Extract Date
     d <- data@date
     # Calculate the Z-Score of Factors
-    fz <- calc_factor_z(data@fvals, .settings@win_prob)
+    fz <- calc_factor_z(data, .settings@win_prob)
     # Calculate the Z-Score of Returns
-    rz <- ctz(data@returns, .settings@win_prob)
+    rz <- ctz(data@returns, data@weights, data@group, .settings@win_prob)
     # Calculate the IC
     ic <- cor(fz@factor_z, rz, use = "pairwise.complete.obs")
     # Calculate the weights using the ZScores
     weights <- calc_weights(fz, .settings@weighting_scheme)
     # Return
     r <- as.numeric(weights %*% data@returns)
+    weights_bmark <- data@weights / sum(data@weights, na.rm = TRUE)
+    r_bmark <- as.numeric(weights_bmark %*% data@returns)
+
     new("single_period_at_factor_z",
       date = d,
       return = r,
+      return_bmark = r_bmark,
       weights = weights,
+      weights_bmark = weights_bmark,
       IC = ic,
       factor_z_score = fz,
       return_z_score = rz

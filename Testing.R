@@ -1,3 +1,4 @@
+library(tidyverse)
 load("Data/ATData.Rda")
 source("R/factor_data_single_period.R")
 datesub <- as.Date("2019-12-31")
@@ -14,9 +15,7 @@ test_spfd <- create_single_period_factor_data(
 
 source("R/at_settings.R")
 test_settings <- set_at_settings(
-  testing_scheme = "factor-q",
-  weighting_scheme = "equal-short-only",
-  quantiles = 3
+  testing_scheme = "factor-z"
 )
 
 source("R/utilities_scoring.R")
