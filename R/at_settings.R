@@ -110,7 +110,7 @@ set_at_settings_factor_q <- function(
 set_at_settings <- function(
     testing_scheme = "factor-z",
     start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-    weighting_scheme = "z-weighted", ...) {
+    weighting_scheme, ...) {
   known_schemes <- c("factor-z", "factor-q")
 
   if (!testing_scheme %in% known_schemes) {
@@ -118,10 +118,16 @@ set_at_settings <- function(
   }
 
   if (testing_scheme == "factor-z") {
+    if (is.null(weighting_scheme)) {
+      weighting_scheme <- "z-weighted"
+    }
     at <- set_at_settings_factor_z(start_date, end_date, weighting_scheme, ...)
   }
 
   if (testing_scheme == "factor-q") {
+    if (is.null(weighting_scheme)) {
+      weighting_scheme <- "equal-spread"
+    }
     at <- set_at_settings_factor_q(start_date, end_date, weighting_scheme, ...)
   }
   at

@@ -15,18 +15,18 @@ test_spfd <- create_single_period_factor_data(
 
 source("R/at_settings.R")
 test_settings <- set_at_settings(
-  testing_scheme = "factor-z"
+  testing_scheme = "factor-q"
 )
 
-source("R/utilities_scoring.R")
-source("R/testing_schemes.R")
+source("R/factor_z_score.R")
+source("R/factor_q_score.R")
 source("R/weighting_schemes.R")
 source("R/alpha_test_single_period.R")
 test_spat <- alpha_test(test_spfd, test_settings)
 
 
 
-library(tidyverse)
+
 source("R/generic_methods.R")
 source("R/factor_data_params.R")
 source("R/factor_data.R")

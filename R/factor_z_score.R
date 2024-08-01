@@ -1,61 +1,40 @@
-#' @title Convert Data Array to Quantiles
-#' @description Function to calculate quantiles.
-#' @details Used in Alpha Testing Functions
-#' @param x a numeric array to be quantiled
-#' @param fftile integer number of fractiles to use in splitting data
-#' @return ftile
-#' @import tidyverse
-#' @import DescTools
-#' @import ggplot2
-#' @import forcats
-#' @export
-ctq <- function(x, fftile){
-  b <- sum(!is.na(unique(x)))
-  labels <- gettextf("Q%s", fftile:1)
-  if (b >= fftile) {
-    xnames <- names(x)
-    qs <- round(
-      rank(x, na.last = "keep") / sum(!is.na(x)) / (1 / fftile) + .4999
-    )
-    qs <- ifelse(qs < 1, 1, qs)
-    ftile <- factor(
-      ggplot2::cut_interval(qs, n = fftile, labels = labels),
-      ordered = TRUE
-    )
-    ftile <- forcats::fct_na_value_to_level(ftile, level = "NA")
-    names(ftile) <- xnames
-  }else {
-    ftile <- factor(
-      rep(NA, times = length(x)),
-      levels = labels,
-      ordered = TRUE
-    )
-    ftile <- forcats::fct_na_value_to_level(ftile, level = "NA")
-  }
-  return(ftile)
+#' @title Factor Z-Score (S4 Object)
+#' @description An S4 Class to represent Factor Z-Scores
+#' @slot score Factor Z Scores
+setClass(
+  "factor_z_score",
+  representation(score = "numeric")
+)
+
+#' @title Calculate Z-Score Factor Value
+#' @description Calculate Factor Z-Score
+#' @param factor_values a numeric array of factor values
+#' @param win_prob a numeric vector of probabilities with values in [0,1]
+#' @return A vector of the same length as the original data x containing the
+#' winsorized and normalized data.
+calc_factor_z <- function(factor_data, win_prob = c(0, 1)) UseMethod("calc_factor_z") # nolint: line_length_linter.
+
+calc_factor_z.single_period_factor_data <- function(x, win_prob = c(0, 1)) {
+  fz <- ctz(x@fvals, x@weights, x@group, win_prob)
+  new("factor_z_score", score = fz)
 }
 
 #' @title Calculate Factor Z-Score with Winsorization
 #' @description Function to calculate normalized value with windsorization.
 #' @details Used in Alpha Testing Functions
-#' @param values a numeric vector to be winsorized and normalized.
+#' @param values a numeric vector of factor values
 #' @param weights a numeric vector of weights.
 #' @param group a character vector of grouping.
 #' @param win.prob numeric vector of probabilities with values in [0,1]
 #' as used in quantile.
 #' @return ord
-#' @import tidyverse
-#' @import DescTools
-#' @export
 ctz <- function(values, weights, group, win_prob = c(0, 1)) {
-  win_values <- grouped_windsorization(values, group, win_prob)
+  win_values <- windsorize(values, group, win_prob, na.rm = TRUE)
   means <- grouped_weighted_mean(values, weights, group)
   stds <- grouped_weighted_sd(values, weights, group)
   norm_x <- (win_values - means) / stds
-  return(norm_x)
+  norm_x
 }
-
-
 
 grouped_weighted_mean <- function(values, weights, group) {
   ind_grouped_weighted_mean <- function(group_x, values, weights, group) {
@@ -95,38 +74,33 @@ grouped_weighted_sd <- function(values, weights, group) {
   )
 }
 
-grouped_windsorization <- function(
-  values, group, probs = c(0.05, 0.95), na.rm = TRUE, type = 7
-) {
-
-  ind_grouped_windsorization <- function(x, g, v, gr,
-    probs = c(0.05, 0.95), na.rm = TRUE, type = 7
-  ) {
-    g_values <- v[which(gr == g)]
-    xq <- quantile(x = g_values, probs = probs, na.rm = na.rm, type = type)
+windsorize <- function(values, group, probs = c(0.05, 0.95), ...) {
+  windsorize_ind <- function(x, g, v, gr, probs = c(0.05, 0.95), ...) {
+    if (is.na(x)) {
+      return(NA)
+    }
+    v <- v[which(gr == g)]
+    xq <- quantile(x = v, probs = probs, ...)
     minval <- xq[[1L]]
     maxval <- xq[[2L]]
 
-    if (is.na(x)) {
-      x <- NA
-    }else if (x < minval) {
+    if (x < minval) {
       x <- minval
     } else if (x > maxval) {
       x <- maxval
     }
-    return(x)
+    x
   }
 
   mapply(
-    ind_grouped_windsorization,
+    windsorize_ind,
     x = values,
     g = group,
     MoreArgs = list(
       v = values,
       gr = group,
       probs = probs,
-      na.rm = na.rm,
-      type = type
+      ... = ...
     )
   )
 }

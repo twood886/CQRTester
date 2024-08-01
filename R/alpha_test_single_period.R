@@ -112,11 +112,11 @@ setMethod("alpha_test",
     # Extract Date
     d <- data@date
     # Calculate the Quantile of Factors
-    fq <- calc_factor_q(data@fvals, .settings@quantiles)
+    fq <- calc_factor_q(data, .settings@quantiles)
     # Quintile Level Statistics
     # Should Change to be defined for alt weighting, TODO
-    q_stats <- quantile_return_stats(fq@factor_q, returns = data@returns)
-
+    #q_stats <- quantile_return_stats(fq@factor_q, returns = data@returns)
+    q_stats <- list(NULL)
     weights <- calc_weights(fq, .settings@weighting_scheme)
     # returns
     r <- as.numeric(weights %*% data@returns)

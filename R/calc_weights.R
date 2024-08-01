@@ -1,7 +1,7 @@
 #' @title Calculate Weight from Factor Score
 #' @description Function to calculate the portfolio weights for a given scoring
 #' and weighting scheme
-#' @param score A factor score object 
+#' @param score A factor score object
 #' @param weighting_scheme A string representing the weighting scheme to be
 #' used to calculate the portfolio weights.
 #'@export
@@ -12,7 +12,7 @@ calc_weights <- function(score, weighting_scheme, ...) UseMethod("calc_weights")
 calc_weights.factor_z_score <- function(
   score, weighting_scheme = "z-weighted", ...
 ) {
-  fz <- score@factor_z
+  fz <- score@score
   total_z <- sum(abs(fz), na.rm = TRUE)
   raw_weights <- tidyr::replace_na(fz / (total_z / 2), 0)
 
@@ -30,15 +30,13 @@ calc_weights.factor_z_score <- function(
   weights
 }
 
-
-
 #' @importFrom dplyr full_join
 #' @importFrom dplyr summarise
 #' @importFrom dplyr case_when
 calc_weights.factor_q_score <- function(
   score, weighting_scheme = "equal-spread", ...
 ) {
-  fq <- score@factor_q
+  fq <- score@score
   if (length(which(fq == "NA")) == length(fq)) {
     weights <- rep(0, length(fq))
     names(weights) <- names(fq)
