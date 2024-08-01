@@ -6,9 +6,9 @@
 #' @import purrr
 #' @export
 named_group_split <- function(...) {
-  data <- group_by(...)
+  data <- dplyr::group_by(...)
 
-  names <- group_keys(data) %>%
+  names <- dplyr::group_keys(data) %>%
     purrr::map(as.character) %>%
     purrr::reduce(paste, sep = "~~")
 

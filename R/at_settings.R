@@ -110,7 +110,7 @@ set_at_settings_factor_q <- function(
 set_at_settings <- function(
     testing_scheme = "factor-z",
     start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-    weighting_scheme, ...) {
+    weighting_scheme = NULL, ...) {
   known_schemes <- c("factor-z", "factor-q")
 
   if (!testing_scheme %in% known_schemes) {
@@ -132,7 +132,6 @@ set_at_settings <- function(
   }
   at
 }
-
 
 
 # Show Method -------------------------------------------------------------

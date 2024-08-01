@@ -7,7 +7,7 @@
 #' @slot return_bmark benchmark return
 #' @slot weights Portfolio Weights
 #' @slot weights_bmark benchmark weights
-#' @include SinglePeriodFactorData.R
+#' @include factor_data_single_period.R
 setClass(
   "single_period_at",
   slots = c(
@@ -24,7 +24,7 @@ setClass(
 #' @slot IC todo
 #' @slot factor_z_score todo
 #' @slot return_z_score todo
-#' @include SinglePeriodFactorData.R
+#' @include factor_data_single_period.R
 setClass(
   "single_period_at_factor_z",
   contains = "single_period_at",
@@ -41,7 +41,7 @@ setClass(
 #' @slot factor_quantile todo
 #' @slot q_returns todo
 #' @slot q_stats todo
-#' @include SinglePeriodFactorData.R
+#' @include factor_data_single_period.R
 setClass(
   "single_period_at_factor_q",
   contains = "single_period_at",
@@ -61,9 +61,8 @@ setGeneric("alpha_test",
 alpha_test <- function(data, .settings, ...) UseMethod("alpha_test")
 # -------------------------------------------------------------------------
 
-#' @include testing_schemes.R
-#' @include weighting_schemes.R
-#' @include utilties_scoring.R
+#' @include factor_z_score.R
+#' @include calc_weights.R
 setMethod("alpha_test",
   signature(
     data = "single_period_factor_data",
@@ -75,7 +74,12 @@ setMethod("alpha_test",
     # Calculate the Z-Score of Factors
     fz <- calc_factor_z(data, .settings@win_prob)
     # Calculate the Z-Score of Returns
-    rz <- ctz(data@returns, data@weights, data@group, .settings@win_prob)
+    rz <- ctz( # nolint
+      values = data@returns,
+      weights = data@weights,
+      group = data@group,
+      win_prob = .settings@win_prob
+    )
     # Calculate the IC
     ic <- cor(fz@factor_z, rz, use = "pairwise.complete.obs")
     # Calculate the weights using the ZScores
@@ -98,11 +102,9 @@ setMethod("alpha_test",
   }
 )
 
-
 # -------------------------------------------------------------------------
-#' @include WeightingFunctions.R
-#' @include testing_schemes.R
-#' @include weighting_schemes.R
+#' @include factor_q_score.R
+#' @include calc_weights.R
 setMethod("alpha_test",
   signature(
     data = "single_period_factor_data",
@@ -115,7 +117,7 @@ setMethod("alpha_test",
     fq <- calc_factor_q(data, .settings@quantiles)
     # Quintile Level Statistics
     # Should Change to be defined for alt weighting, TODO
-    #q_stats <- quantile_return_stats(fq@factor_q, returns = data@returns)
+    #quantile_return_stats(fq@factor_q, returns = data@returns) # nolint
     q_stats <- list(NULL)
     weights <- calc_weights(fq, .settings@weighting_scheme)
     # returns

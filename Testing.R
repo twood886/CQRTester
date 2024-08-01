@@ -20,7 +20,7 @@ test_settings <- set_at_settings(
 
 source("R/factor_z_score.R")
 source("R/factor_q_score.R")
-source("R/weighting_schemes.R")
+source("R/calc_weights.R")
 source("R/alpha_test_single_period.R")
 test_spat <- alpha_test(test_spfd, test_settings)
 
