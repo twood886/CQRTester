@@ -48,6 +48,7 @@ setClass(
 
 #' @include generic_methods.R
 #' @include alpha_test_single_period.R
+#' @include factor_data.R
 setMethod("alpha_test",
   signature(
     data = "factor_data",
@@ -81,6 +82,7 @@ setMethod("alpha_test",
 
 #' @include generic_methods.R
 #' @include alpha_test_single_period.R
+#' @include factor_data.R
 setMethod("alpha_test",
   signature(
     data = "factor_data",
