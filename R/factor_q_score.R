@@ -13,8 +13,8 @@ setClass(
 #' @return Ordered quantiles
 calc_factor_q <- function(factor_data, quantiles = 5) UseMethod("calc_factor_q")
 
-calc_factor_q.single_period_factor_data <- function(x, quantiles = 5, desc = TRUE) { # nolint: line_length_linter.
-  fq <- ctq(x@fvals, x@group, quantiles, desc)
+calc_factor_q.single_period_factor_data <- function(x, quantiles = 5, .desc = TRUE) { # nolint: line_length_linter.
+  fq <- ctq(x@fvals, x@group, quantiles, .desc)
   new("factor_q_score", score = fq)
 }
 
@@ -29,7 +29,7 @@ calc_factor_q.single_period_factor_data <- function(x, quantiles = 5, desc = TRU
 #' @import DescTools
 #' @import ggplit
 #' @import forcats
-ctq <- function(values, group, quantiles = 3, desc = TRUE) {
+ctq <- function(values, group, quantiles = 3, .desc = TRUE) {
   qs <- mapply(
     quantile_ind,
     x = values,
@@ -38,14 +38,14 @@ ctq <- function(values, group, quantiles = 3, desc = TRUE) {
       v = values,
       gr = group,
       q = quantiles,
-      desc = desc
+      .desc = .desc
     ),
     USE.NAMES = FALSE
   )
 
-  labels <- gettextf("Q%s", q:1)
+  labels <- gettextf("Q%s", quantiles:1)
   ftile <- factor(
-    ggplot2::cut_interval(qs, n = q, labels = labels),
+    ggplot2::cut_interval(qs, n = quantiles, labels = labels),
     ordered = TRUE
   )
   ftile <- forcats::fct_na_value_to_level(ftile, level = "NA")
@@ -53,7 +53,7 @@ ctq <- function(values, group, quantiles = 3, desc = TRUE) {
   ftile
 }
 
-quantile_ind <- function(x, x_name, v, gr, q, desc) {
+quantile_ind <- function(x, x_name, v, gr, q, .desc) {
   if (is.na(x)) {
     out <- NA
     names(out) <- x_name
@@ -61,7 +61,7 @@ quantile_ind <- function(x, x_name, v, gr, q, desc) {
   }
   g <- gr[which(names(v) == x_name)]
   v <- v[which(gr == g)]
-  if (desc == FALSE) {
+  if (.desc == FALSE) {
     v <- v * -1
   }
   b <- sum(!is.na(unique(v)))

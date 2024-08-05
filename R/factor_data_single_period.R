@@ -26,7 +26,7 @@ setClass(
 #' @details This function converts data into SinglePeriodFactorData object.
 #' @param data A data frame containing id columns, return column and factor
 #' value column.
-#' @param date A date object representing the date of the data.
+#' @param date_col_name A character representing the column name of dates.
 #' @param id_col_name A character representing the column name of identifiers.
 #' @param factor_col_name A character string representing the
 #'  column name of the factor.
@@ -39,13 +39,13 @@ setClass(
 #' @returns A SinglePeriodFactorData object.
 #' @keywords internal
 create_single_period_factor_data <- function( # nolint: object_length_linter.
-  data, date, id_col_name, factor_col_name, return_col_name,
+  data, date_col_name, id_col_name, factor_col_name, return_col_name,
   group_col_name, weight_col_name, ...
 ) {
   dargs <- list(...)
 
-  if ("date" %in% names(dargs))
-    date <- dargs$date
+  if ("date_col_name" %in% names(dargs))
+    date_col_name <- dargs$date
   if ("id_col_name" %in% names(dargs))
     id_col_name <- dargs$id_col_name
   if ("return_col_name" %in% names(dargs))
@@ -61,7 +61,7 @@ create_single_period_factor_data <- function( # nolint: object_length_linter.
   if (missing(data))
     stop("There is no data provided")
 
-  if (missing(date))
+  if (missing(date_col_name))
     stop("No date arguement provided")
 
   if (missing(id_col_name))
@@ -87,7 +87,7 @@ create_single_period_factor_data <- function( # nolint: object_length_linter.
   } else {
     weights <- data[[weight_col_name]] / sum(data[[weight_col_name]], na.rm = TRUE) # nolint: line_length_linter.
   }
-
+  date <- unique(data[[date_col_name]])[1]
   ids <- data[[id_col_name]]
   fvals <- data[[factor_col_name]]
   names(fvals) <- ids

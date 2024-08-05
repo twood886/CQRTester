@@ -52,15 +52,9 @@ setClass(
   )
 )
 
-# -------------------------------------------------------------------------
-setGeneric("alpha_test",
-  function(data, .settings, ...) standardGeneric("alpha_test")
-)
 
-#' @export
-alpha_test <- function(data, .settings, ...) UseMethod("alpha_test")
 # -------------------------------------------------------------------------
-
+#' @include generic_methods.R
 #' @include factor_z_score.R
 #' @include calc_weights.R
 setMethod("alpha_test",
@@ -81,7 +75,7 @@ setMethod("alpha_test",
       win_prob = .settings@win_prob
     )
     # Calculate the IC
-    ic <- cor(fz@factor_z, rz, use = "pairwise.complete.obs")
+    ic <- cor(fz@score, rz, use = "pairwise.complete.obs")
     # Calculate the weights using the ZScores
     weights <- calc_weights(fz, .settings@weighting_scheme)
     # Return
