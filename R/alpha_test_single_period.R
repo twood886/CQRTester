@@ -55,6 +55,7 @@ setClass(
 
 # -------------------------------------------------------------------------
 #' @include generic_methods.R
+#' @include at_settings.R
 #' @include factor_z_score.R
 #' @include calc_weights.R
 setMethod("alpha_test",
@@ -97,6 +98,8 @@ setMethod("alpha_test",
 )
 
 # -------------------------------------------------------------------------
+#' @include generic_methods.R
+#' @include at_settings.R
 #' @include factor_q_score.R
 #' @include calc_weights.R
 setMethod("alpha_test",
