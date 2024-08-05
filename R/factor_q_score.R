@@ -21,13 +21,13 @@ calc_factor_q.single_period_factor_data <- function(x, quantiles = 5, .desc = TR
 #' @title Calculate Factor Quantile
 #' @param values a numeric vector of factor values.
 #' @param group a character vector of groups.
-#' @param quantiles integer representing the number of quantiles 
+#' @param quantiles integer representing the number of quantiles
 #' to split data into.
 #' @param desc Should values be ranked in secending order?
 #' @return company quantile based on factor value
 #' @import tidyverse
 #' @import DescTools
-#' @import ggplit
+#' @importFrom ggplot2 cut_interval
 #' @import forcats
 ctq <- function(values, group, quantiles = 3, .desc = TRUE) {
   qs <- mapply(

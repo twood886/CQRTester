@@ -10,17 +10,16 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
 Collate: 
-    'Utilities.R'
     'WeightingFunctions.R'
     'generic_methods.R'
+    'factor_data_params.R'
+    'utilities.R'
+    'factor_data_single_period.R'
+    'factor_data.R'
     'factor_q_score.R'
     'calc_weights.R'
     'factor_z_score.R'
     'at_settings.R'
-    'factor_data_single_period.R'
     'alpha_test_single_period.R'
     'alpha_test.r'
-    'factor_data_params.R'
-    'utilities.R'
-    'factor_data.R'
     'hello.R'
