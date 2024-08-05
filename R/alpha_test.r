@@ -21,6 +21,7 @@ setClass(
 #' @title Alpha Test (Factor Z-Score) S4 Object
 #' @slot IC
 #' @slot factor_z_score
+#' @keywords internal
 setClass(
   "alpha_test_factor_z",
   contains = "alpha_test",
@@ -45,7 +46,6 @@ setClass(
   )
 )
 
-
 #' @include generic_methods.R
 #' @include alpha_test_single_period.R
 #' @include factor_data.R
@@ -61,7 +61,7 @@ setMethod("alpha_test",
       .setting = .settings
     )
 
-    returns <- sapply(spats, \(x) x@return)
+    returns <- sapply(spats, \(x) x@return_factor)
     returns_bmark <- sapply(spats, \(x) x@return_bmark)
     weights <- lapply(spats, \(x) x@weights)
     weights_bmark <- lapply(spats, \(x) x@weights)
@@ -95,8 +95,8 @@ setMethod("alpha_test",
       .setting = .settings
     )
 
-    returns <- sapply(spats, \(x) x@return)
-    returns_bmark <- sapply(spats, \(x) x@return_bmark)
+    returns <- sapply(spats, \(x) x@return_factor)
+    returns_bmark <- sapply(spats, \(x) x@return_bmark, simplify = TRUE)
     weights <- lapply(spats, \(x) x@weights)
     weights_bmark <- lapply(spats, \(x) x@weights)
 

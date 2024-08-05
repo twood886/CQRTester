@@ -12,7 +12,7 @@ setClass(
   "single_period_at",
   slots = c(
     date = "Date",
-    return = "numeric",
+    return_factor = "numeric",
     return_bmark = "numeric",
     weights = "numeric",
     weights_bmark = "numeric"
@@ -86,7 +86,7 @@ setMethod("alpha_test",
 
     new("single_period_at_factor_z",
       date = d,
-      return = r,
+      return_factor = r,
       return_bmark = r_bmark,
       weights = weights,
       weights_bmark = weights_bmark,
@@ -121,7 +121,7 @@ setMethod("alpha_test",
     r <- as.numeric(weights %*% data@returns)
     new("single_period_at_factor_q",
       date = d,
-      return = r,
+      return_factor = r,
       weights = weights,
       factor_quantile = fq,
       q_returns = as.numeric(q_stats$avg_return),

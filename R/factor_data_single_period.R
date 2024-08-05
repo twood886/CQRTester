@@ -36,7 +36,8 @@ setClass(
 #'  grouping varialble.
 #' @param weight_col_name A character string representing the column name
 #'  of weighting variable.
-#' @returns A SinglePeriodFactorData object.
+#' @returns A single_period_factor_data object.
+#' @importFrom tidyr replace_na
 #' @keywords internal
 create_single_period_factor_data <- function( # nolint: object_length_linter.
   data, date_col_name, id_col_name, factor_col_name, return_col_name,
@@ -73,7 +74,7 @@ create_single_period_factor_data <- function( # nolint: object_length_linter.
   if (missing(return_col_name)) {
     returns <- rep(NA_real_, nrow(data))
   } else {
-    returns <- data[[return_col_name]]
+    returns <- tidyr::replace_na(data[[return_col_name]], 0)
   }
 
   if (missing(group_col_name)) {
@@ -87,6 +88,7 @@ create_single_period_factor_data <- function( # nolint: object_length_linter.
   } else {
     weights <- data[[weight_col_name]] / sum(data[[weight_col_name]], na.rm = TRUE) # nolint: line_length_linter.
   }
+
   date <- unique(data[[date_col_name]])[1]
   ids <- data[[id_col_name]]
   fvals <- data[[factor_col_name]]
@@ -105,8 +107,6 @@ create_single_period_factor_data <- function( # nolint: object_length_linter.
     weights = weights
   )
 }
-
-
 
 # UniverseReturnStats -----------------------------------------------------
 setGeneric("calc_universe_return_stats",

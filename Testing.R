@@ -1,7 +1,8 @@
 library(tidyverse)
-load("Data/ATData.Rda")
+load("Data/at_test_data.Rda")
 source("R/factor_data_single_period.R")
-datesub <- as.Date("2019-12-31")
+
+datesub <- as.Date("1996-06-30")
 datasub <- data[which(data$Periods == datesub), ]
 datasub[1, "EPS to Price - Trail"] <- NA
 

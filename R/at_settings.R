@@ -7,13 +7,16 @@
 #' @slot end_date Date representing the latest date for Alpha Testing.
 #' @slot testing_scheme Character representing alpha testing procedure.
 #' @slot weighting_scheme Character representing weighting scheme.
+#' @slot benchmark_weighting_scheme Character represenitng the weighting scheme
+#' for the benchmark.
 setClass(
   "at_settings",
   representation(
     start_date = "Date",
     end_date = "Date",
     testing_scheme = "character",
-    weighting_scheme = "character"
+    weighting_scheme = "character",
+    benchmark_weighting_scheme = "character"
   )
 )
 
@@ -47,7 +50,8 @@ setClass(
 #' @returns An at_settings_factor_w S4 object to be used in Alpha Testing.
 set_at_settings_factor_z <- function(
   start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-  weighting_scheme = "z-weighted", win_prob = c(0, 1), ...
+  weighting_scheme = "z-weighted", benchmark_weighting_scheme = "zero",
+  win_prob = c(0, 1), ...
 ) {
   dargs <- list(...)
 
@@ -59,6 +63,7 @@ set_at_settings_factor_z <- function(
     end_date = end_date,
     testing_scheme = "factor_z",
     weighting_scheme = weighting_scheme,
+    benchmark_weighting_scheme = benchmark_weighting_scheme,
     win_prob = win_prob
   )
 }
