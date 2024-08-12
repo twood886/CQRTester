@@ -79,9 +79,12 @@ setMethod("alpha_test",
     ic <- cor(fz@score, rz, use = "pairwise.complete.obs")
     # Calculate the weights using the ZScores
     weights <- calc_weights(fz, .settings@weighting_scheme)
+    weights_bmark <- calc_bench_weights(
+      .settings@benchmark_weighting_scheme,
+      data@weights
+    )
     # Return
     r <- as.numeric(weights %*% data@returns)
-    weights_bmark <- data@weights / sum(data@weights, na.rm = TRUE)
     r_bmark <- as.numeric(weights_bmark %*% data@returns)
 
     new("single_period_at_factor_z",
@@ -117,12 +120,20 @@ setMethod("alpha_test",
     #quantile_return_stats(fq@factor_q, returns = data@returns) # nolint
     q_stats <- list(NULL)
     weights <- calc_weights(fq, .settings@weighting_scheme)
+    weights_bmark <- calc_bench_weights(
+      .settings@benchmark_weighting_scheme,
+      data@weights
+    )
     # returns
     r <- as.numeric(weights %*% data@returns)
+    r_bmark <- as.numeric(weights_bmark %*% data@returns)
+
     new("single_period_at_factor_q",
       date = d,
       return_factor = r,
+      return_bmark = r_bmark,
       weights = weights,
+      weights_bmark = weights_bmark,
       factor_quantile = fq,
       q_returns = as.numeric(q_stats$avg_return),
       q_stats = q_stats

@@ -1,11 +1,13 @@
 # single_period_factor_data (S4 Object) ------------------------------------
 #' @title Single Period Factor Data (S4 Object)
-#' @description An S4 Class to represent Factor Data for a single period
-#' @slot factor A character representing the name of the factor
-#' @slot date A date object representing the date of the data
-#' @slot ids A character vector representing the company ids
-#' @slot fvales A named numeric vector representing the factor values
-#' @slot returns A names numeric vector representing the forward returns
+#' @description An S4 Class to represent Factor Data for a single period.
+#' @slot factor A character representing the name of the factor.
+#' @slot date A date object representing the date of the data.
+#' @slot ids A character vector representing the company ids.
+#' @slot fvales A named numeric vector representing the factor values.
+#' @slot returns A named numeric vector representing the forward returns.
+#' @slot group A named character vector representing the company grouping.
+#' @slot weights A named numeric vector of weights from factor values.
 #' @export
 setClass(
   "single_period_factor_data",
@@ -16,7 +18,7 @@ setClass(
     fvals = "numeric",
     returns = "numeric",
     group = "character",
-    weights = "numeric"
+    weights = "numeric",
   )
 )
 
@@ -88,6 +90,8 @@ create_single_period_factor_data <- function( # nolint: object_length_linter.
   } else {
     weights <- data[[weight_col_name]] / sum(data[[weight_col_name]], na.rm = TRUE) # nolint: line_length_linter.
   }
+
+
 
   date <- unique(data[[date_col_name]])[1]
   ids <- data[[id_col_name]]

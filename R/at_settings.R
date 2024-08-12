@@ -45,6 +45,7 @@ setClass(
 #' @param start_date description
 #' @param end_date description
 #' @param weighting_scheme description
+#' @param benchmark_weighting_scheme description
 #' @param win_prob A numeric vector of length 2 representing the percentile
 #' @param ... Additional arguements to be passed to function.
 #' @returns An at_settings_factor_w S4 object to be used in Alpha Testing.
@@ -74,12 +75,14 @@ set_at_settings_factor_z <- function(
 #' @param start_date description
 #' @param end_date description
 #' @param weighting_scheme description
+#' @param benchmark_weighting_scheme description
 #' @param quantiles description
 #' @param ... Addtional arguements to be passesd to function.
 #' @returns An at_settings_q_spread S4 object to be used in Alpha Testing.
 set_at_settings_factor_q <- function(
   start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-  weighting_scheme = "equal",  quantiles = 5, ...
+  weighting_scheme = "equal",  benchmark_weighting_scheme = "zero",
+  quantiles = 5, ...
 ) {
   dargs <- list(...)
 
@@ -92,6 +95,7 @@ set_at_settings_factor_q <- function(
     end_date = end_date,
     testing_scheme = "factor-q",
     weighting_scheme = weighting_scheme,
+    benchmark_weighting_scheme = benchmark_weighting_scheme,
     quantiles = quantiles
   )
 }
@@ -110,12 +114,13 @@ set_at_settings_factor_q <- function(
 #' @param testing_scheme Weighting scheme to be used in testing factor.
 #' Currently supports "Factor" and "Quantile"
 #' @param weighting_scheme desctiption
+#' @param benchmark_weighting_scheme description
 #' @param ... Additional settings to be passed based on Weighting.Scheme
 #' @export
 set_at_settings <- function(
     testing_scheme = "factor-z",
     start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
-    weighting_scheme = NULL, ...) {
+    weighting_scheme = NULL, benchmark_weighting_scheme = "zero", ...) {
   known_schemes <- c("factor-z", "factor-q")
 
   if (!testing_scheme %in% known_schemes) {
@@ -126,17 +131,24 @@ set_at_settings <- function(
     if (is.null(weighting_scheme)) {
       weighting_scheme <- "z-weighted"
     }
-    at <- set_at_settings_factor_z(start_date, end_date, weighting_scheme, ...)
+    at <- set_at_settings_factor_z(
+      start_date, end_date, weighting_scheme, benchmark_weighting_scheme, ...
+    )
   }
 
   if (testing_scheme == "factor-q") {
     if (is.null(weighting_scheme)) {
       weighting_scheme <- "equal-spread"
     }
-    at <- set_at_settings_factor_q(start_date, end_date, weighting_scheme, ...)
+    at <- set_at_settings_factor_q(
+      start_date, end_date, weighting_scheme, benchmark_weighting_scheme, ...
+    )
   }
   at
 }
+
+
+
 
 
 # Show Method -------------------------------------------------------------
@@ -147,6 +159,7 @@ setMethod(f = "show",
       paste("----- Alpha Testing Settings -----"),
       paste("Testing Scheme:", object@testing_scheme, sep = "\t\t"),
       paste("Weighting Scheme:", object@weighting_scheme, sep = "\t"),
+      paste("Benchmark Weighting:", object@benchmark_weighting_scheme, sep = "\t"), # nolint: line_length_linter.
       paste("Start Date:", format(object@start_date, "%b %d,%Y"), sep = "\t\t"),
       paste("End Date:", format(object@end_date, "%b %d,%Y"), sep = "\t\t"),
       paste("Windsorization:",
@@ -168,9 +181,10 @@ setMethod(f = "show",
   signature(object = "at_settings_factor_q"),
   function(object) {
     out <- paste(
-      paste("----- Alpha Testing Settings -----"),
+      paste("----- Alpsha Testing Settings -----"),
       paste("Testing Scheme:", object@testing_scheme, sep = "\t\t"),
       paste("Weighting Scheme:", object@weighting_scheme, sep = "\t"),
+      paste("Benchmark Weighting:", object@benchmark_weighting_scheme, sep = "\t"), # nolint: line_length_linter.
       paste("Start Date:", format(object@start_date, "%b %d,%Y"), sep = "\t\t"),
       paste("End Date:", format(object@end_date, "%b %d,%Y"), sep = "\t\t"),
       paste("Factor Quantiles:", object@quantiles, sep = "\t"),
