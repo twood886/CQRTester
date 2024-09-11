@@ -1,11 +1,10 @@
 # alpha_test (S4 Object) ---------------------------------------------------
 #' @title Alpha Testing S4 Object
 #' @description An S4 Class to represent Factor Alpha Testing
-#' @slot returns
-#' @slot return_bmark
-#' @slot weights
-#' @slot weights_bmark
-#' @spat list
+#' @slot returns A numeric array of returns.
+#' @slot return_bmark A numeric array of benchmark returns.
+#' @slot weights A list of weights.
+#' @slot weights_bmark A list of benchmark weights.
 #' @include alpha_test_single_period.R
 setClass(
   "alpha_test",
@@ -19,8 +18,8 @@ setClass(
 
 # alpha_test_factor_z (S4 Object) ------------------------------------------
 #' @title Alpha Test (Factor Z-Score) S4 Object
-#' @slot IC
-#' @slot factor_z_score
+#' @slot IC Information Coefficient
+#' @slot factor_z_score A list of factor z-scores.
 #' @keywords internal
 setClass(
   "alpha_test_factor_z",
@@ -33,9 +32,9 @@ setClass(
 
 # alpha_test_factor_q (S4 Object) ------------------------------------------
 #' @title Alpha Test (Factor Quantile) S4 Object
-#' @slot factor_quantile
-#' @slot q_returns
-#' @slot q_stats
+#' @slot factor_quantile A list of factor quantiles.
+#' @slot q_returns A list of factor quantile returns.
+#' @slot q_stats A list of factor quantile stats.
 setClass(
   "alpha_test_factor_q",
   contains = "alpha_test",

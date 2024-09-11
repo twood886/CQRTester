@@ -7,3 +7,12 @@
 \description{
 Alpha Test (Factor Z-Score) S4 Object
 }
+\section{Slots}{
+
+\describe{
+\item{\code{IC}}{Information Coefficient}
+
+\item{\code{factor_z_score}}{A list of factor z-scores.}
+}}
+
+\keyword{internal}

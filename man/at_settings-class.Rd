@@ -18,5 +18,8 @@ passed through ATSettings are used in designing the alpha testing procedure.
 \item{\code{testing_scheme}}{Character representing alpha testing procedure.}
 
 \item{\code{weighting_scheme}}{Character representing weighting scheme.}
+
+\item{\code{benchmark_weighting_scheme}}{Character represenitng the weighting scheme
+for the benchmark.}
 }}
 

@@ -8,6 +8,7 @@ set_at_settings_factor_z(
   start_date = as.Date("1901-01-01"),
   end_date = Sys.Date(),
   weighting_scheme = "z-weighted",
+  benchmark_weighting_scheme = "zero",
   win_prob = c(0, 1),
   ...
 )
@@ -18,6 +19,8 @@ set_at_settings_factor_z(
 \item{end_date}{description}
 
 \item{weighting_scheme}{description}
+
+\item{benchmark_weighting_scheme}{description}
 
 \item{win_prob}{A numeric vector of length 2 representing the percentile}
 

@@ -8,7 +8,6 @@
 #' @slot returns A named numeric vector representing the forward returns.
 #' @slot group A named character vector representing the company grouping.
 #' @slot weights A named numeric vector of weights from factor values.
-#' @export
 setClass(
   "single_period_factor_data",
   representation(
@@ -18,7 +17,7 @@ setClass(
     fvals = "numeric",
     returns = "numeric",
     group = "character",
-    weights = "numeric",
+    weights = "numeric"
   )
 )
 

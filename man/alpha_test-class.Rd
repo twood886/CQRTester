@@ -7,3 +7,15 @@
 \description{
 An S4 Class to represent Factor Alpha Testing
 }
+\section{Slots}{
+
+\describe{
+\item{\code{returns}}{A numeric array of returns.}
+
+\item{\code{return_bmark}}{A numeric array of benchmark returns.}
+
+\item{\code{weights}}{A list of weights.}
+
+\item{\code{weights_bmark}}{A list of benchmark weights.}
+}}
+

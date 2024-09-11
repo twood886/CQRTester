@@ -8,6 +8,7 @@ set_at_settings_factor_q(
   start_date = as.Date("1901-01-01"),
   end_date = Sys.Date(),
   weighting_scheme = "equal",
+  benchmark_weighting_scheme = "zero",
   quantiles = 5,
   ...
 )
@@ -18,6 +19,8 @@ set_at_settings_factor_q(
 \item{end_date}{description}
 
 \item{weighting_scheme}{description}
+
+\item{benchmark_weighting_scheme}{description}
 
 \item{quantiles}{description}
 

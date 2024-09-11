@@ -9,6 +9,7 @@ set_at_settings(
   start_date = as.Date("1901-01-01"),
   end_date = Sys.Date(),
   weighting_scheme = NULL,
+  benchmark_weighting_scheme = "zero",
   ...
 )
 }
@@ -25,6 +26,8 @@ used when performing alpha testing. Factor data is filtered to end at or
 before provided End.Date argument.}
 
 \item{weighting_scheme}{desctiption}
+
+\item{benchmark_weighting_scheme}{description}
 
 \item{...}{Additional settings to be passed based on Weighting.Scheme}
 }

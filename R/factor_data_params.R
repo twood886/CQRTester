@@ -2,12 +2,12 @@
 #' @title Factor Data Parameters
 #' @description
 #' An S4 class containing the parameters for creating a factor_data object
-#' @slot data_col_name
-#' @slot id_col_name
-#' @slot factor_col_name
-#' @slot return_col_name
-#' @slot group_col_name
-#' @slot weight_col_name
+#' @slot data_col_name A string representing the column name of date values.
+#' @slot id_col_name A string representing the column name of id values.
+#' @slot factor_col_name A string representing the column name of factor values.
+#' @slot return_col_name A string representing the column name of return values.
+#' @slot group_col_name A string representing the column name of grouping value.
+#' @slot weight_col_name A string representing the column name of weights.
 setClass(
   "factor_data_params",
   representation(
@@ -23,13 +23,13 @@ setClass(
 #' @title Create Factor Data Parameters Object
 #' @description
 #' Function to set parameters for factor data, creating a factor_data_params
-#' object
-#' @param date_col_name A string representing the column name of date values
-#' @param id_col_name A string representing the column name of id values
-#' @param factor_col_name A string representing the column name of factor values
-#' @param return_col_name A string representing the column name of return values
-#' @param group_col_name A string representing the column name of grouping value
-#' @param weight_col_name A string representing the column name of weights
+#' object.
+#' @param date_col_name A string representing the column name of date values.
+#' @param id_col_name A string representing the column name of id values.
+#' @param factor_col_name A string representing the column name of factor values.
+#' @param return_col_name A string representing the column name of return values.
+#' @param group_col_name A string representing the column name of grouping value.
+#' @param weight_col_name A string representing the column name of weights.
 #' @return factor_data_params object
 #' @export
 create_factor_data_params <- function(

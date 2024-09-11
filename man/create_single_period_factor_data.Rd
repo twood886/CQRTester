@@ -36,7 +36,7 @@ grouping varialble.}
 of weighting variable.}
 }
 \value{
-A SinglePeriodFactorData object.
+A single_period_factor_data object.
 }
 \description{
 Function to create SinglePeriodFactorData object

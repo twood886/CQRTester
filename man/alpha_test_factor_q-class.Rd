@@ -7,3 +7,13 @@
 \description{
 Alpha Test (Factor Quantile) S4 Object
 }
+\section{Slots}{
+
+\describe{
+\item{\code{factor_quantile}}{A list of factor quantiles.}
+
+\item{\code{q_returns}}{A list of factor quantile returns.}
+
+\item{\code{q_stats}}{A list of factor quantile stats.}
+}}
+

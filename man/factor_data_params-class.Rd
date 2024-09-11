@@ -7,3 +7,19 @@
 \description{
 An S4 class containing the parameters for creating a factor_data object
 }
+\section{Slots}{
+
+\describe{
+\item{\code{data_col_name}}{A string representing the column name of date values.}
+
+\item{\code{id_col_name}}{A string representing the column name of id values.}
+
+\item{\code{factor_col_name}}{A string representing the column name of factor values.}
+
+\item{\code{return_col_name}}{A string representing the column name of return values.}
+
+\item{\code{group_col_name}}{A string representing the column name of grouping value.}
+
+\item{\code{weight_col_name}}{A string representing the column name of weights.}
+}}
+

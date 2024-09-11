@@ -14,22 +14,22 @@ create_factor_data_params(
 )
 }
 \arguments{
-\item{date_col_name}{A string representing the column name of date values}
+\item{date_col_name}{A string representing the column name of date values.}
 
-\item{id_col_name}{A string representing the column name of id values}
+\item{id_col_name}{A string representing the column name of id values.}
 
-\item{factor_col_name}{A string representing the column name of factor values}
+\item{factor_col_name}{A string representing the column name of factor values.}
 
-\item{return_col_name}{A string representing the column name of return values}
+\item{return_col_name}{A string representing the column name of return values.}
 
-\item{group_col_name}{A string representing the column name of grouping value}
+\item{group_col_name}{A string representing the column name of grouping value.}
 
-\item{weight_col_name}{A string representing the column name of weights}
+\item{weight_col_name}{A string representing the column name of weights.}
 }
 \value{
 factor_data_params object
 }
 \description{
 Function to set parameters for factor data, creating a factor_data_params
-object
+object.
 }
