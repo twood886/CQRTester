@@ -12,7 +12,7 @@ setClass(
 #' @param quantiles a numeric representing the number of quantiles.
 #' @return Ordered quantiles
 calc_factor_q <- function(factor_data, quantiles = 5) UseMethod("calc_factor_q")
-
+#' @export
 calc_factor_q.single_period_factor_data <- function(x, quantiles = 5, .desc = TRUE) { # nolint: line_length_linter.
   fq <- ctq(x@fvals, x@group, quantiles, .desc)
   new("factor_q_score", score = fq)

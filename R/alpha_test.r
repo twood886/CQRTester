@@ -114,3 +114,9 @@ setMethod("alpha_test",
     )
   }
 )
+
+##' @title Get Factor Score Data
+##' @description Get Factor Score Data as new Factor Data from Alpha Test
+##' @param alpha_test alpha_test object
+#get_score_data <- function(alpha_test) UseMethod("get_score_data")
+

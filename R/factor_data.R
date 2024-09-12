@@ -86,10 +86,14 @@ create_fdata.factor_data <- function(factor_data) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_date_col <- function(x, date_col_name) UseMethod("set_date_col")
+
+#' @export
 set_date_col.factor_data <- function(x, date_col_name) {
   x@params@date_col_name <- date_col_name
   create_fdata(x)
 }
+
+#' @export
 set_date_col.factor_data_params <- function(x, date_col_name) {
   x@date_col_name <- date_col_name
   x
@@ -102,10 +106,14 @@ set_date_col.factor_data_params <- function(x, date_col_name) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_id_col <- function(x, date_col_name) UseMethod("set_id_col")
+
+#' @export
 set_id_col.factor_data <- function(x, id_col_name) {
   x@params@id_col_name <- id_col_name
   create_fdata(x)
 }
+
+#' @export
 set_id_col.factor_data_params <- function(x, id_col_name) {
   x@id_col_name <- id_col_name
   x
@@ -118,10 +126,12 @@ set_id_col.factor_data_params <- function(x, id_col_name) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_factor_col <- function(x, factor_col_name) UseMethod("set_factor_col")
+#' @export
 set_factor_col.factor_data <- function(x, factor_col_name) {
   x@params@factor_col_name <- factor_col_name
   create_fdata(x)
 }
+#' @export
 set_factor_col.factor_data_params <- function(x, factor_col_name) {
   x@factor_col_name <- factor_col_name
   x
@@ -134,10 +144,12 @@ set_factor_col.factor_data_params <- function(x, factor_col_name) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_return_col <- function(x, return_col_name) UseMethod("set_return_col")
+#' @export
 set_return_col.factor_data <- function(x, return_col_name) {
   x@params@return_col_name <- return_col_name
   create_fdata(x)
 }
+#' @export
 set_return_col.factor_data_params <- function(x, return_col_name) {
   x@return_col_name <- return_col_name
   x
@@ -150,10 +162,12 @@ set_return_col.factor_data_params <- function(x, return_col_name) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_group_col <- function(x, group_col_name) UseMethod("set_group_col")
+#' @export
 set_group_col.factor_data <- function(x, group_col_name) {
   x@params@group_col_name <- group_col_name
   create_fdata(x)
 }
+#' @export
 set_group_col.factor_data_params <- function(x, group_col_name) {
   x@group_col_name <- group_col_name
   x
@@ -166,10 +180,12 @@ set_group_col.factor_data_params <- function(x, group_col_name) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_weight_col <- function(x, weight_col_name) UseMethod("set_weight_col")
+#' @export
 set_weight_col.factor_data <- function(x, weight_col_name) {
   x@params@weight_col_name <- weight_col_name
   create_fdata(x)
 }
+#' @export
 set_weight_col.factor_data_params <- function(x, weight_col_name) {
   x@weight_col_name <- weight_col_name
   x

@@ -47,12 +47,6 @@ create_factor_data_params <- function(
   )
 }
 
-
-
-
-
-
-
 #' @include generic_methods.R
 setMethod("check_factor_data_params",
   signature(params = "factor_data_params", data = "data.frame"),

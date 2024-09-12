@@ -13,7 +13,7 @@ setClass(
 #' @return A vector of the same length as the original data x containing the
 #' winsorized and normalized data.
 calc_factor_z <- function(factor_data, win_prob = c(0, 1)) UseMethod("calc_factor_z") # nolint: line_length_linter.
-
+#' @export
 calc_factor_z.single_period_factor_data <- function(x, win_prob = c(0, 1)) {
   fz <- ctz(x@fvals, x@weights, x@group, win_prob)
   new("factor_z_score", score = fz)

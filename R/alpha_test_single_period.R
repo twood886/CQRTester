@@ -79,6 +79,7 @@ setMethod("alpha_test",
     ic <- cor(fz@score, rz, use = "pairwise.complete.obs")
     # Calculate the weights using the ZScores
     weights <- calc_weights(fz, .settings@weighting_scheme)
+
     weights_bmark <- calc_bench_weights(
       .settings@benchmark_weighting_scheme,
       data@weights
