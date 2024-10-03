@@ -27,53 +27,54 @@ calc_factor_q.single_period_factor_data <- function(x, quantiles = 5, .desc = TR
 #' @return company quantile based on factor value
 #' @import tidyverse
 #' @import DescTools
-#' @importFrom ggplot2 cut_interval
 #' @import forcats
-ctq <- function(values, group, quantiles = 3, .desc = TRUE) {
-  qs <- mapply(
-    quantile_ind,
-    x = values,
-    x_name = names(values),
-    MoreArgs = list(
-      v = values,
-      gr = group,
-      q = quantiles,
-      .desc = .desc
-    ),
-    USE.NAMES = FALSE
-  )
+#' @import data.table
+ctq <- function(values, group = NA_real_, quantiles = 3, .desc = TRUE) {
+  dt <- data.table::data.table(values = values, group = group)
 
-  labels <- gettextf("Q%s", quantiles:1)
-  ftile <- factor(
-    ggplot2::cut_interval(qs, n = quantiles, labels = labels),
-    ordered = TRUE
-  )
-  ftile <- forcats::fct_na_value_to_level(ftile, level = "NA")
-  names(ftile) <- names(values)
-  ftile
+  if (.desc) {
+    dt[, values := -values]
+  }
+
+  dt[,
+    quantile := custom_cut_interval(
+      values,
+      n = quantiles,
+      labels = paste0("Q", quantiles:1),
+      right = TRUE
+    ),
+    by = group
+  ]
+
+  dt[, quantile := forcats::fct_na_value_to_level(quantile, level = "NA")]
+  dt[, quantile := factor(quantile, ordered = TRUE)]
+  out <- dt$quantile
+  names(out) <- names(values)
+  return(out)
 }
 
-quantile_ind <- function(x, x_name, v, gr, q, .desc) {
-  if (is.na(x)) {
-    out <- NA
-    names(out) <- x_name
-    return(out)
+#' @title Discretise numeric data into categorical
+#' @param x numeric vector.
+#' @param n number of intervals to create.
+#' @param labels lables for the levels of the resulting category.
+#' @param right logical, indicating if the intervals should be closed
+#'  on the right (and open on the left) or vice versa.
+custom_cut_interval <- function(x, n, labels = NULL, right = TRUE) {
+  finite_x <- x[is.finite(x)]
+
+  if (length(finite_x) == 0) {
+    warning("No finite values available for calculating intervals. Setting all to NA") # nolint
+    return(factor(x, levels = labels))
   }
-  g <- gr[which(names(v) == x_name)]
-  v <- v[which(gr == g)]
-  if (.desc == FALSE) {
-    v <- v * -1
+
+  if (length(finite_x) < length(labels)) {
+    warning("Not enough finite values available for calculating intervals. Setting all to NA") # nolint
+    return(factor(rep(NA, length(x)), levels = labels))
   }
-  b <- sum(!is.na(unique(v)))
-  if (b >= q) {
-    qs <- round(
-      rank(v, na.last = "keep") / sum(!is.na(v)) / (1 / q) + .4999
-    )
-    qs <- ifelse(qs < 1, 1, qs)
-    out <- qs[which(names(qs) == x_name)]
-  }else {
-    out <- NA
-    names(out) <- x_name
-  }
-  out
+
+  # Calculate range and breaks
+  b <- quantile(finite_x, probs = seq(0, 1, length.out = n + 1), na.rm = TRUE)
+
+  # Use base R cut to assign intervals
+  cut(x, breaks = b, labels = labels, right = TRUE, include.lowest = TRUE)
 }

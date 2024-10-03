@@ -18,7 +18,7 @@ An S4 Class to represent Factor Data for a single period.
 
 \item{\code{fvales}}{A named numeric vector representing the factor values.}
 
-\item{\code{returns}}{A named numeric vector representing the forward returns.}
+\item{\code{returns}}{A list of named numeric vector representing the forward returns.}
 
 \item{\code{group}}{A named character vector representing the company grouping.}
 

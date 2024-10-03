@@ -12,3 +12,4 @@ create_fdata(factor_data)
 \description{
 create factor data
 }
+\keyword{internal}

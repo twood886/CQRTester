@@ -21,9 +21,9 @@ setClass(
 
 # single_period_at_factor_w (S4 Object) ------------------------------------
 #' @title Single Period Alpha Test (Factor Weighted) S4 Object
-#' @slot IC todo
-#' @slot factor_z_score todo
-#' @slot return_z_score todo
+#' @slot IC Information Coefficient of Factor.
+#' @slot factor_z_score factor_z_score object.
+#' @slot return_z_score z-score of returns.
 #' @include factor_data_single_period.R
 setClass(
   "single_period_at_factor_z",
@@ -31,10 +31,9 @@ setClass(
   representation(
     IC = "numeric",
     factor_z_score = "factor_z_score",
-    return_z_score = "numeric"
+    return_z_score = "list"
   )
 )
-
 
 # single_period_at_q_spread (S4 Object) ------------------------------------
 #' @title Single Period Alpha Test (Quantiles) S4 Object
@@ -47,11 +46,10 @@ setClass(
   contains = "single_period_at",
   representation(
     factor_quantile = "factor_q_score",
-    q_returns = "numeric",
+    q_returns = "list",
     q_stats = "list"
   )
 )
-
 
 # -------------------------------------------------------------------------
 #' @include generic_methods.R
@@ -69,14 +67,15 @@ setMethod("alpha_test",
     # Calculate the Z-Score of Factors
     fz <- calc_factor_z(data, .settings@win_prob)
     # Calculate the Z-Score of Returns
-    rz <- ctz( # nolint
-      values = data@returns,
+    rz <- lapply(
+      data@returns,
+      ctz,
       weights = data@weights,
       group = data@group,
       win_prob = .settings@win_prob
     )
     # Calculate the IC
-    ic <- cor(fz@score, rz, use = "pairwise.complete.obs")
+    ic <- sapply(rz, cor, x = fz@score, use = "pairwise.complete.obs")
     # Calculate the weights using the ZScores
     weights <- calc_weights(fz, .settings@weighting_scheme)
 
@@ -85,8 +84,18 @@ setMethod("alpha_test",
       data@weights
     )
     # Return
-    r <- as.numeric(weights %*% data@returns)
-    r_bmark <- as.numeric(weights_bmark %*% data@returns)
+    r <- sapply(
+      data@returns,
+      \(x, y) as.numeric(x %*% y),
+      y = weights,
+      simplify = TRUE
+    )
+    r_bmark <- sapply(
+      data@returns,
+      \(x, y) as.numeric(x %*% y),
+      y = weights_bmark,
+      simplify = TRUE
+    )
 
     new("single_period_at_factor_z",
       date = d,
@@ -116,18 +125,65 @@ setMethod("alpha_test",
     d <- data@date
     # Calculate the Quantile of Factors
     fq <- calc_factor_q(data, .settings@quantiles)
-    # Quintile Level Statistics
-    # Should Change to be defined for alt weighting, TODO
-    #quantile_return_stats(fq@factor_q, returns = data@returns) # nolint
-    q_stats <- list(NULL)
+    # Calculate Weights of portfolio
     weights <- calc_weights(fq, .settings@weighting_scheme)
+    # Calculate Weights of Benchmark
     weights_bmark <- calc_bench_weights(
       .settings@benchmark_weighting_scheme,
       data@weights
     )
-    # returns
-    r <- as.numeric(weights %*% data@returns)
-    r_bmark <- as.numeric(weights_bmark %*% data@returns)
+    # Calculate Portfolio Weights
+    r <- sapply(
+      data@returns,
+      \(x, y) as.numeric(x %*% y),
+      y = weights,
+      simplify = TRUE
+    )
+    # Calculate Benchmark Weights
+    r_bmark <- sapply(
+      data@returns,
+      \(x, y) as.numeric(x %*% y),
+      y = weights_bmark,
+      simplify = TRUE
+    )
+
+    .calc_hr <- function(returns, benchmark = 0) {
+      length(which(returns > benchmark)) / length(which(!is.na(returns)))
+    }
+    # Quintile Level Statistics
+    q_stats <- list(
+      "count" = sapply(
+        data@returns,
+        \(r, q) tapply(r, q, length),
+        q = fq@score,
+        simplify = FALSE
+      ),
+      "average" = sapply(
+        data@returns,
+        \(r, q) tapply(r, q, mean, na.rm = TRUE),
+        q = fq@score,
+        simplify = FALSE
+      ),
+      "median" = sapply(
+        data@returns,
+        \(r, q) tapply(r, q, median, na.rm = TRUE),
+        q = fq@score,
+        simplify = FALSE
+      ),
+      "hit_rate_zero" = sapply(
+        data@returns,
+        \(r, q) tapply(r, q, .calc_hr, benchmark = 0),
+        q = fq@score,
+        simplify = FALSE
+      ),
+      "hit_rate_bench" = mapply(
+        \(r, q, b) tapply(r, q, .calc_hr, benchmark = b),
+        r = data@returns,
+        b = r_bmark,
+        MoreArgs = list(q = fq@score),
+        SIMPLIFY = FALSE
+      )
+    )
 
     new("single_period_at_factor_q",
       date = d,
@@ -136,7 +192,7 @@ setMethod("alpha_test",
       weights = weights,
       weights_bmark = weights_bmark,
       factor_quantile = fq,
-      q_returns = as.numeric(q_stats$avg_return),
+      q_returns = q_stats[["average"]],
       q_stats = q_stats
     )
   }

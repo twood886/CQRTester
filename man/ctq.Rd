@@ -4,7 +4,7 @@
 \alias{ctq}
 \title{Calculate Factor Quantile}
 \usage{
-ctq(values, group, quantiles = 3, .desc = TRUE)
+ctq(values, group = NA_real_, quantiles = 3, .desc = TRUE)
 }
 \arguments{
 \item{values}{a numeric vector of factor values.}

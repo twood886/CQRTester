@@ -9,24 +9,10 @@
 setClass(
   "alpha_test",
   slots = c(
-    returns = "numeric",
-    return_bmark = "numeric",
+    returns = "matrix",
+    return_bmark = "matrix",
     weights = "list",
     weights_bmark = "list"
-  )
-)
-
-# alpha_test_factor_z (S4 Object) ------------------------------------------
-#' @title Alpha Test (Factor Z-Score) S4 Object
-#' @slot IC Information Coefficient
-#' @slot factor_z_score A list of factor z-scores.
-#' @keywords internal
-setClass(
-  "alpha_test_factor_z",
-  contains = "alpha_test",
-  representation(
-    IC = "numeric",
-    factor_z_score = "list"
   )
 )
 
@@ -51,51 +37,18 @@ setClass(
 setMethod("alpha_test",
   signature(
     data = "factor_data",
-    .settings = "at_settings_factor_z"
-  ),
-  function(data, .settings, ...) {
-    spats <- lapply(
-      data@factor_data,
-      alpha_test,
-      .setting = .settings
-    )
-
-    returns <- sapply(spats, \(x) x@return_factor)
-    returns_bmark <- sapply(spats, \(x) x@return_bmark)
-    weights <- lapply(spats, \(x) x@weights)
-    weights_bmark <- lapply(spats, \(x) x@weights)
-
-    ic <- sapply(spats, \(x) x@IC)
-    factor_z_score <- lapply(spats, \(x) x@factor_z_score)
-
-    new("alpha_test_factor_z",
-      returns = returns,
-      return_bmark = returns_bmark,
-      weights = weights,
-      weights_bmark = weights_bmark,
-      IC = ic,
-      factor_z_score = factor_z_score
-    )
-  }
-)
-
-#' @include generic_methods.R
-#' @include alpha_test_single_period.R
-#' @include factor_data.R
-setMethod("alpha_test",
-  signature(
-    data = "factor_data",
     .settings = "at_settings_factor_q"
   ),
   function(data, .settings, ...) {
+    # Calculate Single Period Alpha Tests
     spats <- lapply(
       data@factor_data,
       alpha_test,
       .setting = .settings
     )
 
-    returns <- sapply(spats, \(x) x@return_factor)
-    returns_bmark <- sapply(spats, \(x) x@return_bmark, simplify = TRUE)
+    returns <- t(sapply(spats, \(x) x@return_factor))
+    returns_bmark <- t(sapply(spats, \(x) x@return_bmark, simplify = TRUE))
     weights <- lapply(spats, \(x) x@weights)
     weights_bmark <- lapply(spats, \(x) x@weights)
 
@@ -114,9 +67,3 @@ setMethod("alpha_test",
     )
   }
 )
-
-##' @title Get Factor Score Data
-##' @description Get Factor Score Data as new Factor Data from Alpha Test
-##' @param alpha_test alpha_test object
-#get_score_data <- function(alpha_test) UseMethod("get_score_data")
-

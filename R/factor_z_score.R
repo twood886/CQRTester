@@ -12,6 +12,7 @@ setClass(
 #' @param win_prob a numeric vector of probabilities with values in [0,1]
 #' @return A vector of the same length as the original data x containing the
 #' winsorized and normalized data.
+#' @export
 calc_factor_z <- function(factor_data, win_prob = c(0, 1)) UseMethod("calc_factor_z") # nolint: line_length_linter.
 #' @export
 calc_factor_z.single_period_factor_data <- function(x, win_prob = c(0, 1)) {
@@ -28,79 +29,46 @@ calc_factor_z.single_period_factor_data <- function(x, win_prob = c(0, 1)) {
 #' @param win.prob numeric vector of probabilities with values in [0,1]
 #' as used in quantile.
 #' @return ord
-ctz <- function(values, weights, group, win_prob = c(0, 1)) {
-  win_values <- windsorize(values, group, win_prob, na.rm = TRUE)
-  means <- grouped_weighted_mean(values, weights, group)
-  stds <- grouped_weighted_sd(values, weights, group)
-  norm_x <- (win_values - means) / stds
-  norm_x
-}
+#' @import data.table
+#' @export
+ctz <- function(
+  values, weights = NA_real_, group = NA_real_, win_prob = c(0, 1)
+) {
 
-grouped_weighted_mean <- function(values, weights, group) {
-  ind_grouped_weighted_mean <- function(group_x, values, weights, group) {
-    avail_values <- values[which(!is.na(values))]
-    weights <- ifelse(is.na(weights), 0, weights)
-    avail_weights <- weights[which(!is.na(values))]
-    avail_group <- group[which(!is.na(values))]
-    g_values <- avail_values[which(avail_group == group_x)]
-    g_weights <- avail_weights[which(avail_group == group_x)]
-    sum(g_values * g_weights) / sum(g_weights)
-  }
-  sapply(
-    group,
-    ind_grouped_weighted_mean,
-    values = values, weights = weights, group = group
-  )
-}
-
-grouped_weighted_sd <- function(values, weights, group) {
-  ind_grouped_weighted_sd <- function(group_x, values, weights, group) {
-    avail_values <- values[which(!is.na(values))]
-    weights <- ifelse(is.na(weights), 0, weights)
-    avail_weights <- weights[which(!is.na(values))]
-    avail_group <- group[which(!is.na(values))]
-    g_values <- avail_values[which(avail_group == group_x)]
-    g_weights <- avail_weights[which(avail_group == group_x)]
-
-    avg <- sum(g_values * g_weights) / sum(g_weights)
-    dof <- (length(g_weights) - 1) / length(g_weights)
-    var <- sum(g_weights * (g_values - avg)^2) / (dof * sum(g_weights))
-    sqrt(var)
-  }
-  sapply(
-    group,
-    ind_grouped_weighted_sd,
-    values = values, weights = weights, group = group
-  )
-}
-
-windsorize <- function(values, group, probs = c(0.05, 0.95), ...) {
-  windsorize_ind <- function(x, g, v, gr, probs = c(0.05, 0.95), ...) {
-    if (is.na(x)) {
-      return(NA)
-    }
-    v <- v[which(gr == g)]
-    xq <- quantile(x = v, probs = probs, ...)
-    minval <- xq[[1L]]
-    maxval <- xq[[2L]]
-
-    if (x < minval) {
-      x <- minval
-    } else if (x > maxval) {
-      x <- maxval
-    }
-    x
+  if (length(weights) == 1 && is.na(weights)) {
+    weights <- rep(1, length(values))
   }
 
-  mapply(
-    windsorize_ind,
-    x = values,
-    g = group,
-    MoreArgs = list(
-      v = values,
-      gr = group,
-      probs = probs,
-      ... = ...
-    )
+  if (length(group) == 1 && is.na(group)) {
+    group <- rep("1", length(values))
+  }
+
+  dt <- data.table::data.table(
+    values = values,
+    weights = weights,
+    group = group
   )
+  # Replace NA weights with 0
+  dt[is.na(values), weights := 0]
+  dt[is.na(weights), weights := 0]
+  # Perform winsorization
+  dt[, c("minval", "maxval") := {
+    q <- quantile(values, probs = win_prob, na.rm = TRUE)
+    .(minval = q[1], maxval = q[2])
+  }, by = group]
+  dt[, win_values := pmin(pmax(values, minval), maxval)]
+  # Calculate grouped weighted mean and standard deviation
+  dt[, wmean := sum(values * weights, na.rm = TRUE) / sum(weights), by = group]
+  dt[, wvar := {
+    avg <- wmean[1]
+    dof <- (.N - 1) / .N
+    sum(weights * (values - avg)^2, na.rm = TRUE) / (dof * sum(weights))
+  }, by = group]
+  dt[, wsd := sqrt(wvar)]
+  # Compute normalized values
+  dt[, norm_x := (win_values - wmean) / wsd]
+  # Return the normalized values in the original order
+  out <- dt$norm_x
+  names(out) <- names(values)
+  return(out)
 }

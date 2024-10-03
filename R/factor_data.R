@@ -56,12 +56,15 @@ create_factor_data <- function(
 #' @title Create Factor Data
 #' @description create factor data
 #' @param factor_data factor_data_object
+#' @export
+#' @keywords internal
 create_fdata <- function(factor_data) UseMethod("create_fdata")
 
 #' @import dplyr
 #' @include utilities.R
 #' @include factor_data_params.R
 #' @include factor_data_single_period.R
+#' @export
 create_fdata.factor_data <- function(factor_data) {
   if(check_factor_data_params(factor_data@params, factor_data@data)) { # nolint
     ldata <- factor_data@data %>% # nolint: object_usage_linter.
@@ -72,7 +75,9 @@ create_fdata.factor_data <- function(factor_data) {
       date_col_name = factor_data@params@date_col_name,
       id_col_name = factor_data@params@id_col_name,
       factor_col_name = factor_data@params@factor_col_name,
-      return_col_name = factor_data@params@return_col_name
+      return_col_name = factor_data@params@return_col_name,
+      group_col_name = factor_data@params@group_col_name,
+      weight_col_name = factor_data@params@weight_col_name
     )
     factor_data@factor_data <- fdata
   }
@@ -86,13 +91,11 @@ create_fdata.factor_data <- function(factor_data) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_date_col <- function(x, date_col_name) UseMethod("set_date_col")
-
 #' @export
 set_date_col.factor_data <- function(x, date_col_name) {
   x@params@date_col_name <- date_col_name
   create_fdata(x)
 }
-
 #' @export
 set_date_col.factor_data_params <- function(x, date_col_name) {
   x@date_col_name <- date_col_name
@@ -106,13 +109,11 @@ set_date_col.factor_data_params <- function(x, date_col_name) {
 #' @returns updated factor_data or factor_data_params object
 #' @export
 set_id_col <- function(x, date_col_name) UseMethod("set_id_col")
-
 #' @export
 set_id_col.factor_data <- function(x, id_col_name) {
   x@params@id_col_name <- id_col_name
   create_fdata(x)
 }
-
 #' @export
 set_id_col.factor_data_params <- function(x, id_col_name) {
   x@id_col_name <- id_col_name

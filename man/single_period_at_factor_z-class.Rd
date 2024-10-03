@@ -10,10 +10,10 @@ Single Period Alpha Test (Factor Weighted) S4 Object
 \section{Slots}{
 
 \describe{
-\item{\code{IC}}{todo}
+\item{\code{IC}}{Information Coefficient of Factor.}
 
-\item{\code{factor_z_score}}{todo}
+\item{\code{factor_z_score}}{factor_z_score object.}
 
-\item{\code{return_z_score}}{todo}
+\item{\code{return_z_score}}{z-score of returns.}
 }}
 

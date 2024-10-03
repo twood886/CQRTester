@@ -4,7 +4,7 @@
 \alias{ctz}
 \title{Calculate Factor Z-Score with Winsorization}
 \usage{
-ctz(values, weights, group, win_prob = c(0, 1))
+ctz(values, weights = NA_real_, group = NA_real_, win_prob = c(0, 1))
 }
 \arguments{
 \item{values}{a numeric vector of factor values}
