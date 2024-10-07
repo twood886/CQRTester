@@ -30,6 +30,7 @@ setClass(
   contains = "single_period_at",
   representation(
     IC = "numeric",
+    alpha = "numeric",
     factor_z_score = "factor_z_score",
     return_z_score = "list"
   )
@@ -97,6 +98,8 @@ setMethod("alpha_test",
       simplify = TRUE
     )
 
+    alpha <- r - r_bmark
+
     new("single_period_at_factor_z",
       date = d,
       return_factor = r,
@@ -104,6 +107,7 @@ setMethod("alpha_test",
       weights = weights,
       weights_bmark = weights_bmark,
       IC = ic,
+      alpha = alpha,
       factor_z_score = fz,
       return_z_score = rz
     )

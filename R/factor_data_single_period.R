@@ -77,7 +77,7 @@ create_single_period_factor_data <- function( # nolint: object_length_linter.
   } else {
     returns <- sapply(
       return_col_name,
-      \(x, data) tidyr::replace_na(data[[x]], 0),
+      \(x, data) data[[x]],
       data = data,
       simplify = FALSE
     )

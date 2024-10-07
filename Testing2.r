@@ -33,31 +33,6 @@ data <- data_raw %>%
   ) %>%
   janitor::clean_names()
 
-'
-   %>%
-  dplyr::mutate(
-    `earnings_yield_z` = ctz(`earnings_yield`, win_prob = c(0.05, 0.95)),
-    `ntm_earnings_yield_z` = ctz(`ntm_earnings_yield`,  win_prob = c(0.05, 0.95)),
-    `book_to_price_z` = ctz(`book_to_price`,  win_prob = c(0.05, 0.95)),
-    `operating_cash_flow_yield_z` = ctz(`operating_cash_flow_yield`, win_prob = c(0.05, 0.95)),
-    `free_cash_flow_to_enterprise_value` = ctz(`operating_cash_flow_yield`, win_prob = c(0.05, 0.95)),
-    .by = c("periods", "fact_set_econ_sector")
-  ) %>%
-  dplyr::mutate(
-    `value_score` = rowMeans(pick(
-      `earnings_yield_z`,
-      `ntm_earnings_yield_z`,
-      `book_to_price_z`,
-      `operating_cash_flow_yield_z`,
-      `free_cash_flow_to_enterprise_value`
-    ),
-    na.rm = TRUE
-    )
-  )
-'
-
-
-
 # Create Factor Data
 fcf2ev_data <- CQRTester::create_factor_data(
   data = data,
@@ -82,5 +57,5 @@ fcf2ev_settings <- set_at_settings(
 )
 
 # Alpha Test
-fcf2ev_factor_at_sp <- alpha_test(test, fcf2ev_factor_settings)
+fcf2ev_factor_at_sp <- alpha_test(test, fcf2ev_settings)
 fcf2ev_at <- alpha_test(fcf2ev_data, fcf2ev_settings)

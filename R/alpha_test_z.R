@@ -3,12 +3,13 @@
 #' @slot IC Information Coefficient
 #' @slot factor_z_score A list of factor z-scores.
 #' @keywords internal
-#' @include alpha_test.r
+#' @include alpha_test.R
 setClass(
   "alpha_test_factor_z",
   contains = "alpha_test",
   representation(
     IC = "matrix",
+    alpha = "matrix",
     factor_z_score = "list"
   )
 )
@@ -35,6 +36,7 @@ setMethod("alpha_test",
     weights_bmark <- lapply(spats, \(x) x@weights)
 
     ic <- t(sapply(spats, \(x) x@IC))
+    alpha <- t(sapply(spats, \(x) x@alpha))
     factor_z_score <- lapply(spats, \(x) x@factor_z_score)
 
     new("alpha_test_factor_z",
@@ -43,7 +45,18 @@ setMethod("alpha_test",
       weights = weights,
       weights_bmark = weights_bmark,
       IC = ic,
+      alpha = alpha,
       factor_z_score = factor_z_score
     )
+  }
+)
+
+# Show Method -------------------------------------------------------------
+setMethod(f = show,
+  signature(object = "alpha_test_factor_z"),
+  function(object) {
+
+
+
   }
 )
