@@ -7,6 +7,18 @@
 #'@export
 calc_weights <- function(score, weighting_scheme, ...) UseMethod("calc_weights")
 
+#' @include orderedList.R
+calc_weights.orderedList <- function(
+  score, weighting_scheme = "z-weighted", ...
+) {
+  weights <- lapply(
+    score@list,
+    calc_weights,
+    weighting_scheme = weighting_scheme,
+  )
+  orderedList(weights, score@n, score@order)
+}
+
 
 #' @importFrom tidyr replace_na
 calc_weights.factor_z_score <- function(

@@ -9,11 +9,7 @@ calc_factor_z(factor_data, win_prob = c(0, 1))
 \arguments{
 \item{win_prob}{a numeric vector of probabilities with values in [0,1]}
 
-\item{factor_values}{a numeric array of factor values}
-}
-\value{
-A vector of the same length as the original data x containing the
-winsorized and normalized data.
+\item{factor_values}{Factor Values.}
 }
 \description{
 Calculate Factor Z-Score

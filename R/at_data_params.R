@@ -1,7 +1,7 @@
-# factor_data_params (S4 Object) -----------------------------------------------
-#' @title Factor Data Parameters
+# at_data_params (S4 Object) -----------------------------------------------
+#' @title Alpha Test Data Parameters
 #' @description
-#' An S4 class containing the parameters for creating a factor_data object
+#' An S4 class containing the parameters for creating a at_data object
 #' @slot data_col_name A string representing the column name of date values.
 #' @slot id_col_name A string representing the column name of id values.
 #' @slot factor_col_name A string representing the column name of factor values.
@@ -9,8 +9,9 @@
 #' @slot include_col_name A string representing the column name of include T/F.
 #' @slot group_col_name A string representing the column name of grouping value.
 #' @slot weight_col_name A string representing the column name of weights.
+#' @slot horizon return and factor horizon
 setClass(
-  "factor_data_params",
+  "at_data_params",
   representation(
     date_col_name = "character",
     id_col_name = "character",
@@ -18,60 +19,68 @@ setClass(
     return_col_name = "character",
     include_col_name = "character",
     weight_col_name = "character",
-    group_col_name = "character"
+    group_col_name = "character",
+    horizon = "numeric"
   )
 )
 
-#' @title Create Factor Data Parameters Object
+#' @title Create Alpha Test Data Parameters Object
 #' @description
-#' Function to set parameters for factor data, creating a factor_data_params
-#' object.
+#' Function to set parameters for factor data, creating a at_data_params object.
 #' @param date_col_name A string representing the column name of date values.
 #' @param id_col_name A string representing the column name of id values.
-#' @param factor_col_name A string representing the column name of factor values.
-#' @param return_col_name A string representing the column name of return values.
-#' @param group_col_name A string representing the column name of grouping value.
+#' @param factor_col_name A string representing the column name of factor values. # nolint: line_length_linter.
+#' @param return_col_name A string representing the column name of return values. # nolint: line_length_linter.
+#' @param include_col_name A string representing the column name of include T/F.
+#' @param group_col_name A string representing the column name of grouping value. # nolint: line_length_linter.
 #' @param weight_col_name A string representing the column name of weights.
-#' @return factor_data_params object
+#' @param horizon A numeric representing the return and factor horizon.
+#' @return at_data_params object
 #' @export
-create_factor_data_params <- function(
+create_at_data_params <- function(
   date_col_name = NA_character_, id_col_name = NA_character_,
   factor_col_name = NA_character_, return_col_name = NA_character_,
-  group_col_name = NA_character_, weight_col_name = NA_character_
+  include_col_name = NA_character_, group_col_name = NA_character_,
+  weight_col_name = NA_character_, horizon = 12
 ) {
-  new("factor_data_params",
+  new("at_data_params",
     date_col_name = date_col_name,
     id_col_name = id_col_name,
     factor_col_name = factor_col_name,
     return_col_name = return_col_name,
+    include_col_name = include_col_name,
     group_col_name = group_col_name,
-    weight_col_name = weight_col_name
+    weight_col_name = weight_col_name,
+    horizon = horizon
   )
 }
 
-#' @include generic_methods.R
-
-check_factor_data_params <- function(params, data) UseMethod("check_factor_data_params")
-
-setMethod("check_factor_data_params",
-  signature(params = "factor_data_params", data = "data.frame"),
+setGeneric("check_at_data_params",
+  function(params, data) standardGeneric("check_at_data_params")
+)
+setMethod("check_at_data_params",
+  signature(params = "at_data_params", data = "data.frame"),
   function(params, data) {
     date_col_name <- params@date_col_name
     id_col_name <- params@id_col_name
     factor_col_name <- params@factor_col_name
     return_col_name <- params@return_col_name
+    include_col_name <- params@include_col_name
     group_col_name <- params@group_col_name
     weight_col_name <- params@weight_col_name
     data_col_names <- colnames(data)
 
     entered_names <-
       all(!is.na(c(
-        date_col_name, id_col_name, factor_col_name, return_col_name
+        date_col_name, id_col_name,
+        factor_col_name, return_col_name,
+        include_col_name
       )))
 
     names_in_data <-
       all(c(
-        date_col_name, id_col_name, factor_col_name, return_col_name,
+        date_col_name, id_col_name,
+        factor_col_name, return_col_name, include_col_name,
         group_col_name, weight_col_name
       ) %in% c(data_col_names, NA_character_),
       na.rm = TRUE)

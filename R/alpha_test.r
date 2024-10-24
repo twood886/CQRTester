@@ -9,9 +9,10 @@
 setClass(
   "alpha_test",
   slots = c(
-    returns = "matrix",
-    return_bmark = "matrix",
-    weights = "list",
-    weights_bmark = "list"
+    return_fwd_factor = "orderedList",
+    return_lag_factor = "orderedList",
+    return_bmark = "orderedList",
+    weights = "orderedList",
+    weights_bmark = "orderedList"
   )
 )

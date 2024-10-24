@@ -1,4 +1,4 @@
-# single_period_at(S4 Object) ----------------------------------------------
+# single_period_at(S4 Object) --------------------------------------------------
 #' @title Single Period Alpha Testing S4 Object
 #' @description An S4 Class to represent Factor Alpha Testing Parent Class
 #'  for a single period
@@ -19,7 +19,7 @@ setClass(
   )
 )
 
-# single_period_at_factor_w (S4 Object) ------------------------------------
+# single_period_at_factor_z (S4 Object) ------------------------------------
 #' @title Single Period Alpha Test (Factor Weighted) S4 Object
 #' @slot IC Information Coefficient of Factor.
 #' @slot factor_z_score factor_z_score object.
