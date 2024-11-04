@@ -4,9 +4,10 @@
 #' @slot q_returns A list of factor quantile returns.
 #' @slot q_stats A list of factor quantile stats.
 #' @include alpha_test.R
+#' @include at_data.R
 setClass(
   "alpha_test_factor_q",
-  contains = "alpha_test",
+  contains = "at",
   representation(
     factor_quantile = "list",
     q_returns = "list",
@@ -14,12 +15,11 @@ setClass(
   )
 )
 
-#' @include generic_methods.R
+#' @include alpha_test.R
 #' @include alpha_test_single_period.R
-#' @include factor_data.R
 setMethod("alpha_test",
   signature(
-    data = "factor_data",
+    data = "at_data",
     .settings = "at_settings_factor_q"
   ),
   function(data, .settings, ...) {

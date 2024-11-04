@@ -3,51 +3,36 @@ library(tidyverse)
 library(CQRTester)
 library(readr)
 
+load("Data\\data.rda")
+
 # Read in raw data
 data_raw <- read_delim(
-  "C:/Users/TWood.callodine/Downloads/Factors_Within_Value - 20240911 - 1418/Constituents - Constituents.txt",
+  "data/data.txt",
   delim = "\t",
   escape_double = FALSE,
   col_types = cols(Periods = col_date(format = "%m/%d/%Y")),
   trim_ws = TRUE
 )
 
-
-#ctz <- function(x) {
-#  win_x <- DescTools::Winsorize(x, na.rm = TRUE)
-#  mean_x <- mean(x, na.rm = TRUE)
-#  sd_x <- sd(x, na.rm = TRUE)
-#  (win_x - mean_x) / sd_x
-#}
-
 # Clean data
 data <- data_raw %>%
   dplyr::mutate(
     `company_id` = `...1`,
-    `return_m01` = `Universe Returns` / 100,
-    `return_m03` = `Universe Returns Additional Return 2` / 100,
-    `return_m06` = `Universe Returns Additional Return 3` / 100,
-    `return_m09` = `Universe Returns Additional Return 4` / 100,
-    `return_m12` = `Universe Returns Additional Return 5` / 100,
+    `return` = `Universe Returns` / 100,
+    `include` = dplyr::case_when(
+      `Top 500` == 1 ~ TRUE,
+      `Second 500` == 1 ~ TRUE,
+      `Third 500` == 1 ~ TRUE,
+      .default = FALSE
+    ),
     .keep = "unused"
   ) %>%
-  janitor::clean_names() %>%
-  dplyr::rename(return = `return_m01`) %>%
-  dplyr::mutate(`include` = TRUE)
+  janitor::clean_names()
 
-
-
-fdata <- get_prv_factor_vals(
-  data, date_col_name, id_col_name, factor_col_name, 12
-)
-
-rdata <- get_fwd_returns(
-  data, date_col_name, id_col_name, return_col_name, 12
-)
 
 # Create Alpha Testing Settings
 fcf2ev_settings <- set_at_settings(
-  testing_scheme = "factor-z"
+  testing_scheme = "factor-q"
 )
 
 # Test Single Period AT Data
@@ -79,7 +64,8 @@ test_at_data <- create_at_data(
   horizon = 12
 )
 
-
+# Alpha Test
+fcf2ev_at <- alpha_test(test_at_data, fcf2ev_settings)
 
 
 # Create Factor Data
@@ -101,6 +87,4 @@ fcf2ev_data <- CQRTester::create_factor_data(
 test <- fcf2ev_data@factor_data[[390]]
 
 
-# Alpha Test
 
-fcf2ev_at <- alpha_test(fcf2ev_data, fcf2ev_settings)

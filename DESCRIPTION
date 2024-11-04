@@ -8,29 +8,24 @@ Description: Alpha Testing
 License: MIT
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.2.9000
 Collate: 
     'WeightingFunctions.R'
-    'factor_q_score.R'
     'orderedList.R'
-    'calc_weights.R'
-    'utilities.R'
-    'factor_z_score.R'
-    'at_settings.R'
-    'generic_methods.R'
-    'factor_data_single_period.R'
-    'alpha_test_single_period.R'
     'alpha_test.R'
-    'factor_data_params.R'
-    'factor_data.R'
-    'alpha_test_q.R'
+    'utilities.R'
+    'factor_q_score.R'
     'calc_bench_weights.R'
+    'factor_z_score.R'
+    'calc_weights.R'
     'return_z_score.R'
     'calc_IC.R'
+    'at_settings.R'
     'at_data_single_period.R'
-    'alpha_test_single_period_v2.R'
+    'alpha_test_single_period.R'
     'at_data_params.R'
     'at_data.R'
+    'alpha_test_q.R'
     'alpha_test_z.R'
     'calc_return.R'
-    'hello.R'
+    'factor_data_params.R'

@@ -49,8 +49,7 @@ create_factor_data_params <- function(
   )
 }
 
-#' @include generic_methods.R
-
+#' @include alpha_test.R
 check_factor_data_params <- function(params, data) UseMethod("check_factor_data_params")
 
 setMethod("check_factor_data_params",

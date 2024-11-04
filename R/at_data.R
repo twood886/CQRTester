@@ -92,3 +92,21 @@ create_single_period_at_data_list.at_data <- function(at_data) {
   }
   at_data
 }
+
+##' @title Set Date Column Name
+##' @description Set the date column for factor_data_params
+##' @param x factor_data or factor_data_params object
+##' @param date_col_name a string representing the date column name
+##' @returns updated factor_data or factor_data_params object
+##' @export
+#set_date_col <- function(x, date_col_name) UseMethod("set_date_col")
+##' @export
+#set_date_col.factor_data <- function(x, date_col_name) {
+#  x@params@date_col_name <- date_col_name
+#  create_fdata(x)
+#}
+##' @export
+#set_date_col.factor_data_params <- function(x, date_col_name) {
+#  x@date_col_name <- date_col_name
+#  x
+#}

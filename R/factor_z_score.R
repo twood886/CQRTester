@@ -31,12 +31,3 @@ calc_factor_z.single_period_at_data <- function(x, win_prob = c(0, 1)) {
   fz <- lapply(z, \(x) new("factor_z_score", score = x))
   new("orderedList", list = fz, n = x@fvals@n, order = x@fvals@order)
 }
-
-
-
-
-#' @export
-calc_factor_z.single_period_factor_data <- function(x, win_prob = c(0, 1)) {
-  fz <- ctz(x@fvals, x@weights, x@group, win_prob)
-  new("factor_z_score", score = fz)
-}

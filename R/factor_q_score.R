@@ -6,16 +6,30 @@ setClass(
   representation(score = "ordered")
 )
 
+setMethod("as.numeric", "factor_q_score", function(x) x@score)
+
 #' @title Calculate Quantile Factor Value
-#' @description Calculate Factor Z-Score
-#' @param factor_values a numeric array of factor values
-#' @param quantiles a numeric representing the number of quantiles.
-#' @return Ordered quantiles
-calc_factor_q <- function(factor_data, quantiles = 5) UseMethod("calc_factor_q")
+#' @description Calculate Factor Quantile
+#' @param factor_values Factor Values.
+#' @param quantiles a numeric representing the number of quantiles
+#' @return orderedList
+#' @include utilities.R
+#' @include orderedList.R
 #' @export
-calc_factor_q.single_period_factor_data <- function(x, quantiles = 5, .desc = TRUE) { # nolint: line_length_linter.
-  fq <- ctq(x@fvals, x@group, quantiles, .desc)
-  new("factor_q_score", score = fq)
+calc_factor_q <- function(factor_data, quantiles = 5) UseMethod("calc_factor_q")
+
+#' @title Calculate Quantile of Factor Values
+#' @description Calculate the Quantile of Factor Values including lagged
+#'  Factor Values in a single_period_at_data S4 object
+#' @param x A single_period_at_data S4 object.
+#' @param quantiles a numeric representing the number of quantiles
+#' @include utilities.R
+#' @include orderedList.R
+#' @return orderedList S4 object of factor_q_score S4 objects
+calc_factor_q.single_period_at_data <- function(x, quantiles = 5, .desc = TRUE) { # nolint
+  q <- lapply(x@fvals@list, ctq, x@group, quantiles, .desc)
+  fq <- lapply(q, \(x) new("factor_q_score", score = x))
+  orderedList(fq, x@fvals@n, x@fvals@order)
 }
 
 #' @title Calculate Factor Quantile

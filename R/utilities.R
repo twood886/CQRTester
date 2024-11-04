@@ -187,19 +187,19 @@ ctz <- function(
   # Perform winsorization
   dt[, c("minval", "maxval") := {
     q <- quantile(values, probs = win_prob, na.rm = TRUE)
-    .(minval = q[1], maxval = q[2])
+    .(minval = q[1], maxval = q[2]) # nolint
   }, by = group]
-  dt[, win_values := pmin(pmax(values, minval), maxval)]
+  dt[, "win_values" := pmin(pmax(values, minval), maxval)] # nolint
   # Calculate grouped weighted mean and standard deviation
-  dt[, wmean := sum(values * weights, na.rm = TRUE) / sum(weights), by = group]
-  dt[, wvar := {
-    avg <- wmean[1]
+  dt[, "wmean" := sum(values * weights, na.rm = TRUE) / sum(weights), by = group] # nolint
+  dt[, "wvar" := {
+    avg <- wmean[1] # nolint
     dof <- (.N - 1) / .N
     sum(weights * (values - avg)^2, na.rm = TRUE) / (dof * sum(weights))
   }, by = group]
-  dt[, wsd := sqrt(wvar)]
+  dt[, "wsd" := sqrt(wvar)] # nolint
   # Compute normalized values
-  dt[, norm_x := (win_values - wmean) / wsd]
+  dt[, "norm_x" := (win_values - wmean) / wsd] # nolint
   # Return the normalized values in the original order
   out <- dt$norm_x
   names(out) <- names(values)

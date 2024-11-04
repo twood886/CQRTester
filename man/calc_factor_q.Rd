@@ -7,13 +7,13 @@
 calc_factor_q(factor_data, quantiles = 5)
 }
 \arguments{
-\item{quantiles}{a numeric representing the number of quantiles.}
+\item{quantiles}{a numeric representing the number of quantiles}
 
-\item{factor_values}{a numeric array of factor values}
+\item{factor_values}{Factor Values.}
 }
 \value{
-Ordered quantiles
+orderedList
 }
 \description{
-Calculate Factor Z-Score
+Calculate Factor Quantile
 }
