@@ -69,7 +69,7 @@ setClass(
 #' @export
 setMethod("alpha_test",
   signature(
-    data = "single_period_at_data", 
+    data = "single_period_at_data",
     .setting = "at_settings_factor_z"
   ),
   function(data, .settings, ...) {

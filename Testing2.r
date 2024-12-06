@@ -5,34 +5,10 @@ library(readr)
 
 load("Data\\data.rda")
 
-# Read in raw data
-data_raw <- read_delim(
-  "data/data.txt",
-  delim = "\t",
-  escape_double = FALSE,
-  col_types = cols(Periods = col_date(format = "%m/%d/%Y")),
-  trim_ws = TRUE
-)
-
-# Clean data
-data <- data_raw %>%
-  dplyr::mutate(
-    `company_id` = `...1`,
-    `return` = `Universe Returns` / 100,
-    `include` = dplyr::case_when(
-      `Top 500` == 1 ~ TRUE,
-      `Second 500` == 1 ~ TRUE,
-      `Third 500` == 1 ~ TRUE,
-      .default = FALSE
-    ),
-    .keep = "unused"
-  ) %>%
-  janitor::clean_names()
-
 
 # Create Alpha Testing Settings
 fcf2ev_settings <- set_at_settings(
-  testing_scheme = "factor-q"
+  testing_scheme = "factor-z"
 )
 
 # Test Single Period AT Data
@@ -66,7 +42,6 @@ test_at_data <- create_at_data(
 
 # Alpha Test
 fcf2ev_at <- alpha_test(test_at_data, fcf2ev_settings)
-
 
 # Create Factor Data
 fcf2ev_data <- CQRTester::create_factor_data(

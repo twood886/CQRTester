@@ -10,8 +10,6 @@ setClass(
   representation(
     IC_fwd_return = "orderedList",
     IC_lag_factor = "orderedList",
-    alpha_fwd_return = "orderedList",
-    alpha_lag_factor = "orderedList"
   )
 )
 
