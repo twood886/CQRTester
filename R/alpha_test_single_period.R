@@ -50,15 +50,13 @@ setClass(
   contains = "single_period_at",
   representation(
     factor_quantile = "orderedList",
-    q_avg_fwd_return = "list",
-    q_lag_factor_avg_return = "list"
+    q_avg_fwd_return = "orderedList",
+    q_lag_factor_avg_return = "orderedList"
   )
 )
 
-# -------------------------------------------------------------------------
-##' @aliases alpha_test, single_period_at_data-method
-#' @name alpha_test
-#' @export alpha_test
+
+#' @title Alpha Test Method for Single Period AT
 #' @include alpha_test.R
 #' @include at_settings.R
 #' @include factor_z_score.R
@@ -141,6 +139,8 @@ setMethod("alpha_test",
 #' @include factor_q_score.R
 #' @include calc_weights.R
 #' @include calc_bench_weights.R
+#' @include calc_q_metrics.R
+#' @export
 setMethod("alpha_test",
   signature(
     data = "single_period_at_data",
@@ -185,33 +185,24 @@ setMethod("alpha_test",
       return_fwd_factor,
       bmark_fwd_return@list
     )
+
     alpha_lag_factor <- calc_alpha(
       return_fwd_factor,
       bmark_fwd_return@list[[1]]
     )
-    # Quintile Level Statistics
-    calc_q_ <- function(x, fq, f, ...) {
-      if (!is.list(x) && !is.list(fq)) {
-        return(tapply(x, fq, f, ...))
-      }
-      if (is.list(x) && !is.list(fq)) {
-        return(lapply(x, \(x, fq) tapply(x, fq, f, ...), fq = fq))
-      }
-      if (!is.list(x) && is.list(fq)) {
-        return(lapply(fq, \(q, x) tapply(x, q@score, f, ...), x = x))
-      }
-    }
 
-    # q_count <- calc_q_(fq[[0]]@score, fq[[0]]@score, length)
-    q_avg_fwd_return <- calc_q_(
-      data@returns[[]],
-      fq[[0]]@score,
-      mean, na.rm = TRUE
+    q_avg_fwd_return <- calc_q_returns(
+      fq[[0]],
+      data@returns,
+      mean,
+      na.rm = TRUE
     )
-    q_lag_factor_avg_return <- calc_q_(
+
+    q_lag_factor_avg_return <- calc_q_returns(
+      fq,
       data@returns[[1]],
-      fq[[]],
-      mean, na.rm = TRUE
+      mean,
+      na.rm = TRUE
     )
 
     new("single_period_at_q",

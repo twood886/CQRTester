@@ -30,7 +30,7 @@ calc_weights.orderedList <- function(
 #' @export
 setMethod("calc_weights",
   signature(score = "factor_z_score"),
-  function(score, weighting_scheme = "z-weighted", ... ) {
+  function(score, weighting_scheme = "z-weighted", ...) {
     fz <- score@score
     total_z <- sum(abs(fz), na.rm = TRUE)
     raw_weights <- tidyr::replace_na(fz / (total_z / 2), 0)
@@ -57,7 +57,7 @@ setMethod("calc_weights",
 #' @export
 setMethod("calc_weights",
   signature(score = "factor_q_score"),
-  function(score, weighting_scheme = "equal-spread", ... ) {
+  function(score, weighting_scheme = "equal-spread", ...) {
     fq <- score@score
     if (length(which(fq == "NA")) == length(fq)) {
       weights <- rep(0, length(fq))

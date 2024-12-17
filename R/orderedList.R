@@ -57,6 +57,7 @@ orderedList <- function(list, n, order) {
 #' @param lol a list of orderedLists
 #' @param y an array of names
 #' @param simplify logical, should new data be combined or remain list
+#' @export
 stackorderedLists <- function(lol, y = NULL, simplify = TRUE) {
   # Check that all items in lol are orderedLists
   if (!all(sapply(lol, function(x) inherits(x, "orderedList")))) {
@@ -95,6 +96,7 @@ stackorderedLists <- function(lol, y = NULL, simplify = TRUE) {
 #' @param dates an array of dates
 #' @param simplify a logical. Is slot a value or list
 #' @return stackedorderedLists object
+#' @export
 pivot_lospat_slot <- function(x, slotname, dates = NULL, simplify = TRUE) {
   lol <- lapply(x, \(x) slot(x, slotname))
   stackorderedLists(lol, dates)
