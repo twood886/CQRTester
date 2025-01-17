@@ -28,5 +28,3 @@ fcf2ev_at <- alpha_test(test_at_data, fcf2ev_settings)
 
 
 mean(fcf2ev_at@return_fwd_factor[[12]])
-
-1+1
