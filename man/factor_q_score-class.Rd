@@ -3,13 +3,13 @@
 \docType{class}
 \name{factor_q_score-class}
 \alias{factor_q_score-class}
-\title{Factor Quantile (S4 Object)}
+\title{Factor Quantile Scores (S4 Object)}
 \description{
-An S4 Class to represent Factor Quantiles
+Encapsulates quantile-based factor scores for a given period.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{score}}{Factor Quantile}
+\item{\code{score}}{A named vector of factor scores for the quantile-based analysis.}
 }}
 

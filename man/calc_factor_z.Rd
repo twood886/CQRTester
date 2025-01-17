@@ -4,12 +4,14 @@
 \alias{calc_factor_z}
 \title{Calculate Z-Score Factor Value}
 \usage{
-calc_factor_z(at_data, win_prob)
+calc_factor_z(at_data, win_prob, .desc)
 }
 \arguments{
 \item{at_data}{A single_period_at_data S4 object.}
 
 \item{win_prob}{a numeric vector of probabilities with values in [0,1]}
+
+\item{.desc}{Should values be ranked in secending order?}
 }
 \description{
 Calculate Factor Z-Score

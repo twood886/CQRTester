@@ -14,7 +14,7 @@ ctq(values, group = NA_real_, quantiles = 3, .desc = TRUE)
 \item{quantiles}{integer representing the number of quantiles
 to split data into.}
 
-\item{desc}{Should values be ranked in secending order?}
+\item{.desc}{Should values be ranked in secending order?}
 }
 \value{
 company quantile based on factor value

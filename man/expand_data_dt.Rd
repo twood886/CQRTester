@@ -2,22 +2,23 @@
 % Please edit documentation in R/utilities.R
 \name{expand_data_dt}
 \alias{expand_data_dt}
-\title{Expand Datatable for Factor/Returns}
+\title{Expand Dataset for Factors and Returns}
 \usage{
 expand_data_dt(data, date_col_name, id_col_name, data_col_name)
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{A data frame containing the input data.}
 
-\item{date_col_name}{string representing name of date column in data.}
+\item{date_col_name}{A string specifying the column name for dates.}
 
-\item{id_col_name}{string representing name of id column in data.}
+\item{id_col_name}{A string specifying the column name for IDs.}
 
-\item{data_col_name}{string representing name of data in data.}
+\item{data_col_name}{A string specifying the column name for data values.}
+}
+\value{
+An expanded data frame with missing combinations filled with `NA`.
 }
 \description{
-Creates a datatable from data, date column name, id column name,
- and target data column name. Expands the data for all combinations of dates
- and ids. Non-existing data will return NA. To be used with
- get_prv_factor_data and get_fwd_return_data.
+Expands the dataset to include all combinations of dates and IDs, ensuring
+missing data is handled.
 }

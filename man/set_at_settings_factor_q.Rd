@@ -9,6 +9,7 @@ set_at_settings_factor_q(
   end_date = Sys.Date(),
   weighting_scheme = "equal",
   benchmark_weighting_scheme = "zero",
+  .desc = TRUE,
   quantiles = 5,
   ...
 )
@@ -21,6 +22,8 @@ set_at_settings_factor_q(
 \item{weighting_scheme}{description}
 
 \item{benchmark_weighting_scheme}{description}
+
+\item{.desc}{Should factor score be ranked in descending order?}
 
 \item{quantiles}{description}
 

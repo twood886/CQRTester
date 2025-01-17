@@ -5,21 +5,26 @@
 \alias{at_settings-class}
 \title{Alpha Testing Settings (S4 Object)}
 \description{
-An S4 Object containing the settings to be used in Alpha Testing. Arguments
-passed through ATSettings are used in designing the alpha testing procedure.
+An S4 object that encapsulates settings for alpha testing.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{start_date}}{Date representing the earliest date for Alpha Testing.}
+\item{\code{start_date}}{A `Date` object representing the earliest date for alpha
+testing.}
 
-\item{\code{end_date}}{Date representing the latest date for Alpha Testing.}
+\item{\code{end_date}}{A `Date` object representing the latest date for alpha
+testing.}
 
-\item{\code{testing_scheme}}{Character representing alpha testing procedure.}
+\item{\code{testing_scheme}}{A character string representing the alpha testing
+scheme.}
 
-\item{\code{weighting_scheme}}{Character representing weighting scheme.}
+\item{\code{weighting_scheme}}{A character string representing the weighting scheme.}
 
-\item{\code{benchmark_weighting_scheme}}{Character represenitng the weighting scheme
-for the benchmark.}
+\item{\code{benchmark_weighting_scheme}}{A character string representing the
+benchmark weighting scheme.}
+
+\item{\code{.desc}}{A logical value indicating whether the factor scores should
+be ranked in descending order.}
 }}
 

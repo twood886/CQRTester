@@ -1,15 +1,22 @@
 #' @title Create Alpha Test Data Parameters Object
 #' @description
-#' Function to set parameters for factor data, creating a at_data_params object.
+#' Function to create and configure an `at_data_params` object, used to set
+#' parameters for factor data in alpha testing.
+#'
 #' @param date_col_name A string representing the column name of date values.
-#' @param id_col_name A string representing the column name of id values.
-#' @param factor_col_name A string representing the column name of factor values. # nolint: line_length_linter.
-#' @param return_col_name A string representing the column name of return values. # nolint: line_length_linter.
-#' @param include_col_name A string representing the column name of include T/F.
-#' @param group_col_name A string representing the column name of grouping value. # nolint: line_length_linter.
-#' @param weight_col_name A string representing the column name of weights.
-#' @param horizon A numeric representing the return and factor horizon.
-#' @return at_data_params object
+#' @param id_col_name A string representing the column name of ID values.
+#' @param factor_col_name A string representing the column name of factor
+#'   values.
+#' @param return_col_name A string representing the column name of return
+#'   values.
+#' @param include_col_name A string representing the column name for include
+#'   flags (TRUE/FALSE).
+#' @param group_col_name A string representing the column name for grouping
+#'   values.
+#' @param weight_col_name A string representing the column name for weights.
+#' @param horizon A numeric value representing the return and factor horizon.
+#'   Defaults to 12.
+#' @return An `at_data_params` S4 object.
 #' @include class-at_data_params.R
 #' @export
 create_at_data_params <- function(

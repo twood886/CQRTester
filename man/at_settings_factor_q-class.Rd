@@ -5,11 +5,11 @@
 \alias{at_settings_factor_q-class}
 \title{Settings for Factor Quantile Weighted Alpha Testing (S4 Object)}
 \description{
-Settings for Factor Quantile Weighted Alpha Testing (S4 Object)
+An S4 class for specifying settings used in quantile-based alpha testing.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{quantiles}}{Number of Quantiles to use.}
+\item{\code{quantiles}}{A numeric value representing the number of quantiles to use.}
 }}
 

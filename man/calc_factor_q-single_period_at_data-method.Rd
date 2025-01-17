@@ -2,19 +2,22 @@
 % Please edit documentation in R/method-calc_factor_q.R
 \name{calc_factor_q,single_period_at_data-method}
 \alias{calc_factor_q,single_period_at_data-method}
-\title{Calculate Quantile of Factor Values}
+\title{Calculate Quantile-Based Factor Values}
 \usage{
 \S4method{calc_factor_q}{single_period_at_data}(at_data, quantiles = 5, .desc = TRUE)
 }
 \arguments{
-\item{at_data}{A single_period_at_data S4 object.}
+\item{at_data}{A `single_period_at_data` object containing factor data.}
 
-\item{quantiles}{a numeric representing the number of quantiles}
+\item{quantiles}{A numeric value representing the number of quantiles.}
+
+\item{.desc}{A logical value indicating whether values should be ranked in
+descending order.}
 }
 \value{
-orderedList S4 object of factor_q_score S4 objects
+An `orderedList` object containing `factor_q_score` objects.
 }
 \description{
-Calculate the Quantile of Factor Values including lagged
- Factor Values in a single_period_at_data S4 object
+Computes quantile-based factor scores for a given period using specified
+quantiles and settings.
 }

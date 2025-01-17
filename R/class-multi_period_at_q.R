@@ -1,8 +1,12 @@
-#' @title Multi Period Alpha Test (Factor Quantile) S4 Object
-#' @slot factor_quantile A list of factor quantiles.
-#' @slot q_returns A list of factor quantile returns.
-#' @slot q_stats A list of factor quantile stats.
-#' @include class-multi_period_at.R
+#' @title Multi-Period Alpha Test Data (Quantile-Based) (S4 Object)
+#' @description
+#' Encapsulates multi-period alpha test results for quantile-based analysis.
+#'
+#' @slot factor_quantile An `orderedList` of factor quantiles for each period.
+#' @slot q_avg_fwd_returns An `orderedList` of average forward returns by
+#'   quantile.
+#' @slot q_lag_factor_avg_return An `orderedList` of average returns for lagged
+#'   factors by quantile.
 #' @include class-orderedList.R
 setClass(
   "multi_period_at_q",

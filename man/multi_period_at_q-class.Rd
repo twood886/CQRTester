@@ -3,17 +3,19 @@
 \docType{class}
 \name{multi_period_at_q-class}
 \alias{multi_period_at_q-class}
-\title{Multi Period Alpha Test (Factor Quantile) S4 Object}
+\title{Multi-Period Alpha Test Data (Quantile-Based) (S4 Object)}
 \description{
-Multi Period Alpha Test (Factor Quantile) S4 Object
+Encapsulates multi-period alpha test results for quantile-based analysis.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{factor_quantile}}{A list of factor quantiles.}
+\item{\code{factor_quantile}}{An `orderedList` of factor quantiles for each period.}
 
-\item{\code{q_returns}}{A list of factor quantile returns.}
+\item{\code{q_avg_fwd_returns}}{An `orderedList` of average forward returns by
+quantile.}
 
-\item{\code{q_stats}}{A list of factor quantile stats.}
+\item{\code{q_lag_factor_avg_return}}{An `orderedList` of average returns for lagged
+factors by quantile.}
 }}
 

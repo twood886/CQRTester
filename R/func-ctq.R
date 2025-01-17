@@ -3,7 +3,7 @@
 #' @param group a character vector of groups.
 #' @param quantiles integer representing the number of quantiles
 #' to split data into.
-#' @param desc Should values be ranked in secending order?
+#' @param .desc Should values be ranked in secending order?
 #' @return company quantile based on factor value
 #' @import tidyverse
 #' @import DescTools
@@ -13,7 +13,7 @@
 ctq <- function(values, group = NA_real_, quantiles = 3, .desc = TRUE) {
   dt <- data.table::data.table(values = values, group = group)
 
-  if (.desc) {
+  if (!.desc) {
     dt[, values := -values]
   }
 

@@ -4,12 +4,14 @@
 \alias{calc_factor_q}
 \title{Calculate Quantile Factor Value}
 \usage{
-calc_factor_q(at_data, quantiles, ...)
+calc_factor_q(at_data, quantiles, .desc, ...)
 }
 \arguments{
 \item{at_data}{Alpha Test data}
 
 \item{quantiles}{a numeric representing the number of quantiles}
+
+\item{.desc}{Should values be ranked in secending order?}
 }
 \description{
 Calculate Factor Quantile

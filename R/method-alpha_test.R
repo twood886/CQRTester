@@ -7,7 +7,7 @@
 #' @include gen-calc_weights.R
 #' @include func-orderedList.R
 #' @include func-calc_bench_weights.R
-#' @include gen-calc_return.R
+#' @include method-calc_return.R
 #' @include class-single_period_at_z.R
 #' @include gen-alpha_test.R
 #' @export
@@ -20,7 +20,7 @@ setMethod("alpha_test",
     # Extract Date
     d <- data@date
     # Calculate the Z-Score of Factors
-    fz <- calc_factor_z(data, .settings@win_prob)
+    fz <- calc_factor_z(data, .settings@win_prob, .settings@.desc)
     # Calculate the Z-Score of Returns
     rz <- calc_return_z(data, .settings@win_prob)
     # Calculate IC of current scores on Fwd Returns
@@ -84,10 +84,10 @@ setMethod("alpha_test",
 #' @include gen-calc_weights.R
 #' @include func-orderedList.R
 #' @include func-calc_bench_weights.R
-#' @include gen-calc_return.R
+#' @include method-calc_return.R
 #' @include gen-calc_q_metrics.R
 #' @include class-single_period_at_q.R
-#' @include gen-alpha_test.R
+#' @include method-alpha_test.R
 #' @export
 setMethod("alpha_test",
   signature(
@@ -98,7 +98,7 @@ setMethod("alpha_test",
     # Extract Date
     d <- data@date
     # Calculate the Quantile of Factors
-    fq <- calc_factor_q(data, .settings@quantiles)
+    fq <- calc_factor_q(data, .settings@quantiles, .settings@.desc)
     # Calculate Weights of portfolio
     weights <- calc_weights(fq, .settings@weighting_scheme)
     # Calculate Weights of Benchmark

@@ -5,6 +5,7 @@
 #' @param end_date description
 #' @param weighting_scheme description
 #' @param benchmark_weighting_scheme description
+#' @param .desc Should factor score be ranked in descending order?
 #' @param quantiles description
 #' @param ... Addtional arguements to be passesd to function.
 #' @returns An at_settings_q_spread S4 object to be used in Alpha Testing.
@@ -12,7 +13,7 @@
 set_at_settings_factor_q <- function(
   start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
   weighting_scheme = "equal",  benchmark_weighting_scheme = "zero",
-  quantiles = 5, ...
+  .desc = TRUE, quantiles = 5, ...
 ) {
   dargs <- list(...)
 
@@ -26,6 +27,7 @@ set_at_settings_factor_q <- function(
     testing_scheme = "factor-q",
     weighting_scheme = weighting_scheme,
     benchmark_weighting_scheme = benchmark_weighting_scheme,
+    .desc = .desc,
     quantiles = quantiles
   )
 }

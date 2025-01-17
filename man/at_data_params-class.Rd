@@ -5,25 +5,33 @@
 \alias{at_data_params-class}
 \title{Alpha Test Data Parameters}
 \description{
-An S4 class containing the parameters for creating a at_data object
+An S4 class containing the parameters for configuring an `at_data`
+object.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{data_col_name}}{A string representing the column name of date values.}
+\item{\code{date_col_name}}{A character string representing the column name for
+date values.}
 
-\item{\code{id_col_name}}{A string representing the column name of id values.}
+\item{\code{id_col_name}}{A character string representing the column name for ID
+values.}
 
-\item{\code{factor_col_name}}{A string representing the column name of factor values.}
+\item{\code{factor_col_name}}{A character string representing the column name for
+factor values.}
 
-\item{\code{return_col_name}}{A string representing the column name of return values.}
+\item{\code{return_col_name}}{A character string representing the column name for
+return values.}
 
-\item{\code{include_col_name}}{A string representing the column name of include T/F.}
+\item{\code{include_col_name}}{A character string representing the column name for
+inclusion flags (TRUE/FALSE).}
 
-\item{\code{group_col_name}}{A string representing the column name of grouping value.}
+\item{\code{group_col_name}}{A character string representing the column name for
+group values.}
 
-\item{\code{weight_col_name}}{A string representing the column name of weights.}
+\item{\code{weight_col_name}}{A character string representing the column name for
+weights.}
 
-\item{\code{horizon}}{return and factor horizon}
+\item{\code{horizon}}{A numeric value representing the return and factor horizon.}
 }}
 

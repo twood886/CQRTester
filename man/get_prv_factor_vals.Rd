@@ -2,21 +2,25 @@
 % Please edit documentation in R/utilities.R
 \name{get_prv_factor_vals}
 \alias{get_prv_factor_vals}
-\title{Get lagged factor values}
+\title{Compute Lagged Factor Values}
 \usage{
 get_prv_factor_vals(data, date_col_name, id_col_name, factor_col_name, horizon)
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{A data frame containing the input data.}
 
-\item{date_col_name}{string representing name of date column in data.}
+\item{date_col_name}{A string specifying the column name for dates.}
 
-\item{id_col_name}{string representing name of id column in data.}
+\item{id_col_name}{A string specifying the column name for IDs.}
 
-\item{factor_col_name}{string representing name of factor column in data.}
+\item{factor_col_name}{A string specifying the column name for factors.}
 
-\item{horizon}{numeric representing the number of periods to lag factor data.}
+\item{horizon}{An integer representing the lag horizon in periods.}
+}
+\value{
+A data frame containing lagged factor values.
 }
 \description{
-For every date, id get the factor and lagged values of factor.
+Computes lagged factor values for a given dataset across specified time
+horizons.
 }

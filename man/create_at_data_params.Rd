@@ -18,23 +18,29 @@ create_at_data_params(
 \arguments{
 \item{date_col_name}{A string representing the column name of date values.}
 
-\item{id_col_name}{A string representing the column name of id values.}
+\item{id_col_name}{A string representing the column name of ID values.}
 
-\item{factor_col_name}{A string representing the column name of factor values. # nolint: line_length_linter.}
+\item{factor_col_name}{A string representing the column name of factor
+values.}
 
-\item{return_col_name}{A string representing the column name of return values. # nolint: line_length_linter.}
+\item{return_col_name}{A string representing the column name of return
+values.}
 
-\item{include_col_name}{A string representing the column name of include T/F.}
+\item{include_col_name}{A string representing the column name for include
+flags (TRUE/FALSE).}
 
-\item{group_col_name}{A string representing the column name of grouping value. # nolint: line_length_linter.}
+\item{group_col_name}{A string representing the column name for grouping
+values.}
 
-\item{weight_col_name}{A string representing the column name of weights.}
+\item{weight_col_name}{A string representing the column name for weights.}
 
-\item{horizon}{A numeric representing the return and factor horizon.}
+\item{horizon}{A numeric value representing the return and factor horizon.
+Defaults to 12.}
 }
 \value{
-at_data_params object
+An `at_data_params` S4 object.
 }
 \description{
-Function to set parameters for factor data, creating a at_data_params object.
+Function to create and configure an `at_data_params` object, used to set
+parameters for factor data in alpha testing.
 }

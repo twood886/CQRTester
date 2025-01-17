@@ -2,31 +2,28 @@
 % Please edit documentation in R/gen-alpha_test.R
 \name{alpha_test}
 \alias{alpha_test}
-\title{Alpha Test}
+\title{Alpha Test Function}
 \usage{
 alpha_test(data, .settings, ...)
 }
 \arguments{
-\item{data}{A `factor_data` or `single_period_factor_data` object.
-See Methods, below, for more details.}
+\item{data}{A `factor_data` or `single_period_factor_data` object containing
+the input data for the alpha test.}
 
-\item{.settings}{A `factor_data_params` object.}
+\item{.settings}{A `factor_data_params` object containing configuration
+settings for the alpha test.}
 }
 \value{
-An `multi_period_at` or `single_period_at` object.
- See Methods, below, for more details.
+A `multi_period_at` or `single_period_at` object, depending on the
+  input data.
 }
 \description{
-The `alpha_test()` function is used to run a backtest on
- `at_data` or `single_period_at_data` objects according to the
- backtest parameters in set in an `at_data_params` object
+The `alpha_test` function performs a backtest on alpha test data using the
+specified settings, generating performance metrics for factors.
 }
 \details{
-The `alpha_test()` function is used to calculate backtest
- statistics regarding the effecacy of a factor to produce excess returns.
- The statistics returned depend on the object passed as `data` and the
- object passed as `.settings`. `alpha_test()` is designed to provide
- statistics about future cumulative performance for the current factor value
- as well as 1 period forward performance of the lagged factor value.
- These statistics are returned in `orderedList` objects.
+The function computes backtest statistics, evaluating the efficacy of
+factors in predicting excess returns. Metrics include forward cumulative
+performance for the current factor value and one-period forward performance
+for lagged factor values.
 }

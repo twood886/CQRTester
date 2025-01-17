@@ -1,21 +1,25 @@
-#' @title Calculate Z-Score of Factor Values
-#' @description Calculate the Z-Score of Factor Values including lagged
-#'  Factor Values in a single_period_at_data S4 object
-#' @param at_data A single_period_at_data S4 object.
-#' @param win_prob a numeric vector of probabilities with values in [0,1]
-#'  defining the windsorization levels.
+#' @title Calculate Z-Score-Based Factor Values
+#' @description
+#' Computes Z-score-based factor values, applying winsorization if specified.
+#'
+#' @param at_data A `single_period_at_data` object containing factor data.
+#' @param win_prob A numeric vector specifying percentile cutoffs for
+#'   winsorization.
+#' @param .desc A logical value indicating whether values should be ranked in
+#'   descending order.
+#' @return An `orderedList` object containing `factor_z_score` objects.
+#' @export
 #' @include utilities.R
 #' @include class-single_period_at_data.R
 #' @include func-orderedList.R
 #' @include class-factor_z_score.R
 #' @include gen-calc_factor_z.R
-#' @return orderedList S4 object of factor_z_score S4 objects
 setMethod(
   "calc_factor_z",
   signature(
     at_data = "single_period_at_data"
   ),
-  function(at_data, win_prob = c(0, 1)) {
+  function(at_data, win_prob = c(0, 1), .desc = TRUE) {
     z <- lapply(
       at_data@fvals@list,
       ctz,

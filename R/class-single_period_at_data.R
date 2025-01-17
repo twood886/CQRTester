@@ -1,13 +1,15 @@
-# single_period_at_data (S4 Object) --------------------------------------------
 #' @title Single Period Alpha Test Data (S4 Object)
-#' @description An S4 Class to represent Alpha Test Data for a single period.
-#' @slot factor A character representing the name of the factor.
-#' @slot date A date object representing the date of the data.
-#' @slot ids A character vector representing the company ids.
-#' @slot fvales An orderedList of factor values.
-#' @slot returns An orderedList of returns.
-#' @slot group A named character vector representing the company grouping.
-#' @slot weights A named numeric vector of weights from factor values.
+#' @description
+#' Represents alpha test data for a single period, encapsulating results and
+#' configurations for individual factor and return evaluations.
+#'
+#' @slot factor A character string representing the name of the factor.
+#' @slot date A `Date` object representing the specific period date.
+#' @slot ids A character vector containing company IDs for the period.
+#' @slot fvals An `orderedList` containing factor values for the period.
+#' @slot returns An `orderedList` containing returns data for the period.
+#' @slot group A named character vector indicating company groupings.
+#' @slot weights A named numeric vector of weights derived from factor values.
 #' @include class-orderedList.R
 setClass(
   "single_period_at_data",

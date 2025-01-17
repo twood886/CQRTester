@@ -1,6 +1,8 @@
 #' @title Return Z-Score (S4 Object)
-#' @description An S4 Class to represent Return Z-Scores
-#' @slot score Return Z-Score
+#' @description
+#' Represents Z-scores of returns for a single period in alpha testing.
+#'
+#' @slot score A numeric vector containing Z-scores for returns.
 setClass(
   "return_z_score",
   representation(score = "numeric")

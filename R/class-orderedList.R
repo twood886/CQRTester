@@ -1,9 +1,11 @@
-# orderedList (S4 Object) ------------------------------------------------------
-#' @title orderedList (S4 Object)
-#' @description An S4 Class to represent a list with a given order
-#' @slot list A list
-#' @slot n the length of the list
-#' @slot order a numeric array representing the order of the list
+#' @title Ordered List (S4 Object)
+#' @description
+#' Represents a list with a defined order, often used in alpha testing
+#' configurations.
+#'
+#' @slot list A list containing the elements.
+#' @slot n An integer representing the length of the list.
+#' @slot order A numeric array indicating the order of elements in the list.
 setClass(
   "orderedList",
   representation(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/func-create_single_period_at_data.R
 \name{create_single_period_at_data}
 \alias{create_single_period_at_data}
-\title{Create single_period_at_data S4 Object}
+\title{Create Single Period Alpha Test Data}
 \usage{
 create_single_period_at_data(
   date,
@@ -18,37 +18,34 @@ create_single_period_at_data(
 )
 }
 \arguments{
-\item{date}{Date.}
+\item{date}{A `Date` object representing the specific period.}
 
-\item{data}{A data frame containing id columns, return column and factor
-value column.}
+\item{data}{A data frame containing the required columns: ID, return, and
+factor values.}
 
-\item{date_col_name}{A character representing the column name of dates.}
+\item{date_col_name}{A character string for the column name of dates.}
 
-\item{id_col_name}{A character representing the column name of identifiers.}
+\item{id_col_name}{A character string for the column name of IDs.}
 
-\item{factor_col_name}{A character string representing the
-column name of the factor.}
+\item{factor_col_name}{A character string for the column name of factors.}
 
-\item{return_col_name}{A character string representing the
-column name of the returns.}
+\item{return_col_name}{A character string for the column name of returns.}
 
-\item{include_col_name}{A character string representing the column name of
-include at period variable.}
+\item{include_col_name}{A character string for the column name of include
+flags (TRUE/FALSE).}
 
-\item{group_col_name}{A character string representing the column name of
-grouping varialble.}
+\item{group_col_name}{A character string for the column name of groups.}
 
-\item{weight_col_name}{A character string representing the column name
-of weighting variable.}
+\item{weight_col_name}{A character string for the column name of weights.}
+
+\item{horizon}{A numeric value representing the horizon for returns and
+factors. Defaults to 0.}
 }
 \value{
-A single_period_factor_data object.
+A `single_period_at_data` S4 object.
 }
 \description{
-Function to create single_period_at_data object
-}
-\details{
-This function converts data into single_period_at_data object.
+Converts raw data into a `single_period_at_data` object for single-period
+alpha testing.
 }
 \keyword{internal}

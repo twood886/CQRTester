@@ -3,17 +3,18 @@
 \docType{class}
 \name{orderedList-class}
 \alias{orderedList-class}
-\title{orderedList (S4 Object)}
+\title{Ordered List (S4 Object)}
 \description{
-An S4 Class to represent a list with a given order
+Represents a list with a defined order, often used in alpha testing
+configurations.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{list}}{A list}
+\item{\code{list}}{A list containing the elements.}
 
-\item{\code{n}}{the length of the list}
+\item{\code{n}}{An integer representing the length of the list.}
 
-\item{\code{order}}{a numeric array representing the order of the list}
+\item{\code{order}}{A numeric array indicating the order of elements in the list.}
 }}
 

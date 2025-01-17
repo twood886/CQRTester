@@ -3,14 +3,14 @@
 \docType{class}
 \name{at_settings_factor_z-class}
 \alias{at_settings_factor_z-class}
-\title{Settings for Factor Zscore Weighted Alpha Testing (S4 Object)}
+\title{Settings for Factor Z-Score Weighted Alpha Testing (S4 Object)}
 \description{
-Settings for Factor Zscore Weighted Alpha Testing (S4 Object)
+An S4 class for specifying settings used in Z-score-based alpha testing.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{win_prob}}{A numeric vector of length 2 representing the percentile
-cut-offs for windsorization.}
+\item{\code{win_prob}}{A numeric vector of length 2 specifying the percentile
+cut-offs for winsorization.}
 }}
 

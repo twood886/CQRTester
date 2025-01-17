@@ -2,21 +2,25 @@
 % Please edit documentation in R/utilities.R
 \name{get_fwd_p_returns}
 \alias{get_fwd_p_returns}
-\title{Get forward periodic return values}
+\title{Compute Forward Returns}
 \usage{
 get_fwd_p_returns(data, date_col_name, id_col_name, return_col_name, horizon)
 }
 \arguments{
-\item{data}{Data frame}
+\item{data}{A data frame containing the input data.}
 
-\item{date_col_name}{string representing name of date column in data.}
+\item{date_col_name}{A string specifying the column name for dates.}
 
-\item{id_col_name}{string representing name of id column in data.}
+\item{id_col_name}{A string specifying the column name for IDs.}
 
-\item{return_col_name}{string representing name of return in data.}
+\item{return_col_name}{A string specifying the column name for returns.}
 
-\item{horizon}{numeric representing the number of forward return periods.}
+\item{horizon}{An integer representing the forward horizon in periods.}
+}
+\value{
+A data frame containing the computed forward returns.
 }
 \description{
-For every date, id get the periodic forward returns.
+Computes forward periodic returns for a given dataset based on specified
+time horizons.
 }

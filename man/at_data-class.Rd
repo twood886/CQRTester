@@ -5,15 +5,18 @@
 \alias{at_data-class}
 \title{Alpha Test Data (S4 Object)}
 \description{
-An S4 Class to represent alpha test data for multi-periods
+An S4 class to represent alpha test data for multiple periods.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{alpha_data}}{A list of single_period_at_data objects.}
+\item{\code{alpha_data}}{A list of `single_period_at_data` objects representing
+alpha test results for individual periods.}
 
-\item{\code{data}}{A data.frame containing raw data.}
+\item{\code{data}}{A `data.frame` containing the raw input data used in the
+alpha test.}
 
-\item{\code{params}}{An at_data_params object.}
+\item{\code{params}}{An `at_data_params` object containing the parameters used
+to configure the alpha test.}
 }}
 

@@ -5,6 +5,7 @@
 #' @param end_date description
 #' @param weighting_scheme description
 #' @param benchmark_weighting_scheme description
+#' @param .desc Should factor score be ranked in descending order?
 #' @param win_prob A numeric vector of length 2 representing the percentile
 #' @param ... Additional arguements to be passed to function.
 #' @returns An at_settings_factor_w S4 object to be used in Alpha Testing.
@@ -12,7 +13,7 @@
 set_at_settings_factor_z <- function(
   start_date = as.Date("1901-01-01"), end_date = Sys.Date(),
   weighting_scheme = "z-weighted", benchmark_weighting_scheme = "zero",
-  win_prob = c(0, 1), ...
+  .desc = TRUE, win_prob = c(0, 1), ...
 ) {
   dargs <- list(...)
 
@@ -25,6 +26,7 @@ set_at_settings_factor_z <- function(
     testing_scheme = "factor_z",
     weighting_scheme = weighting_scheme,
     benchmark_weighting_scheme = benchmark_weighting_scheme,
+    .desc = .desc,
     win_prob = win_prob
   )
 }

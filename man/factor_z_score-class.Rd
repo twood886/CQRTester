@@ -5,11 +5,11 @@
 \alias{factor_z_score-class}
 \title{Factor Z-Score (S4 Object)}
 \description{
-An S4 Class to represent Factor Z-Scores
+Represents Z-scores of factor values for a single period in alpha testing.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{score}}{Factor Z Scores}
+\item{\code{score}}{A numeric vector containing Z-scores for factors.}
 }}
 

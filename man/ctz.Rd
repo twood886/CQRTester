@@ -4,7 +4,13 @@
 \alias{ctz}
 \title{Calculate Factor Z-Score with Winsorization}
 \usage{
-ctz(values, weights = NA_real_, group = NA_real_, win_prob = c(0, 1))
+ctz(
+  values,
+  weights = NA_real_,
+  group = NA_real_,
+  .desc = TRUE,
+  win_prob = c(0, 1)
+)
 }
 \arguments{
 \item{values}{a numeric vector of factor values}
@@ -12,6 +18,8 @@ ctz(values, weights = NA_real_, group = NA_real_, win_prob = c(0, 1))
 \item{weights}{a numeric vector of weights.}
 
 \item{group}{a character vector of grouping.}
+
+\item{.desc}{Should values be ranked in secending order?}
 
 \item{win.prob}{numeric vector of probabilities with values in [0,1]
 as used in quantile.}

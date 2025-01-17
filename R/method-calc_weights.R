@@ -13,26 +13,36 @@ setMethod("calc_weights",
   }
 )
 
+#' @title Calculate Portfolio Weights
+#' @description
+#' Computes portfolio weights based on factor scores and a specified weighting
+#' scheme.
+#'
+#' @param score A factor score object (either `factor_z_score` or
+#'   `factor_q_score`).
+#' @param weighting_scheme A string representing the weighting scheme to use.
+#' @return A numeric vector of weights.
 #' @importFrom tidyr replace_na
 #' @include class-factor_z_score.R
 #' @include gen-calc_weights.R
 #' @export
-setMethod("calc_weights",
-  signature(score = "factor_z_score"),
+setMethod(
+  "calc_weights",
+  signature(
+    score = "factor_z_score"
+  ),
   function(score, weighting_scheme = "z-weighted", ...) {
     fz <- score@score
     total_z <- sum(abs(fz), na.rm = TRUE)
     raw_weights <- tidyr::replace_na(fz / (total_z / 2), 0)
 
-    if (weighting_scheme == "z-weighted") {
-      weights <- raw_weights
-    }else if (weighting_scheme == "long-only") {
-      weights <- ifelse(raw_weights > 0, raw_weights, 0)
-    }else if (weighting_scheme == "short-only") {
-      weights <- ifelse(raw_weights < 0, raw_weights, 0)
-    }else {
-      stop("Unknown Weighting Scheme for Factor Z Score")
-    }
+    weights <- switch(
+      weighting_scheme,
+      "z-weighted" = raw_weights,
+      "long-only" = ifelse(raw_weights > 0, raw_weights, 0),
+      "short-only" = ifelse(raw_weights < 0, raw_weights, 0),
+      stop("Unknown weighting scheme for Factor Z Scores")
+    )
 
     names(weights) <- names(fz)
     weights

@@ -1,15 +1,19 @@
-#' @title Calculate Z-Score of Returns in Single Period AT Data
-#' @include utilities.R
+#' @title Compute Z-Scores of Returns in Single Period Data
+#' @description
+#' Calculates Z-scores for return values in a single period alpha test dataset.
+#'
+#' @param at_data A `single_period_at_data` object containing returns data.
+#' @param win_prob A numeric vector of probabilities used for winsorization.
+#' @return An `orderedList` of `return_z_score` objects.
 #' @include class-single_period_at_data.R
-#' @include func-orderedList.R
 #' @include class-return_z_score.R
+#' @include func-orderedList.R
 #' @include gen-calc_return_z.R
-#' @return orderedList S4 object of return_z_score S4 objects
+#' @include utilities.R
+#' @export
 setMethod(
   "calc_return_z",
-  signature(
-    at_data = "single_period_at_data"
-  ),
+  signature(at_data = "single_period_at_data"),
   function(at_data, win_prob = c(0, 1)) {
     z <- lapply(
       at_data@returns@list,

@@ -2,13 +2,18 @@
 % Please edit documentation in R/method-calc_return_z.R
 \name{calc_return_z,single_period_at_data-method}
 \alias{calc_return_z,single_period_at_data-method}
-\title{Calculate Z-Score of Returns in Single Period AT Data}
+\title{Compute Z-Scores of Returns in Single Period Data}
 \usage{
 \S4method{calc_return_z}{single_period_at_data}(at_data, win_prob = c(0, 1))
 }
+\arguments{
+\item{at_data}{A `single_period_at_data` object containing returns data.}
+
+\item{win_prob}{A numeric vector of probabilities used for winsorization.}
+}
 \value{
-orderedList S4 object of return_z_score S4 objects
+An `orderedList` of `return_z_score` objects.
 }
 \description{
-Calculate Z-Score of Returns in Single Period AT Data
+Calculates Z-scores for return values in a single period alpha test dataset.
 }

@@ -9,6 +9,7 @@ set_at_settings_factor_z(
   end_date = Sys.Date(),
   weighting_scheme = "z-weighted",
   benchmark_weighting_scheme = "zero",
+  .desc = TRUE,
   win_prob = c(0, 1),
   ...
 )
@@ -21,6 +22,8 @@ set_at_settings_factor_z(
 \item{weighting_scheme}{description}
 
 \item{benchmark_weighting_scheme}{description}
+
+\item{.desc}{Should factor score be ranked in descending order?}
 
 \item{win_prob}{A numeric vector of length 2 representing the percentile}
 

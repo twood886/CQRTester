@@ -5,11 +5,11 @@
 \alias{return_z_score-class}
 \title{Return Z-Score (S4 Object)}
 \description{
-An S4 Class to represent Return Z-Scores
+Represents Z-scores of returns for a single period in alpha testing.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{score}}{Return Z-Score}
+\item{\code{score}}{A numeric vector containing Z-scores for returns.}
 }}
 

@@ -3,15 +3,17 @@
 \docType{class}
 \name{multi_period_at_z-class}
 \alias{multi_period_at_z-class}
-\title{Multi Period Alpha Test (Factor Z-Score) S4 Object}
+\title{Multi-Period Alpha Test Data (Z-Score-Based) (S4 Object)}
 \description{
-Multi Period Alpha Test (Factor Z-Score) S4 Object
+Represents multi-period alpha test data for Z-score-based analysis.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{IC_fwd_return}}{ToDo}
+\item{\code{IC_fwd_return}}{An `orderedList` of information coefficients for
+forward returns.}
 
-\item{\code{IC_lag_factor}}{ToDo}
+\item{\code{IC_lag_factor}}{An `orderedList` of information coefficients for lagged
+factors.}
 }}
 

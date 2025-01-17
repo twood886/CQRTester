@@ -1,60 +1,47 @@
-# Create Single Period AT Data -------------------------------------------------
-#' @title Create single_period_at_data S4 Object
-#' @description Function to create single_period_at_data object
-#' @details This function converts data into single_period_at_data object.
-#' @param date Date.
-#' @param data A data frame containing id columns, return column and factor
-#' value column.
-#' @param date_col_name A character representing the column name of dates.
-#' @param id_col_name A character representing the column name of identifiers.
-#' @param factor_col_name A character string representing the
-#'  column name of the factor.
-#' @param return_col_name A character string representing the
-#'  column name of the returns.
-#' @param include_col_name A character string representing the column name of
-#'  include at period variable.
-#' @param group_col_name A character string representing the column name of
-#'  grouping varialble.
-#' @param weight_col_name A character string representing the column name
-#'  of weighting variable.
-#' @returns A single_period_factor_data object.
-#' @importFrom tidyr replace_na
-#' @keywords internal
-#' @include utilities.R
-#' @include func-orderedList.R
+#' @title Create Single Period Alpha Test Data
+#' @description
+#' Converts raw data into a `single_period_at_data` object for single-period
+#' alpha testing.
+#'
+#' @param date A `Date` object representing the specific period.
+#' @param data A data frame containing the required columns: ID, return, and
+#'   factor values.
+#' @param date_col_name A character string for the column name of dates.
+#' @param id_col_name A character string for the column name of IDs.
+#' @param factor_col_name A character string for the column name of factors.
+#' @param return_col_name A character string for the column name of returns.
+#' @param include_col_name A character string for the column name of include
+#'   flags (TRUE/FALSE).
+#' @param group_col_name A character string for the column name of groups.
+#' @param weight_col_name A character string for the column name of weights.
+#' @param horizon A numeric value representing the horizon for returns and
+#'   factors. Defaults to 0.
+#' @return A `single_period_at_data` S4 object.
 #' @include class-single_period_at_data.R
+#' @keywords internal
 create_single_period_at_data <- function(
   date, data, date_col_name, id_col_name, factor_col_name, return_col_name,
   include_col_name, group_col_name, weight_col_name, horizon = 0
 ) {
-  # Find rows in data to include
   inc <- which(data[[include_col_name]] == TRUE & data[[date_col_name]] == date)
 
-  # Get available IDs for date
   ids <- data[inc, id_col_name][[1]]
 
-  # Get the groups if group_col_name is provided
-  if (missing(group_col_name)) {
-    group <- rep("All", length(ids))
-  } else if (is.na(group_col_name)) {
-    group <- rep("All", length(ids))
+  group <- if (missing(group_col_name) || is.na(group_col_name)) {
+    rep("All", length(ids))
   } else {
-    group <- data[inc, group_col_name][[1]]
+    data[inc, group_col_name][[1]]
   }
   names(group) <- ids
 
-  # Get the weights if weight_col_name is provided
-  if (missing(weight_col_name)) {
-    weights <- rep(1, length(ids)) / length(ids)
-  } else if (is.na(weight_col_name)) {
-    weights <- rep(1, length(ids)) / length(ids)
+  weights <- if (missing(weight_col_name) || is.na(weight_col_name)) {
+    rep(1, length(ids)) / length(ids)
   } else {
     weights_raw <- data[inc, weight_col_name][[1]]
-    weights <- weights_raw / sum(weights_raw, na.rm = TRUE)
+    weights_raw / sum(weights_raw, na.rm = TRUE)
   }
   names(weights) <- ids
 
-  # Get smaller version of data for creating prv factor and fwd returns
   dates_unique <- sort(unique(data[[date_col_name]]))
   dates_horizon <- dates_unique[
     (which(dates_unique == date) - (horizon - 1)) :
@@ -66,7 +53,6 @@ create_single_period_at_data <- function(
     ),
   ]
 
-  # Get factor values
   fdata <- get_prv_factor_vals(
     sub_data, date_col_name, id_col_name, factor_col_name, horizon
   )
@@ -83,7 +69,6 @@ create_single_period_at_data <- function(
     )
   )
 
-  # Get return data
   rdata <- get_fwd_returns(
     sub_data, date_col_name, id_col_name, return_col_name, horizon
   )
